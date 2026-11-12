@@ -1,0 +1,1950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PALO COMMUNITY CLERKS ACTIVITY PLANNER</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            clinical: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    /* Custom subtle scrollbars and print styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    @media print {
+      .no-print {
+        display: none !important;
+      }
+      body {
+        background: #ffffff !important;
+      }
+      .print-full {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border: 1px solid #e2e8f0 !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Toast Notification Banner (Replaces alert) -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Top Navigation & Portal Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <!-- Brand & Title -->
+        <div class="flex items-start sm:items-center gap-3.5">
+          <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 text-white flex items-center justify-center shadow-md shrink-0">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight text-slate-900">
+                PALO COMMUNITY CLERKS ACTIVITY PLANNER
+              </h1>
+            </div>
+            <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+              Medical Clerkship Duty Rotation &amp; Community Health Task Portal (November 2026 – April 2027)
+            </p>
+          </div>
+        </div>
+
+        <!-- Portal Quick Actions -->
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <span id="save-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span id="save-status-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span id="save-status-text">All Changes Saved</span>
+          </span>
+          <button onclick="manualSaveAll()" id="explicit-save-btn" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+            </svg>
+            Save Changes
+          </button>
+          <button onclick="downloadCalendarPDF()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Download Calendar PDF
+          </button>
+          <button onclick="downloadTasksPDF()" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            Download Tasks PDF
+          </button>
+          <button onclick="exportCSV()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 shadow-sm transition cursor-pointer">
+            CSV
+          </button>
+          <button onclick="openResetModal()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer">
+            Reset Default
+          </button>
+        </div>
+      </div>
+
+      <!-- Clerk Profiles & Filter Bar -->
+      <div class="mt-4 pt-3.5 border-t border-slate-100 flex flex-col xl:flex-row xl:items-center justify-between gap-3 no-print">
+        <!-- Clerk Filter Pills & Duty Counters -->
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 mr-1">Filter Clerk:</span>
+          <button onclick="setClerkFilter('ALL')" id="filter-btn-ALL" class="clerk-filter-btn px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer bg-slate-900 text-white shadow-sm">
+            All Clerks (3)
+          </button>
+          <button onclick="setClerkFilter('Jazzy')" id="filter-btn-Jazzy" class="clerk-filter-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-teal-50">
+            <span class="w-5 h-5 rounded-full bg-teal-600 text-white text-[11px] font-bold flex items-center justify-center">J</span>
+            <span>Jazzy</span>
+            <span id="stat-pill-Jazzy" class="text-[11px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+          </button>
+          <button onclick="setClerkFilter('Leila')" id="filter-btn-Leila" class="clerk-filter-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50">
+            <span class="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center">L</span>
+            <span>Leila</span>
+            <span id="stat-pill-Leila" class="text-[11px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+          </button>
+          <button onclick="setClerkFilter('Aubrey')" id="filter-btn-Aubrey" class="clerk-filter-btn inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs sm:text-sm font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-purple-50">
+            <span class="w-5 h-5 rounded-full bg-purple-600 text-white text-[11px] font-bold flex items-center justify-center">A</span>
+            <span>Aubrey</span>
+            <span id="stat-pill-Aubrey" class="text-[11px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+          </button>
+        </div>
+
+        <!-- Primary View Switcher Tabs -->
+        <div class="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl self-start xl:self-auto">
+          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition cursor-pointer bg-white text-teal-700 shadow-sm">
+            📅 Calendar View
+          </button>
+          <button onclick="switchView('table')" id="tab-table" class="view-tab px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900">
+            📋 Weekly / List Schedule
+          </button>
+          <button onclick="switchView('matrix')" id="tab-matrix" class="view-tab px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900">
+            📊 BHS 1–6 &amp; RHU Matrix
+          </button>
+          <button onclick="switchView('tasks-mobile')" id="tab-tasks-mobile" class="lg:hidden view-tab px-3.5 py-1.5 rounded-lg text-xs sm:text-sm font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900">
+            ✅ Tasks (<span id="mobile-task-count">0</span>)
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Workspace: Split Screen (Left/Center Schedule Portal + Right Side-by-Side Task Checklist) -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+      <!-- LEFT / MAIN PANEL (8 cols on lg+): Calendar, List Schedule, or BHS Matrix -->
+      <div id="schedule-workspace" class="lg:col-span-8 space-y-5">
+
+        <!-- VIEW 1: INTERACTIVE MONTH-BY-MONTH CALENDAR -->
+        <div id="view-calendar" class="space-y-4">
+          <!-- Month Selector & Quick Jump Controls -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <button onclick="changeMonth(-1)" id="prev-month-btn" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer" title="Previous Month">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <h2 id="current-month-title" class="text-lg sm:text-xl font-extrabold text-slate-900 min-w-[190px] text-center">
+                November 2026
+              </h2>
+              <button onclick="changeMonth(1)" id="next-month-btn" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer" title="Next Month">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Month Quick Pills & PDF Option -->
+            <div class="flex flex-wrap items-center gap-1.5">
+              <div class="flex flex-wrap items-center gap-1.5" id="month-quick-pills">
+                <!-- Populated by JS -->
+              </div>
+              <button onclick="downloadAllMonthsCalendarPDF()" class="ml-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-900 text-white transition cursor-pointer" title="Download All 6 Months Calendar PDF">
+                All Months PDF
+              </button>
+            </div>
+          </div>
+
+          <!-- Station Color Legend -->
+          <div class="bg-white rounded-2xl border border-slate-200 px-4 py-2.5 shadow-sm flex flex-wrap items-center gap-3 text-xs">
+            <span class="font-semibold text-slate-500">Station Badges:</span>
+            <span class="px-2 py-0.5 rounded-md font-semibold bg-teal-100 text-teal-800 border border-teal-200">RHU Palo</span>
+            <span class="px-2 py-0.5 rounded-md font-semibold bg-sky-100 text-sky-800 border border-sky-200">BHS 1–2</span>
+            <span class="px-2 py-0.5 rounded-md font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">BHS 3–4</span>
+            <span class="px-2 py-0.5 rounded-md font-semibold bg-purple-100 text-purple-800 border border-purple-200">BHS 5–6</span>
+            <span class="px-2 py-0.5 rounded-md font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">BHS / Secondary Data</span>
+            <span class="px-2 py-0.5 rounded-md font-semibold bg-amber-100 text-amber-800 border border-amber-200">Holiday / No Duty</span>
+          </div>
+
+          <!-- Calendar Grid Card -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-full">
+            <!-- Day of Week Headers -->
+            <div class="grid grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div class="py-2.5 text-slate-400">Sun</div>
+              <div class="py-2.5 text-teal-800">Mon</div>
+              <div class="py-2.5 text-teal-800">Tue</div>
+              <div class="py-2.5 text-teal-800">Wed</div>
+              <div class="py-2.5 text-teal-800">Thu</div>
+              <div class="py-2.5 text-teal-800">Fri</div>
+              <div class="py-2.5 text-slate-400">Sat</div>
+            </div>
+            <!-- Calendar Days Container -->
+            <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50">
+              <!-- Populated dynamically by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 2: WEEKLY / LIST SCHEDULE TABLE -->
+        <div id="view-table" class="hidden space-y-4">
+          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <h2 class="text-lg font-extrabold text-slate-900">Complete Duty Rotation Roster (Mon–Fri)</h2>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="table-month-filter" onchange="renderScheduleTable()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                <option value="ALL">All Months (Nov 2026 – Apr 2027)</option>
+                <option value="2026-11">November 2026</option>
+                <option value="2026-12">December 2026</option>
+                <option value="2027-01">January 2027</option>
+                <option value="2027-02">February 2027</option>
+                <option value="2027-03">March 2027</option>
+                <option value="2027-04">April 2027</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-full">
+            <div class="overflow-x-auto max-h-[680px]">
+              <table class="w-full text-left border-collapse">
+                <thead class="bg-slate-100 sticky top-0 z-10 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
+                  <tr>
+                    <th class="py-3 px-4">Date &amp; Day</th>
+                    <th class="py-3 px-3">Week / Phase</th>
+                    <th class="py-3 px-3">Jazzy</th>
+                    <th class="py-3 px-3">Leila</th>
+                    <th class="py-3 px-3">Aubrey</th>
+                    <th class="py-3 px-4">Activity / Notes</th>
+                    <th class="py-3 px-3 text-right no-print">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="schedule-table-body" class="divide-y divide-slate-200 text-xs sm:text-sm">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- VIEW 3: STATION & BHS 1-6 DISTRIBUTION MATRIX -->
+        <div id="view-matrix" class="hidden space-y-5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+              <div>
+                <h2 class="text-lg font-extrabold text-slate-900">Station &amp; BHS 1–6 Rotation Fairness Matrix</h2>
+                <p class="text-xs text-slate-500">Live count of total duty days assigned to each clerk across RHU Palo, BHS 1–6, and Community Assessment.</p>
+              </div>
+              <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-teal-50 text-teal-700 border border-teal-200">
+                Live Synced with Edits
+              </span>
+            </div>
+
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse text-xs sm:text-sm">
+                <thead>
+                  <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold">
+                    <th class="py-3 px-4 rounded-tl-xl">Medical Clerk</th>
+                    <th class="py-3 px-3 text-center bg-teal-50/70 text-teal-900">RHU Palo</th>
+                    <th class="py-3 px-2.5 text-center">BHS 1</th>
+                    <th class="py-3 px-2.5 text-center">BHS 2</th>
+                    <th class="py-3 px-2.5 text-center">BHS 3</th>
+                    <th class="py-3 px-2.5 text-center">BHS 4</th>
+                    <th class="py-3 px-2.5 text-center">BHS 5</th>
+                    <th class="py-3 px-2.5 text-center">BHS 6</th>
+                    <th class="py-3 px-3 text-center bg-emerald-50/70 text-emerald-900">Secondary Data / BHS</th>
+                    <th class="py-3 px-3 text-center font-extrabold">Total Active Duty</th>
+                  </tr>
+                </thead>
+                <tbody id="matrix-table-body" class="divide-y divide-slate-200">
+                  <!-- Populated by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Weekly RHU Compliance Audit (Jan 11 - Apr 30, 2027) -->
+          <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+            <h3 class="text-base font-extrabold text-slate-900 mb-1">Weekly RHU Palo Rotation Verification (Jan 11 – Apr 30, 2027)</h3>
+            <p class="text-xs text-slate-500 mb-4">Confirms that every clerk rotates at RHU Palo at least once every week while BHS 1–6 stations are covered.</p>
+            <div id="weekly-audit-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT / SIDE-BY-SIDE PANEL (4 cols on lg+): TASKS & DELIVERABLES CHECKLIST -->
+      <aside id="tasks-sidebar" class="hidden lg:block lg:col-span-4 space-y-4 sticky top-28">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-8.5rem)]">
+          <!-- Panel Header -->
+          <div class="p-4 bg-gradient-to-r from-teal-700 to-teal-800 text-white">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <svg class="w-5 h-5 text-teal-200" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                </svg>
+                <h2 class="font-extrabold text-base tracking-tight">Community Clerkship Tasks</h2>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="downloadTasksPDF()" title="Download Organized Tasks PDF" class="p-1.5 rounded-lg bg-white/15 hover:bg-white/25 text-white transition cursor-pointer">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </button>
+                <span id="task-progress-badge" class="text-xs font-bold bg-white/20 px-2.5 py-1 rounded-full">
+                  0 / 0 Done
+                </span>
+              </div>
+            </div>
+            <!-- Progress Bar -->
+            <div class="w-full bg-teal-950/50 h-2 rounded-full mt-3 overflow-hidden">
+              <div id="task-progress-bar" class="bg-emerald-300 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <!-- Task Filters & Add Button -->
+          <div class="p-3 bg-slate-50 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <select id="task-phase-filter" onchange="renderTasks()" class="px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white text-slate-700 focus:outline-none focus:ring-2 focus:ring-teal-500">
+              <option value="ALL">All Phases &amp; Stations</option>
+              <option value="Phase 1 (Nov 16–Dec 11)">Phase 1: Nov 16 – Dec 11</option>
+              <option value="Holiday Break (Dec 14–Jan 10)">Holiday: Dec 14 – Jan 10</option>
+              <option value="Phase 3 (Jan 11–Apr 30)">Phase 3: Jan 11 – Apr 30</option>
+            </select>
+            <button onclick="openTaskModal()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition cursor-pointer">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+              </svg>
+              Add Task
+            </button>
+          </div>
+
+          <!-- Scrollable Task List -->
+          <div id="task-list-container" class="p-3 space-y-2.5 overflow-y-auto flex-1">
+            <!-- Populated dynamically by JS -->
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- MODAL 1: EDIT DAILY SCHEDULE MODAL -->
+  <div id="edit-day-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden animate-fadeIn">
+      <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
+        <div>
+          <span id="modal-phase-tag" class="text-[11px] font-bold uppercase tracking-wider text-teal-300">Phase Info</span>
+          <h3 id="modal-date-title" class="text-lg font-extrabold">Edit Duty Assignment</h3>
+        </div>
+        <button onclick="closeEditDayModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="edit-day-form" onsubmit="saveDayEdit(event)" class="p-5 space-y-4">
+        <input type="hidden" id="edit-date-key" />
+
+        <!-- Quick Preset Bar -->
+        <div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+          <span class="block text-xs font-bold text-slate-600 mb-2">Quick Day Presets:</span>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="applyDayPreset('ALL_RHU')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-teal-100 text-teal-800 hover:bg-teal-200 transition cursor-pointer">
+              All 3 at RHU Palo
+            </button>
+            <button type="button" onclick="applyDayPreset('ALL_SEC')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-emerald-100 text-emerald-800 hover:bg-emerald-200 transition cursor-pointer">
+              All 3 BHS / Secondary Data
+            </button>
+            <button type="button" onclick="applyDayPreset('HOLIDAY')" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-100 text-amber-800 hover:bg-amber-200 transition cursor-pointer">
+              Holiday / No Duty
+            </button>
+          </div>
+        </div>
+
+        <!-- Clerk Station Selectors -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-teal-800 mb-1">Jazzy's Station</label>
+            <select id="edit-station-Jazzy" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:ring-2 focus:ring-teal-500 focus:outline-none">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-indigo-800 mb-1">Leila's Station</label>
+            <select id="edit-station-Leila" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-purple-800 mb-1">Aubrey's Station</label>
+            <select id="edit-station-Aubrey" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+        </div>
+
+        <!-- Daily Activity / Notes -->
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Daily Activity / Clinical Focus Notes</label>
+          <textarea id="edit-day-note" rows="3" placeholder="Enter specific clinic duties, barangay visit focus, or reminders..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
+        </div>
+
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" onclick="closeEditDayModal()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 transition cursor-pointer">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition cursor-pointer">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ADD / EDIT TASK MODAL -->
+  <div id="task-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
+      <div class="px-5 py-4 bg-teal-800 text-white flex items-center justify-between">
+        <h3 id="task-modal-title" class="text-base font-extrabold">Add Activity / Task</h3>
+        <button onclick="closeTaskModal()" class="p-1.5 rounded-xl text-teal-200 hover:text-white hover:bg-teal-700 transition cursor-pointer">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <form onsubmit="saveTask(event)" class="p-5 space-y-4">
+        <input type="hidden" id="task-edit-id" />
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Task / Deliverable Description *</label>
+          <input type="text" id="task-title-input" required placeholder="e.g., Consolidate BHS 1–6 prenatal census" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Assigned Clerk(s)</label>
+            <select id="task-assignee-input" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium bg-white">
+              <option value="All Clerks">All Clerks (Team)</option>
+              <option value="Jazzy">Jazzy</option>
+              <option value="Leila">Leila</option>
+              <option value="Aubrey">Aubrey</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Rotation Phase</label>
+            <select id="task-phase-input" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-medium bg-white">
+              <option value="Phase 1 (Nov 16–Dec 11)">Phase 1 (Nov 16–Dec 11)</option>
+              <option value="Holiday Break (Dec 14–Jan 10)">Holiday (Dec 14–Jan 10)</option>
+              <option value="Phase 3 (Jan 11–Apr 30)">Phase 3 (Jan 11–Apr 30)</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Station / Tag</label>
+            <input type="text" id="task-station-input" placeholder="e.g., RHU Palo / BHS 1–6" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1">Target Due Date</label>
+            <input type="date" id="task-due-input" min="2026-11-01" max="2027-04-30" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm" />
+          </div>
+        </div>
+        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
+          <button type="button" onclick="closeTaskModal()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
+            Cancel
+          </button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm cursor-pointer">
+            Save Task
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 3: RESET CONFIRMATION MODAL (Replaces confirm()) -->
+  <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 space-y-4">
+      <div class="flex items-center gap-3 text-rose-600">
+        <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h3 class="text-lg font-extrabold text-slate-900">Reset to Default Schedule?</h3>
+      </div>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        This will restore the original November 2026 – April 2027 duty rotation for <strong>Jazzy, Leila, and Aubrey</strong> and reset all custom edits and tasks. This action cannot be undone.
+      </p>
+      <div class="flex items-center justify-end gap-2 pt-2">
+        <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
+          Cancel
+        </button>
+        <button onclick="confirmResetDefault()" class="px-4 py-2 rounded-xl text-sm font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-sm cursor-pointer">
+          Yes, Reset Everything
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APPLICATION LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // =========================================================================
+    // 1. CONSTANTS & CONFIGURATION
+    // =========================================================================
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'palo-community-clerks-planner';
+    const CLERKS = ['Jazzy', 'Leila', 'Aubrey'];
+
+    const STATION_OPTIONS = [
+      'RHU Palo',
+      'BHS 1',
+      'BHS 2',
+      'BHS 3',
+      'BHS 4',
+      'BHS 5',
+      'BHS 6',
+      'BHS / Secondary Data Assessment',
+      'Holiday / No Duty',
+      'Pre-Deployment Orientation'
+    ];
+
+    const MONTHS_LIST = [
+      { year: 2026, month: 10, label: 'November 2026', short: 'Nov 2026', key: '2026-11' },
+      { year: 2026, month: 11, label: 'December 2026', short: 'Dec 2026', key: '2026-12' },
+      { year: 2027, month: 0,  label: 'January 2027',  short: 'Jan 2027', key: '2027-01' },
+      { year: 2027, month: 1,  label: 'February 2027', short: 'Feb 2027', key: '2027-02' },
+      { year: 2027, month: 2,  label: 'March 2027',    short: 'Mar 2027', key: '2027-03' },
+      { year: 2027, month: 3,  label: 'April 2027',    short: 'Apr 2027', key: '2027-04' }
+    ];
+
+    // Global State
+    let scheduleData = {}; // Key: 'YYYY-MM-DD' -> { date, dayOfWeek, phase, weekLabel, assignments: { Jazzy, Leila, Aubrey }, note }
+    let tasksData = [];
+    let currentMonthIndex = 0; // Starts at November 2026
+    let activeClerkFilter = 'ALL';
+    let activeView = 'calendar';
+    let hasUnsavedChanges = false;
+
+    // Cloud Sync State
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let isCloudReady = false;
+    let isApplyingRemoteSnapshot = false;
+
+    // =========================================================================
+    // 2. SCHEDULE GENERATION ENGINE (EXACT SEQUENTIAL ROTATION RULES)
+    // =========================================================================
+    function formatDateKey(dateObj) {
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const d = String(dateObj.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function parseDateLocal(dateStr) {
+      const [y, m, d] = dateStr.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+
+    function generateDefaultSchedule() {
+      const data = {};
+      const startDate = new Date(2026, 10, 1); // Nov 1, 2026
+      const endDate = new Date(2027, 3, 30);   // Apr 30, 2027
+
+      const phase3Start = new Date(2027, 0, 11);
+      let phase3DayIndex = 0;
+      let bhsSlotIndex = 0;
+
+      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
+        const dayOfWeek = d.getDay();
+        if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+
+        const dateKey = formatDateKey(d);
+        let phase = '';
+        let weekLabel = '';
+        let assignments = { Jazzy: '', Leila: '', Aubrey: '' };
+        let note = '';
+
+        if (dateKey >= '2026-11-02' && dateKey <= '2026-11-13') {
+          phase = 'Pre-Deployment Prep';
+          weekLabel = 'Prep Week';
+          assignments = {
+            Jazzy: 'Pre-Deployment Orientation',
+            Leila: 'Pre-Deployment Orientation',
+            Aubrey: 'Pre-Deployment Orientation'
+          };
+          note = 'Pre-deployment briefing, courtesy call prep & catchment barangay assignment.';
+        } else if (dateKey >= '2026-11-16' && dateKey <= '2026-12-11') {
+          phase = 'Phase 1 (Nov 16–Dec 11)';
+          const weekNum = Math.floor((d - new Date(2026, 10, 16)) / (7 * 86400000)) + 1;
+          weekLabel = `Phase 1 • Wk ${weekNum}`;
+
+          if (dayOfWeek === 1 || dayOfWeek === 3) {
+            assignments = {
+              Jazzy: 'RHU Palo',
+              Leila: 'RHU Palo',
+              Aubrey: 'RHU Palo'
+            };
+            note = 'RHU Palo Clinic Duty: OPD shadowing, records review & municipal health workflow.';
+          } else {
+            assignments = {
+              Jazzy: 'BHS / Secondary Data Assessment',
+              Leila: 'BHS / Secondary Data Assessment',
+              Aubrey: 'BHS / Secondary Data Assessment'
+            };
+            note = 'BHS & Catchment Barangay Community Assessment using secondary demographic & morbidity data.';
+          }
+        } else if (dateKey >= '2026-12-14' && dateKey <= '2027-01-10') {
+          phase = 'Holiday Break (Dec 14–Jan 10)';
+          weekLabel = 'Holiday Break';
+          assignments = {
+            Jazzy: 'Holiday / No Duty',
+            Leila: 'Holiday / No Duty',
+            Aubrey: 'Holiday / No Duty'
+          };
+          note = 'Holiday / No Duty Break (Dec 14, 2026 – Jan 10, 2027).';
+        } else if (dateKey >= '2027-01-11' && dateKey <= '2027-04-30') {
+          phase = 'Phase 3 (Jan 11–Apr 30)';
+          const daysSinceP3 = Math.floor((d - phase3Start) / 86400000);
+          const weekIdx = Math.floor(daysSinceP3 / 7);
+          weekLabel = `Rotation Wk ${weekIdx + 1}`;
+
+          const rhuClerkIdx = phase3DayIndex % 3;
+          const bhsClerk1Idx = (rhuClerkIdx + 1) % 3;
+          const bhsClerk2Idx = (rhuClerkIdx + 2) % 3;
+
+          const rhuClerk = CLERKS[rhuClerkIdx];
+          const bhsClerk1 = CLERKS[bhsClerk1Idx];
+          const bhsClerk2 = CLERKS[bhsClerk2Idx];
+
+          const bhsStation1 = `BHS ${(bhsSlotIndex % 6) + 1}`;
+          const bhsStation2 = `BHS ${((bhsSlotIndex + 1) % 6) + 1}`;
+
+          assignments[rhuClerk] = 'RHU Palo';
+          assignments[bhsClerk1] = bhsStation1;
+          assignments[bhsClerk2] = bhsStation2;
+
+          note = `${rhuClerk} at RHU Palo; ${bhsClerk1} at ${bhsStation1}; ${bhsClerk2} at ${bhsStation2}.`;
+
+          phase3DayIndex += 1;
+          bhsSlotIndex += 2;
+        }
+
+        data[dateKey] = {
+          date: dateKey,
+          dayOfWeek,
+          phase,
+          weekLabel,
+          assignments,
+          note
+        };
+      }
+
+      return data;
+    }
+
+    function generateDefaultTasks() {
+      return [
+        {
+          id: 't1',
+          title: 'Courtesy Call with Municipal Health Officer (MHO) & RHU Palo Staff',
+          assignee: 'All Clerks',
+          phase: 'Phase 1 (Nov 16–Dec 11)',
+          station: 'RHU Palo',
+          dueDate: '2026-11-18',
+          completed: false
+        },
+        {
+          id: 't2',
+          title: 'Retrieve FHSIS Annual/Quarterly Secondary Data of Catchment Barangays',
+          assignee: 'All Clerks',
+          phase: 'Phase 1 (Nov 16–Dec 11)',
+          station: 'BHS / Secondary Data',
+          dueDate: '2026-11-24',
+          completed: false
+        },
+        {
+          id: 't3',
+          title: 'Compile Top 10 Leading Causes of Morbidity & Mortality (Secondary Data)',
+          assignee: 'Jazzy',
+          phase: 'Phase 1 (Nov 16–Dec 11)',
+          station: 'BHS / Secondary Data',
+          dueDate: '2026-12-01',
+          completed: false
+        },
+        {
+          id: 't4',
+          title: 'Construct Catchment Barangay Spot Map & Demographic Profile',
+          assignee: 'Leila',
+          phase: 'Phase 1 (Nov 16–Dec 11)',
+          station: 'BHS / Secondary Data',
+          dueDate: '2026-12-04',
+          completed: false
+        },
+        {
+          id: 't5',
+          title: 'Analyze Maternal, Child Health (MCH) & EPI Coverage Indicators',
+          assignee: 'Aubrey',
+          phase: 'Phase 1 (Nov 16–Dec 11)',
+          station: 'BHS / Secondary Data',
+          dueDate: '2026-12-08',
+          completed: false
+        },
+        {
+          id: 't6',
+          title: 'Present Preliminary Community Diagnosis Report before Holiday Break',
+          assignee: 'All Clerks',
+          phase: 'Phase 1 (Nov 16–Dec 11)',
+          station: 'RHU Palo',
+          dueDate: '2026-12-11',
+          completed: false
+        },
+        {
+          id: 't7',
+          title: 'Holiday Break — No Duty (Organize Field Logbooks & Community Action Plan)',
+          assignee: 'All Clerks',
+          phase: 'Holiday Break (Dec 14–Jan 10)',
+          station: 'Holiday / No Duty',
+          dueDate: '2027-01-08',
+          completed: false
+        },
+        {
+          id: 't8',
+          title: 'RHU Palo OPD Consultations, Prenatal Clinic & TB-DOTS Case Management',
+          assignee: 'All Clerks',
+          phase: 'Phase 3 (Jan 11–Apr 30)',
+          station: 'RHU Palo',
+          dueDate: '2027-02-15',
+          completed: false
+        },
+        {
+          id: 't9',
+          title: 'BHS 1–3 Field Immunization, Family Planning & Nutrition (OPT Plus) Drive',
+          assignee: 'All Clerks',
+          phase: 'Phase 3 (Jan 11–Apr 30)',
+          station: 'BHS 1–3',
+          dueDate: '2027-03-10',
+          completed: false
+        },
+        {
+          id: 't10',
+          title: 'BHS 4–6 Household Health Education & Hypertensive/Diabetic Club Screening',
+          assignee: 'All Clerks',
+          phase: 'Phase 3 (Jan 11–Apr 30)',
+          station: 'BHS 4–6',
+          dueDate: '2027-03-26',
+          completed: false
+        },
+        {
+          id: 't11',
+          title: 'Final Community Health Intervention Evaluation & Exit Presentation at RHU Palo',
+          assignee: 'All Clerks',
+          phase: 'Phase 3 (Jan 11–Apr 30)',
+          station: 'RHU Palo & BHS 1–6',
+          dueDate: '2027-04-29',
+          completed: false
+        }
+      ];
+    }
+
+    // =========================================================================
+    // 3. CLOUD SYNC PERSISTENCE & EXPLICIT SAVE STATE
+    // =========================================================================
+    function setUnsavedState(dirty, customLabel = null) {
+      hasUnsavedChanges = dirty;
+      const badge = document.getElementById('save-status-badge');
+      const dot = document.getElementById('save-status-dot');
+      const text = document.getElementById('save-status-text');
+      const saveBtn = document.getElementById('explicit-save-btn');
+
+      if (!badge || !dot || !text || !saveBtn) return;
+
+      if (dirty) {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-ping';
+        text.textContent = customLabel || 'Unsaved Changes';
+        saveBtn.classList.add('ring-2', 'ring-emerald-400', 'ring-offset-1');
+      } else {
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+        text.textContent = customLabel || (isCloudReady ? 'Cloud Synced' : 'Session Ready');
+        saveBtn.classList.remove('ring-2', 'ring-emerald-400', 'ring-offset-1');
+      }
+    }
+
+    async function initCloudSync() {
+      // Load default in-memory state immediately so UI renders without delay
+      scheduleData = generateDefaultSchedule();
+      tasksData = generateDefaultTasks();
+      refreshAllViews();
+
+      // Check for injected cloud config or optional user-supplied window.VERCEL_FIREBASE_CONFIG
+      const rawConfig =
+        typeof __firebase_config !== 'undefined'
+          ? JSON.parse(__firebase_config)
+          : window.VERCEL_FIREBASE_CONFIG || null;
+
+      if (!rawConfig || !rawConfig.apiKey) {
+        isCloudReady = false;
+        setUnsavedState(false, 'Session Ready');
+        return;
+      }
+
+      try {
+        setUnsavedState(true, 'Connecting Cloud...');
+        const app = initializeApp(rawConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          const cred = await signInWithCustomToken(auth, __initial_auth_token);
+          currentUser = cred.user;
+        } else {
+          const cred = await signInAnonymously(auth);
+          currentUser = cred.user;
+        }
+
+        if (!currentUser) return;
+        isCloudReady = true;
+
+        const plannerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'planner_state', 'shared_board');
+
+        // Seed initial state if document does not exist yet
+        const initialSnap = await getDoc(plannerDocRef);
+        if (!initialSnap.exists()) {
+          await setDoc(plannerDocRef, {
+            scheduleJson: JSON.stringify(scheduleData),
+            tasksJson: JSON.stringify(tasksData),
+            updatedAt: new Date().toISOString()
+          });
+        }
+
+        // Real-time listener so Jazzy, Leila, and Aubrey see updates instantaneously
+        onSnapshot(
+          plannerDocRef,
+          (snapshot) => {
+            if (!snapshot.exists()) return;
+            const data = snapshot.data();
+            isApplyingRemoteSnapshot = true;
+            try {
+              if (data.scheduleJson) {
+                scheduleData = JSON.parse(data.scheduleJson);
+              }
+              if (data.tasksJson) {
+                tasksData = JSON.parse(data.tasksJson);
+              }
+              refreshAllViews();
+              setUnsavedState(false, 'Cloud Synced');
+            } catch (parseErr) {
+              console.error('Error parsing remote snapshot:', parseErr);
+            } finally {
+              isApplyingRemoteSnapshot = false;
+            }
+          },
+          (error) => {
+            console.error('Realtime sync error:', error);
+            showToast('Cloud sync interrupted. Changes remain active in session.', 'error');
+          }
+        );
+      } catch (err) {
+        console.error('Cloud initialization failed:', err);
+        isCloudReady = false;
+        setUnsavedState(false, 'Session Ready');
+      }
+    }
+
+    async function persistToCloud(notify = true) {
+      if (isApplyingRemoteSnapshot) return;
+
+      if (!isCloudReady || !db || !currentUser) {
+        setUnsavedState(false, 'Saved in Session');
+        if (notify) showToast('Changes saved to active session!');
+        return;
+      }
+
+      try {
+        setUnsavedState(true, 'Syncing...');
+        const plannerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'planner_state', 'shared_board');
+        await setDoc(plannerDocRef, {
+          scheduleJson: JSON.stringify(scheduleData),
+          tasksJson: JSON.stringify(tasksData),
+          updatedAt: new Date().toISOString()
+        });
+        setUnsavedState(false, 'Cloud Synced');
+        if (notify) showToast('Schedule & tasks synced to cloud!');
+      } catch (err) {
+        console.error('Failed to sync to cloud:', err);
+        showToast('Cloud save failed. Check connection.', 'error');
+      }
+    }
+
+    function saveScheduleState(notify = true) {
+      persistToCloud(notify);
+    }
+
+    function saveTasksState(notify = true) {
+      persistToCloud(notify);
+    }
+
+    function manualSaveAll() {
+      persistToCloud(true);
+    }
+
+    // =========================================================================
+    // 4. STYLING HELPERS FOR STATIONS & CLERKS
+    // =========================================================================
+    function getStationBadgeStyle(station) {
+      if (!station) return 'bg-slate-100 text-slate-600 border-slate-200';
+      if (station === 'RHU Palo') return 'bg-teal-100 text-teal-900 border-teal-300';
+      if (station === 'BHS 1' || station === 'BHS 2') return 'bg-sky-100 text-sky-900 border-sky-300';
+      if (station === 'BHS 3' || station === 'BHS 4') return 'bg-indigo-100 text-indigo-900 border-indigo-300';
+      if (station === 'BHS 5' || station === 'BHS 6') return 'bg-purple-100 text-purple-900 border-purple-300';
+      if (station.includes('Secondary Data')) return 'bg-emerald-100 text-emerald-900 border-emerald-300';
+      if (station.includes('Holiday')) return 'bg-amber-100 text-amber-900 border-amber-300';
+      return 'bg-slate-100 text-slate-700 border-slate-300';
+    }
+
+    function shortStationLabel(station) {
+      if (station === 'BHS / Secondary Data Assessment') return 'BHS / Sec. Data';
+      if (station === 'Pre-Deployment Orientation') return 'Prep / Orient.';
+      if (station === 'Holiday / No Duty') return 'Holiday';
+      return station;
+    }
+
+    function getClerkDotColor(clerk) {
+      if (clerk === 'Jazzy') return 'bg-teal-600';
+      if (clerk === 'Leila') return 'bg-indigo-600';
+      if (clerk === 'Aubrey') return 'bg-purple-600';
+      return 'bg-slate-600';
+    }
+
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      const bgClass = type === 'error' ? 'bg-rose-600' : 'bg-slate-900';
+      toast.className = `${bgClass} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all duration-300 pointer-events-auto`;
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full ${type === 'error' ? 'bg-rose-200' : 'bg-emerald-400'}"></span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(8px)';
+        setTimeout(() => toast.remove(), 300);
+      }, 2600);
+    }
+
+    // =========================================================================
+    // 5. RENDER CALENDAR VIEW
+    // =========================================================================
+    function renderMonthPills() {
+      const container = document.getElementById('month-quick-pills');
+      container.innerHTML = MONTHS_LIST.map((m, idx) => {
+        const active = idx === currentMonthIndex;
+        return `
+          <button onclick="selectMonth(${idx})"
+            class="px-2.5 py-1.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+              active
+                ? 'bg-teal-600 text-white shadow-xs'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }">
+            ${m.short}
+          </button>
+        `;
+      }).join('');
+    }
+
+    function renderCalendar() {
+      const mInfo = MONTHS_LIST[currentMonthIndex];
+      document.getElementById('current-month-title').textContent = mInfo.label;
+      document.getElementById('prev-month-btn').disabled = currentMonthIndex === 0;
+      document.getElementById('next-month-btn').disabled = currentMonthIndex === MONTHS_LIST.length - 1;
+      renderMonthPills();
+
+      const firstDayOfMonth = new Date(mInfo.year, mInfo.month, 1);
+      const lastDayOfMonth = new Date(mInfo.year, mInfo.month + 1, 0);
+      const startWeekday = firstDayOfMonth.getDay(); // 0 (Sun) to 6 (Sat)
+      const totalDays = lastDayOfMonth.getDate();
+
+      const grid = document.getElementById('calendar-grid');
+      let html = '';
+
+      // Leading empty cells
+      for (let i = 0; i < startWeekday; i++) {
+        html += `<div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/70 p-2"></div>`;
+      }
+
+      // Actual days
+      for (let day = 1; day <= totalDays; day++) {
+        const currentObj = new Date(mInfo.year, mInfo.month, day);
+        const dow = currentObj.getDay();
+        const dateKey = formatDateKey(currentObj);
+        const isWeekend = dow === 0 || dow === 6;
+
+        if (isWeekend) {
+          html += `
+            <div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/60 p-2 flex flex-col justify-between">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-400">${day}</span>
+                <span class="text-[10px] font-medium text-slate-400 uppercase">Off</span>
+              </div>
+              <div class="text-[10px] text-slate-400 text-center my-auto">Weekend</div>
+            </div>
+          `;
+          continue;
+        }
+
+        const entry = scheduleData[dateKey];
+        const isHoliday =
+          entry &&
+          entry.assignments.Jazzy.includes('Holiday') &&
+          entry.assignments.Leila.includes('Holiday') &&
+          entry.assignments.Aubrey.includes('Holiday');
+
+        const cardBg = isHoliday
+          ? 'bg-amber-50/80 hover:bg-amber-100/80'
+          : 'bg-white hover:bg-teal-50/40';
+
+        let assignmentsHtml = '';
+        if (entry) {
+          if (isHoliday) {
+            assignmentsHtml = `
+              <div class="my-auto py-2 px-1.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 text-center">
+                <div class="text-[11px] font-extrabold leading-tight">HOLIDAY</div>
+                <div class="text-[10px] font-medium">No Duty</div>
+              </div>
+            `;
+          } else {
+            const visibleClerks = activeClerkFilter === 'ALL' ? CLERKS : [activeClerkFilter];
+            assignmentsHtml = `<div class="space-y-1 mt-1.5">` + visibleClerks.map(c => {
+              const st = entry.assignments[c];
+              const badgeCls = getStationBadgeStyle(st);
+              const dotCls = getClerkDotColor(c);
+              return `
+                <div class="flex items-center justify-between gap-1 px-1.5 py-0.5 rounded-md border text-[10px] sm:text-[11px] font-semibold ${badgeCls}" title="${c}: ${st}">
+                  <span class="flex items-center gap-1 truncate">
+                    <span class="w-1.5 h-1.5 rounded-full ${dotCls} shrink-0"></span>
+                    <span class="font-bold">${c[0]}:</span>
+                    <span class="truncate">${shortStationLabel(st)}</span>
+                  </span>
+                </div>
+              `;
+            }).join('') + `</div>`;
+          }
+        }
+
+        html += `
+          <div onclick="openEditDayModal('${dateKey}')"
+            class="min-h-[115px] sm:min-h-[135px] ${cardBg} p-1.5 sm:p-2 flex flex-col justify-between transition cursor-pointer group relative">
+            <div class="flex items-center justify-between">
+              <span class="text-xs sm:text-sm font-extrabold ${isHoliday ? 'text-amber-800' : 'text-slate-800'}">${day}</span>
+              <span class="opacity-0 group-hover:opacity-100 transition text-[10px] font-bold text-teal-700 bg-teal-100 px-1.5 py-0.5 rounded">
+                Edit
+              </span>
+            </div>
+            ${assignmentsHtml}
+            ${
+              entry && entry.note && !isHoliday
+                ? `<p class="text-[9.5px] text-slate-400 truncate mt-1" title="${entry.note.replace(/"/g, '&quot;')}">${entry.note}</p>`
+                : ''
+            }
+          </div>
+        `;
+      }
+
+      // Trailing empty cells to complete 7-col grid
+      const totalCells = startWeekday + totalDays;
+      const trailing = (7 - (totalCells % 7)) % 7;
+      for (let i = 0; i < trailing; i++) {
+        html += `<div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/70 p-2"></div>`;
+      }
+
+      grid.innerHTML = html;
+    }
+
+    // =========================================================================
+    // 6. RENDER WEEKLY / LIST SCHEDULE TABLE
+    // =========================================================================
+    function renderScheduleTable() {
+      const monthFilter = document.getElementById('table-month-filter').value;
+      const tbody = document.getElementById('schedule-table-body');
+      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      const keys = Object.keys(scheduleData).sort().filter(k => {
+        if (monthFilter === 'ALL') return true;
+        return k.startsWith(monthFilter);
+      });
+
+      tbody.innerHTML = keys.map(dateKey => {
+        const entry = scheduleData[dateKey];
+        const dObj = parseDateLocal(dateKey);
+        const formattedDate = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        const dayStr = dayNames[entry.dayOfWeek];
+
+        const isHoliday =
+          entry.assignments.Jazzy.includes('Holiday') &&
+          entry.assignments.Leila.includes('Holiday') &&
+          entry.assignments.Aubrey.includes('Holiday');
+
+        return `
+          <tr class="${isHoliday ? 'bg-amber-50/70' : 'hover:bg-slate-50'} transition">
+            <td class="py-2.5 px-4 whitespace-nowrap">
+              <div class="font-bold text-slate-900">${formattedDate}</div>
+              <div class="text-[11px] font-semibold text-teal-700">${dayStr}</div>
+            </td>
+            <td class="py-2.5 px-3 whitespace-nowrap">
+              <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">
+                ${entry.weekLabel}
+              </span>
+            </td>
+            ${CLERKS.map(c => {
+              const st = entry.assignments[c];
+              const dimmed = activeClerkFilter !== 'ALL' && activeClerkFilter !== c ? 'opacity-35' : '';
+              return `
+                <td class="py-2.5 px-3 whitespace-nowrap ${dimmed}">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg border text-xs font-bold ${getStationBadgeStyle(st)}">
+                    ${shortStationLabel(st)}
+                  </span>
+                </td>
+              `;
+            }).join('')}
+            <td class="py-2.5 px-4 text-xs text-slate-600 max-w-xs">
+              <p class="line-clamp-2">${entry.note || '—'}</p>
+            </td>
+            <td class="py-2.5 px-3 text-right whitespace-nowrap no-print">
+              <button onclick="openEditDayModal('${dateKey}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 transition cursor-pointer">
+                Edit
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 7. RENDER STATION & BHS 1-6 FAIRNESS MATRIX + AUDIT
+    // =========================================================================
+    function renderMatrixAndStats() {
+      const counts = {
+        Jazzy: { rhu: 0, bhs1: 0, bhs2: 0, bhs3: 0, bhs4: 0, bhs5: 0, bhs6: 0, sec: 0, total: 0 },
+        Leila: { rhu: 0, bhs1: 0, bhs2: 0, bhs3: 0, bhs4: 0, bhs5: 0, bhs6: 0, sec: 0, total: 0 },
+        Aubrey: { rhu: 0, bhs1: 0, bhs2: 0, bhs3: 0, bhs4: 0, bhs5: 0, bhs6: 0, sec: 0, total: 0 }
+      };
+
+      Object.values(scheduleData).forEach(entry => {
+        CLERKS.forEach(c => {
+          const st = entry.assignments[c];
+          if (!st || st.includes('Holiday') || st.includes('Pre-Deployment')) return;
+          counts[c].total += 1;
+          if (st === 'RHU Palo') counts[c].rhu += 1;
+          else if (st === 'BHS 1') counts[c].bhs1 += 1;
+          else if (st === 'BHS 2') counts[c].bhs2 += 1;
+          else if (st === 'BHS 3') counts[c].bhs3 += 1;
+          else if (st === 'BHS 4') counts[c].bhs4 += 1;
+          else if (st === 'BHS 5') counts[c].bhs5 += 1;
+          else if (st === 'BHS 6') counts[c].bhs6 += 1;
+          else if (st.includes('Secondary Data')) counts[c].sec += 1;
+        });
+      });
+
+      // Update Top Header Pills
+      CLERKS.forEach(c => {
+        const pill = document.getElementById(`stat-pill-${c}`);
+        if (pill) {
+          pill.textContent = `${counts[c].rhu} RHU • ${counts[c].total}d`;
+        }
+      });
+
+      // Update Matrix Table
+      const matrixBody = document.getElementById('matrix-table-body');
+      matrixBody.innerHTML = CLERKS.map(c => {
+        const d = counts[c];
+        return `
+          <tr class="hover:bg-slate-50">
+            <td class="py-3 px-4 font-extrabold text-slate-900 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full ${getClerkDotColor(c)} text-white text-xs flex items-center justify-center">${c[0]}</span>
+              ${c}
+            </td>
+            <td class="py-3 px-3 text-center font-extrabold text-teal-800 bg-teal-50/40">${d.rhu}</td>
+            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs1}</td>
+            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs2}</td>
+            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs3}</td>
+            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs4}</td>
+            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs5}</td>
+            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs6}</td>
+            <td class="py-3 px-3 text-center font-semibold text-emerald-800 bg-emerald-50/40">${d.sec}</td>
+            <td class="py-3 px-3 text-center font-extrabold text-slate-900">${d.total} days</td>
+          </tr>
+        `;
+      }).join('');
+
+      // Weekly RHU Audit for Phase 3 (Jan 11 - Apr 30, 2027)
+      const weeklyMap = {};
+      Object.keys(scheduleData).sort().forEach(k => {
+        if (k < '2027-01-11' || k > '2027-04-30') return;
+        const entry = scheduleData[k];
+        const wk = entry.weekLabel;
+        if (!weeklyMap[wk]) {
+          weeklyMap[wk] = { label: wk, dates: [], rhuClerks: new Set(), bhsSet: new Set() };
+        }
+        weeklyMap[wk].dates.push(k);
+        CLERKS.forEach(c => {
+          const st = entry.assignments[c];
+          if (st === 'RHU Palo') weeklyMap[wk].rhuClerks.add(c);
+          if (st.startsWith('BHS ')) weeklyMap[wk].bhsSet.add(st);
+        });
+      });
+
+      const auditGrid = document.getElementById('weekly-audit-grid');
+      auditGrid.innerHTML = Object.values(weeklyMap).map(w => {
+        const allThreeRHU = CLERKS.every(c => w.rhuClerks.has(c));
+        const bhsList = Array.from(w.bhsSet).sort().join(', ') || 'None';
+        const firstD = parseDateLocal(w.dates[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const lastD = parseDateLocal(w.dates[w.dates.length - 1]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        return `
+          <div class="p-3 rounded-xl border ${allThreeRHU ? 'border-emerald-200 bg-emerald-50/40' : 'border-amber-300 bg-amber-50/60'}">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold text-slate-900">${w.label}</span>
+              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${allThreeRHU ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-200 text-amber-900'}">
+                ${allThreeRHU ? '✓ All 3 @ RHU' : 'Check RHU'}
+              </span>
+            </div>
+            <div class="text-[11px] text-slate-500 mt-0.5">${firstD} – ${lastD}, 2027</div>
+            <div class="text-[11px] text-slate-700 mt-2">
+              <span class="font-semibold">BHS Covered:</span> ${bhsList}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // =========================================================================
+    // 8. RENDER & MANAGE TASKS SIDEBAR
+    // =========================================================================
+    function renderTasks() {
+      const phaseFilter = document.getElementById('task-phase-filter').value;
+      const container = document.getElementById('task-list-container');
+
+      const filtered = tasksData.filter(t => {
+        const phaseOk = phaseFilter === 'ALL' || t.phase === phaseFilter;
+        const clerkOk =
+          activeClerkFilter === 'ALL' ||
+          t.assignee === 'All Clerks' ||
+          t.assignee === activeClerkFilter;
+        return phaseOk && clerkOk;
+      });
+
+      const completedTotal = tasksData.filter(t => t.completed).length;
+      const totalTasks = tasksData.length;
+      const pct = totalTasks === 0 ? 0 : Math.round((completedTotal / totalTasks) * 100);
+
+      document.getElementById('task-progress-badge').textContent = `${completedTotal} / ${totalTasks} Done`;
+      document.getElementById('task-progress-bar').style.width = `${pct}%`;
+      const mobCount = document.getElementById('mobile-task-count');
+      if (mobCount) mobCount.textContent = `${completedTotal}/${totalTasks}`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 px-4 text-slate-400 text-xs">
+            No tasks match the current filter. Click <strong>+ Add Task</strong> above to create one.
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(task => {
+        const assigneeBadge =
+          task.assignee === 'Jazzy'
+            ? 'bg-teal-100 text-teal-800'
+            : task.assignee === 'Leila'
+            ? 'bg-indigo-100 text-indigo-800'
+            : task.assignee === 'Aubrey'
+            ? 'bg-purple-100 text-purple-800'
+            : 'bg-slate-200 text-slate-800';
+
+        return `
+          <div class="p-3 rounded-xl border ${task.completed ? 'bg-slate-50 border-slate-200 opacity-75' : 'bg-white border-slate-200 hover:border-teal-300'} shadow-2xs transition group">
+            <div class="flex items-start gap-2.5">
+              <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')"
+                class="mt-1 w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer shrink-0" />
+              <div class="flex-1 min-w-0">
+                <p class="text-xs sm:text-[13px] font-semibold leading-snug ${task.completed ? 'line-through text-slate-400' : 'text-slate-800'}">
+                  ${task.title}
+                </p>
+                <div class="flex flex-wrap items-center gap-1.5 mt-2">
+                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${assigneeBadge}">
+                    ${task.assignee}
+                  </span>
+                  ${task.station ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-teal-50 text-teal-800 border border-teal-200">${task.station}</span>` : ''}
+                  ${task.dueDate ? `<span class="text-[10px] font-medium text-slate-400">Due: ${task.dueDate}</span>` : ''}
+                </div>
+              </div>
+              <div class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition">
+                <button onclick="openTaskModal('${task.id}')" title="Edit Task" class="p-1 rounded-lg text-slate-400 hover:text-teal-700 hover:bg-teal-50 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                  </svg>
+                </button>
+                <button onclick="deleteTask('${task.id}')" title="Delete Task" class="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleTask(id) {
+      const idx = tasksData.findIndex(t => t.id === id);
+      if (idx !== -1) {
+        tasksData[idx].completed = !tasksData[idx].completed;
+        setUnsavedState(true);
+        saveTasksState(false);
+        renderTasks();
+      }
+    }
+
+    function deleteTask(id) {
+      tasksData = tasksData.filter(t => t.id !== id);
+      setUnsavedState(true);
+      saveTasksState();
+      renderTasks();
+    }
+
+    function openTaskModal(taskId = null) {
+      const modal = document.getElementById('task-modal');
+      const titleHeader = document.getElementById('task-modal-title');
+      if (taskId) {
+        const t = tasksData.find(item => item.id === taskId);
+        if (!t) return;
+        titleHeader.textContent = 'Edit Activity / Task';
+        document.getElementById('task-edit-id').value = t.id;
+        document.getElementById('task-title-input').value = t.title;
+        document.getElementById('task-assignee-input').value = t.assignee;
+        document.getElementById('task-phase-input').value = t.phase;
+        document.getElementById('task-station-input').value = t.station || '';
+        document.getElementById('task-due-input').value = t.dueDate || '';
+      } else {
+        titleHeader.textContent = 'Add New Activity / Task';
+        document.getElementById('task-edit-id').value = '';
+        document.getElementById('task-title-input').value = '';
+        document.getElementById('task-assignee-input').value = 'All Clerks';
+        document.getElementById('task-phase-input').value = 'Phase 1 (Nov 16–Dec 11)';
+        document.getElementById('task-station-input').value = '';
+        document.getElementById('task-due-input').value = '';
+      }
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeTaskModal() {
+      const modal = document.getElementById('task-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function saveTask(e) {
+      e.preventDefault();
+      const id = document.getElementById('task-edit-id').value;
+      const title = document.getElementById('task-title-input').value.trim();
+      const assignee = document.getElementById('task-assignee-input').value;
+      const phase = document.getElementById('task-phase-input').value;
+      const station = document.getElementById('task-station-input').value.trim();
+      const dueDate = document.getElementById('task-due-input').value;
+
+      if (!title) return;
+
+      if (id) {
+        const idx = tasksData.findIndex(t => t.id === id);
+        if (idx !== -1) {
+          tasksData[idx] = { ...tasksData[idx], title, assignee, phase, station, dueDate };
+        }
+      } else {
+        tasksData.unshift({
+          id: 'task_' + Date.now(),
+          title,
+          assignee,
+          phase,
+          station,
+          dueDate,
+          completed: false
+        });
+      }
+
+      saveTasksState();
+      renderTasks();
+      closeTaskModal();
+    }
+
+    // =========================================================================
+    // 9. DAILY SCHEDULE EDIT MODAL LOGIC
+    // =========================================================================
+    function populateStationDropdowns() {
+      CLERKS.forEach(c => {
+        const sel = document.getElementById(`edit-station-${c}`);
+        sel.innerHTML = STATION_OPTIONS.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+        sel.addEventListener('change', () => setUnsavedState(true));
+      });
+      const noteEl = document.getElementById('edit-day-note');
+      if (noteEl) {
+        noteEl.addEventListener('input', () => setUnsavedState(true));
+      }
+    }
+
+    function openEditDayModal(dateKey) {
+      const entry = scheduleData[dateKey];
+      if (!entry) return;
+
+      const dObj = parseDateLocal(dateKey);
+      const formatted = dObj.toLocaleDateString('en-US', {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+      });
+
+      document.getElementById('edit-date-key').value = dateKey;
+      document.getElementById('modal-phase-tag').textContent = `${entry.phase} • ${entry.weekLabel}`;
+      document.getElementById('modal-date-title').textContent = formatted;
+
+      CLERKS.forEach(c => {
+        document.getElementById(`edit-station-${c}`).value = entry.assignments[c];
+      });
+      document.getElementById('edit-day-note').value = entry.note || '';
+
+      const modal = document.getElementById('edit-day-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeEditDayModal() {
+      const modal = document.getElementById('edit-day-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function applyDayPreset(preset) {
+      if (preset === 'ALL_RHU') {
+        CLERKS.forEach(c => (document.getElementById(`edit-station-${c}`).value = 'RHU Palo'));
+        document.getElementById('edit-day-note').value = 'All 3 clerks on duty at RHU Palo.';
+      } else if (preset === 'ALL_SEC') {
+        CLERKS.forEach(
+          c => (document.getElementById(`edit-station-${c}`).value = 'BHS / Secondary Data Assessment')
+        );
+        document.getElementById('edit-day-note').value =
+          'BHS & Catchment Barangay Community Assessment using secondary data.';
+      } else if (preset === 'HOLIDAY') {
+        CLERKS.forEach(c => (document.getElementById(`edit-station-${c}`).value = 'Holiday / No Duty'));
+        document.getElementById('edit-day-note').value = 'Holiday / No Duty.';
+      }
+      setUnsavedState(true);
+    }
+
+    function saveDayEdit(e) {
+      e.preventDefault();
+      const dateKey = document.getElementById('edit-date-key').value;
+      if (!scheduleData[dateKey]) return;
+
+      CLERKS.forEach(c => {
+        scheduleData[dateKey].assignments[c] = document.getElementById(`edit-station-${c}`).value;
+      });
+      scheduleData[dateKey].note = document.getElementById('edit-day-note').value.trim();
+
+      saveScheduleState();
+      refreshAllViews();
+      closeEditDayModal();
+    }
+
+    // =========================================================================
+    // 10. VIEW SWITCHING, CLERK FILTERING, PDF GENERATION, CSV & RESET
+    // =========================================================================
+    function renderSingleMonthPDFPage(doc, mInfo, isFirstPage) {
+      if (!isFirstPage) {
+        doc.addPage('letter', 'landscape');
+      }
+
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 24;
+
+      // Formal Header Banner
+      doc.setFillColor(15, 118, 110); // Teal-700
+      doc.roundedRect(margin, margin, pageWidth - margin * 2, 46, 6, 6, 'F');
+
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(14);
+      doc.text('PALO COMMUNITY CLERKS ACTIVITY PLANNER — DUTY ROTATION SCHEDULE', margin + 14, margin + 20);
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9.5);
+      doc.text(
+        `Month: ${mInfo.label.toUpperCase()}   |   Medical Clerks: Jazzy, Leila, Aubrey   |   Duty Days: Monday – Friday`,
+        margin + 14,
+        margin + 36
+      );
+
+      // Build Month Matrix (Mon-Fri 5-column clean paper layout)
+      const lastDay = new Date(mInfo.year, mInfo.month + 1, 0);
+      const totalDays = lastDay.getDate();
+
+      const weeks = [];
+      let currentWeek = ['', '', '', '', '']; // Mon, Tue, Wed, Thu, Fri
+
+      for (let day = 1; day <= totalDays; day++) {
+        const dObj = new Date(mInfo.year, mInfo.month, day);
+        const dow = dObj.getDay(); // 0=Sun..6=Sat
+        if (dow === 0 || dow === 6) continue;
+
+        const colIdx = dow - 1; // 0=Mon..4=Fri
+        const dateKey = formatDateKey(dObj);
+        const entry = scheduleData[dateKey];
+
+        if (entry) {
+          const isHol =
+            entry.assignments.Jazzy.includes('Holiday') &&
+            entry.assignments.Leila.includes('Holiday') &&
+            entry.assignments.Aubrey.includes('Holiday');
+
+          if (isHol) {
+            currentWeek[colIdx] = `${day} (${mInfo.short.split(' ')[0]})\nHOLIDAY / NO DUTY`;
+          } else {
+            currentWeek[colIdx] =
+              `${day} (${mInfo.short.split(' ')[0]})\n` +
+              `Jazzy: ${shortStationLabel(entry.assignments.Jazzy)}\n` +
+              `Leila: ${shortStationLabel(entry.assignments.Leila)}\n` +
+              `Aubrey: ${shortStationLabel(entry.assignments.Aubrey)}`;
+          }
+        } else {
+          currentWeek[colIdx] = `${day}`;
+        }
+
+        if (dow === 5 || day === totalDays) {
+          weeks.push(currentWeek);
+          currentWeek = ['', '', '', '', ''];
+        }
+      }
+
+      const tableStartY = margin + 56;
+      const availableHeight = pageHeight - tableStartY - 34;
+      const rowHeight = Math.min(78, Math.floor((availableHeight - 24) / Math.max(weeks.length, 1)));
+
+      doc.autoTable({
+        startY: tableStartY,
+        margin: { left: margin, right: margin },
+        head: [['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']],
+        body: weeks,
+        theme: 'grid',
+        styles: {
+          font: 'helvetica',
+          fontSize: 8.5,
+          cellPadding: 5,
+          valign: 'top',
+          textColor: [30, 41, 59],
+          lineColor: [203, 213, 225],
+          lineWidth: 0.6,
+          minCellHeight: rowHeight
+        },
+        headStyles: {
+          fillColor: [241, 245, 249],
+          textColor: [15, 118, 110],
+          fontStyle: 'bold',
+          fontSize: 9.5,
+          halign: 'center',
+          minCellHeight: 22
+        },
+        didParseCell: function (data) {
+          if (data.section === 'body') {
+            const val = String(data.cell.raw || '');
+            if (!val) {
+              data.cell.styles.fillColor = [248, 250, 252];
+            } else if (val.includes('HOLIDAY')) {
+              data.cell.styles.fillColor = [254, 243, 199];
+              data.cell.styles.textColor = [146, 64, 14];
+              data.cell.styles.fontStyle = 'bold';
+            }
+          }
+        }
+      });
+
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(100, 116, 139);
+      doc.text(
+        `Generated on ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}  •  Palo Community Medical Clerkship Rotation`,
+        margin,
+        pageHeight - 12
+      );
+      doc.text(`Page ${mInfo.label}`, pageWidth - margin, pageHeight - 12, { align: 'right' });
+    }
+
+    function downloadCalendarPDF() {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+        const mInfo = MONTHS_LIST[currentMonthIndex];
+        renderSingleMonthPDFPage(doc, mInfo, true);
+        doc.save(`Palo_Clerks_Calendar_${mInfo.label.replace(/\s+/g, '_')}.pdf`);
+        showToast(`Downloaded ${mInfo.label} Calendar PDF!`);
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to generate Calendar PDF.', 'error');
+      }
+    }
+
+    function downloadAllMonthsCalendarPDF() {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+        MONTHS_LIST.forEach((mInfo, idx) => {
+          renderSingleMonthPDFPage(doc, mInfo, idx === 0);
+        });
+        doc.save('Palo_Clerks_Full_Calendar_Nov2026_Apr2027.pdf');
+        showToast('Downloaded Complete 6-Month Calendar PDF!');
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to generate full Calendar PDF.', 'error');
+      }
+    }
+
+    function downloadTasksPDF() {
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        const margin = 32;
+
+        // Formal Header
+        doc.setFillColor(15, 118, 110);
+        doc.roundedRect(margin, margin, pageWidth - margin * 2, 54, 6, 6, 'F');
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(13.5);
+        doc.text('PALO COMMUNITY CLERKS ACTIVITY PLANNER', margin + 14, margin + 21);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10.5);
+        doc.text('COMMUNITY CLERKSHIP TASK CHECKLIST & DELIVERABLES', margin + 14, margin + 36);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8.5);
+        const completedCount = tasksData.filter(t => t.completed).length;
+        doc.text(
+          `Clerks: Jazzy, Leila, Aubrey   |   Progress: ${completedCount} of ${tasksData.length} Completed   |   Generated: ${new Date().toLocaleDateString('en-US')}`,
+          margin + 14,
+          margin + 48
+        );
+
+        // Organize Tasks by Phase in Logical Order
+        const phaseOrder = [
+          'Phase 1 (Nov 16–Dec 11)',
+          'Holiday Break (Dec 14–Jan 10)',
+          'Phase 3 (Jan 11–Apr 30)'
+        ];
+
+        const sortedTasks = [...tasksData].sort((a, b) => {
+          const idxA = phaseOrder.indexOf(a.phase);
+          const idxB = phaseOrder.indexOf(b.phase);
+          if (idxA !== idxB) return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+          return (a.dueDate || '').localeCompare(b.dueDate || '');
+        });
+
+        const tableBody = sortedTasks.map((t, i) => [
+          `${i + 1}`,
+          t.completed ? '[ DONE ]' : '[ PENDING ]',
+          t.title,
+          t.assignee,
+          t.station || '—',
+          t.phase.replace(/\s*\(.*?\)/, ''),
+          t.dueDate || '—'
+        ]);
+
+        doc.autoTable({
+          startY: margin + 66,
+          margin: { left: margin, right: margin, bottom: 36 },
+          head: [['#', 'Status', 'Activity / Task Description', 'Assigned', 'Station', 'Period', 'Target Date']],
+          body: tableBody,
+          theme: 'grid',
+          styles: {
+            font: 'helvetica',
+            fontSize: 8.5,
+            cellPadding: 5,
+            textColor: [30, 41, 59],
+            lineColor: [203, 213, 225],
+            lineWidth: 0.5,
+            valign: 'middle'
+          },
+          headStyles: {
+            fillColor: [241, 245, 249],
+            textColor: [15, 118, 110],
+            fontStyle: 'bold',
+            fontSize: 8.5
+          },
+          columnStyles: {
+            0: { cellWidth: 22, halign: 'center' },
+            1: { cellWidth: 58, halign: 'center', fontStyle: 'bold' },
+            2: { cellWidth: 'auto' },
+            3: { cellWidth: 62 },
+            4: { cellWidth: 74 },
+            5: { cellWidth: 58 },
+            6: { cellWidth: 62, halign: 'center' }
+          },
+          didParseCell: function (data) {
+            if (data.section === 'body' && data.column.index === 1) {
+              const txt = String(data.cell.raw || '');
+              if (txt.includes('DONE')) {
+                data.cell.styles.textColor = [5, 150, 105];
+                data.cell.styles.fillColor = [236, 253, 245];
+              } else {
+                data.cell.styles.textColor = [180, 83, 9];
+                data.cell.styles.fillColor = [255, 251, 235];
+              }
+            }
+          },
+          didDrawPage: function () {
+            doc.setFontSize(8);
+            doc.setTextColor(100, 116, 139);
+            doc.text(
+              'PALO COMMUNITY CLERKS ACTIVITY PLANNER — Task Checklist',
+              margin,
+              pageHeight - 16
+            );
+            doc.text(
+              `Page ${doc.internal.getNumberOfPages()}`,
+              pageWidth - margin,
+              pageHeight - 16,
+              { align: 'right' }
+            );
+          }
+        });
+
+        doc.save('Palo_Community_Clerks_Tasks_Checklist.pdf');
+        showToast('Downloaded Organized Tasks PDF!');
+      } catch (err) {
+        console.error(err);
+        showToast('Failed to generate Tasks PDF.', 'error');
+      }
+    }
+
+    function setClerkFilter(clerk) {
+      activeClerkFilter = clerk;
+      document.querySelectorAll('.clerk-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
+        btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+      });
+      const activeBtn = document.getElementById(`filter-btn-${clerk}`);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+        activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
+      }
+      refreshAllViews();
+    }
+
+    function switchView(viewName) {
+      activeView = viewName;
+      const scheduleWorkspace = document.getElementById('schedule-workspace');
+      const tasksSidebar = document.getElementById('tasks-sidebar');
+
+      // Reset tabs
+      document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.classList.remove('bg-white', 'text-teal-700', 'shadow-sm');
+        tab.classList.add('text-slate-600');
+      });
+      const activeTab = document.getElementById(`tab-${viewName}`);
+      if (activeTab) {
+        activeTab.classList.add('bg-white', 'text-teal-700', 'shadow-sm');
+        activeTab.classList.remove('text-slate-600');
+      }
+
+      if (viewName === 'tasks-mobile') {
+        scheduleWorkspace.classList.add('hidden');
+        tasksSidebar.classList.remove('hidden');
+      } else {
+        scheduleWorkspace.classList.remove('hidden');
+        if (window.innerWidth < 1024) {
+          tasksSidebar.classList.add('hidden');
+        } else {
+          tasksSidebar.classList.remove('hidden');
+        }
+
+        document.getElementById('view-calendar').classList.toggle('hidden', viewName !== 'calendar');
+        document.getElementById('view-table').classList.toggle('hidden', viewName !== 'table');
+        document.getElementById('view-matrix').classList.toggle('hidden', viewName !== 'matrix');
+      }
+    }
+
+    function changeMonth(delta) {
+      const next = currentMonthIndex + delta;
+      if (next >= 0 && next < MONTHS_LIST.length) {
+        currentMonthIndex = next;
+        renderCalendar();
+      }
+    }
+
+    function selectMonth(idx) {
+      currentMonthIndex = idx;
+      renderCalendar();
+    }
+
+    function exportCSV() {
+      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const rows = [
+        ['Date', 'Day', 'Phase', 'Week', 'Jazzy', 'Leila', 'Aubrey', 'Activity Notes']
+      ];
+
+      Object.keys(scheduleData).sort().forEach(k => {
+        const e = scheduleData[k];
+        rows.push([
+          e.date,
+          dayNames[e.dayOfWeek],
+          `"${e.phase}"`,
+          `"${e.weekLabel}"`,
+          `"${e.assignments.Jazzy}"`,
+          `"${e.assignments.Leila}"`,
+          `"${e.assignments.Aubrey}"`,
+          `"${(e.note || '').replace(/"/g, '""')}"`
+        ]);
+      });
+
+      const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(r => r.join(',')).join('\n');
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement('a');
+      link.setAttribute('href', encodedUri);
+      link.setAttribute('download', 'Palo_Community_Clerks_Schedule_Nov2026_Apr2027.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      showToast('CSV schedule downloaded!');
+    }
+
+    function openResetModal() {
+      const modal = document.getElementById('reset-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeResetModal() {
+      const modal = document.getElementById('reset-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function confirmResetDefault() {
+      scheduleData = generateDefaultSchedule();
+      tasksData = generateDefaultTasks();
+      saveScheduleState(false);
+      saveTasksState(false);
+      refreshAllViews();
+      closeResetModal();
+      showToast('Schedule & tasks restored to default!');
+    }
+
+    function refreshAllViews() {
+      renderCalendar();
+      renderScheduleTable();
+      renderMatrixAndStats();
+      renderTasks();
+    }
+
+    // =========================================================================
+    // 11. INITIALIZATION
+    // =========================================================================
+    // 11. EXPOSE HANDLERS TO GLOBAL WINDOW & INITIALIZE
+    // =========================================================================
+    Object.assign(window, {
+      manualSaveAll,
+      downloadCalendarPDF,
+      downloadAllMonthsCalendarPDF,
+      downloadTasksPDF,
+      exportCSV,
+      openResetModal,
+      closeResetModal,
+      confirmResetDefault,
+      setClerkFilter,
+      switchView,
+      changeMonth,
+      selectMonth,
+      renderScheduleTable,
+      renderTasks,
+      openTaskModal,
+      closeTaskModal,
+      saveTask,
+      toggleTask,
+      deleteTask,
+      openEditDayModal,
+      closeEditDayModal,
+      applyDayPreset,
+      saveDayEdit
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      populateStationDropdowns();
+      initCloudSync();
+    });
+  </script>
+</body>
+</html>
