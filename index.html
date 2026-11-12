@@ -73,95 +73,94 @@
 
   <!-- Top Navigation & Portal Header -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2.5">
+    <div class="max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2">
         <!-- Brand & Title -->
-        <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
-          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
-          <div class="min-w-0">
-            <h1 class="text-sm sm:text-base xl:text-lg font-extrabold tracking-tight text-slate-900 truncate whitespace-nowrap">
+          <div class="min-w-0 flex-1">
+            <h1 class="text-xs sm:text-base xl:text-lg font-extrabold tracking-tight text-slate-900 truncate">
               PALO COMMUNITY CLERKS ACTIVITY PLANNER
             </h1>
-            <p class="text-[11px] sm:text-xs text-slate-500 truncate whitespace-nowrap">
+            <p class="text-[10px] sm:text-xs text-slate-500 truncate">
               Medical Clerkship Duty Rotation &amp; Community Health Portal (Nov 2026 – Apr 2027)
             </p>
           </div>
         </div>
 
-        <!-- Portal Quick Actions (Single-Line Scrollable on Small Screens, Compact on Desktop) -->
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 lg:pb-0 shrink-0 no-print">
-          <span id="save-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap shrink-0">
+        <!-- Portal Quick Actions (Wraps cleanly on mobile phones so every button is visible & tappable) -->
+        <div class="flex flex-wrap items-center gap-1.5 no-print">
+          <span id="save-status-badge" class="inline-flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 whitespace-nowrap">
             <span id="save-status-dot" class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             <span id="save-status-text">All Changes Saved</span>
           </span>
-          <button onclick="manualSaveAll()" id="explicit-save-btn" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <button onclick="manualSaveAll()" id="explicit-save-btn" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
             </svg>
             Save
           </button>
-          <button onclick="downloadCalendarPDF()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <button onclick="downloadCalendarPDF()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Calendar PDF
           </button>
-          <button onclick="downloadTasksPDF()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <button onclick="downloadTasksPDF()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             Tasks PDF
           </button>
-          <button onclick="exportCSV()" class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 shadow-2xs transition cursor-pointer whitespace-nowrap shrink-0">
+          <button onclick="exportCSV()" class="inline-flex items-center px-2 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 shadow-2xs transition cursor-pointer whitespace-nowrap">
             CSV
           </button>
-          <button onclick="openResetModal()" class="inline-flex items-center px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer whitespace-nowrap shrink-0">
+          <button onclick="openResetModal()" class="inline-flex items-center px-2 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer whitespace-nowrap">
             Reset
           </button>
         </div>
       </div>
 
-      <!-- Clerk Profiles & Filter Bar (Aligned on One Clean Row) -->
-      <div class="mt-2.5 pt-2.5 border-t border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 no-print">
+      <!-- Clerk Profiles & Filter Bar (Responsive Grid on Phones, Single Row on Desktop) -->
+      <div class="mt-2 pt-2 border-t border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 no-print">
         <!-- Clerk Filter Pills & Duty Counters -->
-        <div class="flex items-center gap-1.5 overflow-x-auto pb-0.5 lg:pb-0">
-          <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mr-0.5 whitespace-nowrap shrink-0">Clerk:</span>
-          <button onclick="setClerkFilter('ALL')" id="filter-btn-ALL" class="clerk-filter-btn px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer bg-slate-900 text-white shadow-2xs whitespace-nowrap shrink-0">
-            All (3)
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5">
+          <button onclick="setClerkFilter('ALL')" id="filter-btn-ALL" class="clerk-filter-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-slate-900 text-white shadow-2xs text-center">
+            All Clerks (3)
           </button>
-          <button onclick="setClerkFilter('Jazzy')" id="filter-btn-Jazzy" class="clerk-filter-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-teal-50 whitespace-nowrap shrink-0">
+          <button onclick="setClerkFilter('Jazzy')" id="filter-btn-Jazzy" class="clerk-filter-btn inline-flex items-center justify-center sm:justify-start gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-teal-50">
             <span class="w-4 h-4 rounded-full bg-teal-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">J</span>
             <span>Jazzy</span>
-            <span id="stat-pill-Jazzy" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+            <span id="stat-pill-Jazzy" class="hidden sm:inline text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
           </button>
-          <button onclick="setClerkFilter('Leila')" id="filter-btn-Leila" class="clerk-filter-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50 whitespace-nowrap shrink-0">
+          <button onclick="setClerkFilter('Leila')" id="filter-btn-Leila" class="clerk-filter-btn inline-flex items-center justify-center sm:justify-start gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50">
             <span class="w-4 h-4 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">L</span>
             <span>Leila</span>
-            <span id="stat-pill-Leila" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+            <span id="stat-pill-Leila" class="hidden sm:inline text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
           </button>
-          <button onclick="setClerkFilter('Aubrey')" id="filter-btn-Aubrey" class="clerk-filter-btn inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-purple-50 whitespace-nowrap shrink-0">
+          <button onclick="setClerkFilter('Aubrey')" id="filter-btn-Aubrey" class="clerk-filter-btn inline-flex items-center justify-center sm:justify-start gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-purple-50">
             <span class="w-4 h-4 rounded-full bg-purple-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">A</span>
             <span>Aubrey</span>
-            <span id="stat-pill-Aubrey" class="text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+            <span id="stat-pill-Aubrey" class="hidden sm:inline text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
           </button>
         </div>
 
-        <!-- Primary View Switcher Tabs -->
-        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-lg overflow-x-auto shrink-0 self-start lg:self-auto">
-          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer bg-white text-teal-700 shadow-2xs whitespace-nowrap shrink-0">
+        <!-- Primary View Switcher Tabs (Full-Width Equal Grid on Phones) -->
+        <div class="grid grid-cols-4 sm:flex items-center gap-1 bg-slate-100 p-1 rounded-lg w-full lg:w-auto">
+          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer bg-white text-teal-700 shadow-2xs text-center truncate">
             📅 Calendar
           </button>
-          <button onclick="switchView('table')" id="tab-table" class="view-tab px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap shrink-0">
-            📋 List Schedule
+          <button onclick="switchView('table')" id="tab-table" class="view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 text-center truncate">
+            📋 List
           </button>
-          <button onclick="switchView('matrix')" id="tab-matrix" class="view-tab px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap shrink-0">
-            📊 BHS 1–6 Matrix
+          <button onclick="switchView('matrix')" id="tab-matrix" class="view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 text-center truncate">
+            📊 Matrix
           </button>
-          <button onclick="switchView('tasks-mobile')" id="tab-tasks-mobile" class="lg:hidden view-tab px-2.5 py-1 rounded-md text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap shrink-0">
+          <button onclick="switchView('tasks-mobile')" id="tab-tasks-mobile" class="lg:hidden view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 text-center truncate">
             ✅ Tasks (<span id="mobile-task-count">0</span>)
           </button>
         </div>
@@ -170,7 +169,8 @@
   </header>
 
   <!-- Main Workspace: Split Screen (Left/Center Schedule Portal + Right Side-by-Side Task Checklist) -->
-  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
       <!-- LEFT / MAIN PANEL (8 cols on lg+): Calendar, List Schedule, or BHS Matrix -->
@@ -218,20 +218,20 @@
             <span class="px-2 py-0.5 rounded-md font-semibold bg-amber-100 text-amber-800 border border-amber-200">Holiday / No Duty</span>
           </div>
 
-          <!-- Calendar Grid Card -->
+          <!-- Calendar Grid Card (5-Column Mon-Fri on Mobile so all weekday data fits cleanly; 7-Column on Tablet/Desktop) -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-full">
             <!-- Day of Week Headers -->
-            <div class="grid grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-xs font-bold uppercase tracking-wider text-slate-600">
-              <div class="py-2.5 text-slate-400">Sun</div>
-              <div class="py-2.5 text-teal-800">Mon</div>
-              <div class="py-2.5 text-teal-800">Tue</div>
-              <div class="py-2.5 text-teal-800">Wed</div>
-              <div class="py-2.5 text-teal-800">Thu</div>
-              <div class="py-2.5 text-teal-800">Fri</div>
-              <div class="py-2.5 text-slate-400">Sat</div>
+            <div class="grid grid-cols-5 md:grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div class="hidden md:block py-2.5 text-slate-400">Sun</div>
+              <div class="py-2 sm:py-2.5 text-teal-800">Mon</div>
+              <div class="py-2 sm:py-2.5 text-teal-800">Tue</div>
+              <div class="py-2 sm:py-2.5 text-teal-800">Wed</div>
+              <div class="py-2 sm:py-2.5 text-teal-800">Thu</div>
+              <div class="py-2 sm:py-2.5 text-teal-800">Fri</div>
+              <div class="hidden md:block py-2.5 text-slate-400">Sat</div>
             </div>
             <!-- Calendar Days Container -->
-            <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50">
+            <div id="calendar-grid" class="grid grid-cols-5 md:grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50">
               <!-- Populated dynamically by JS -->
             </div>
           </div>
@@ -257,7 +257,13 @@
           </div>
 
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-full">
-            <div class="overflow-x-auto max-h-[680px]">
+            <!-- Mobile Card Stack (Visible on < md screens so all clerk data & notes fit without horizontal scrolling) -->
+            <div id="schedule-mobile-cards" class="md:hidden divide-y divide-slate-200">
+              <!-- Populated by JS -->
+            </div>
+
+            <!-- Desktop/Tablet Roster Table -->
+            <div class="hidden md:block overflow-x-auto max-h-[680px]">
               <table class="w-full text-left border-collapse">
                 <thead class="bg-slate-100 sticky top-0 z-10 border-b border-slate-200 text-xs font-bold uppercase tracking-wider text-slate-600">
                   <tr>
@@ -327,8 +333,8 @@
       </div>
 
       <!-- RIGHT / SIDE-BY-SIDE PANEL (4 cols on lg+): TASKS & DELIVERABLES CHECKLIST -->
-      <aside id="tasks-sidebar" class="hidden lg:block lg:col-span-4 space-y-4 sticky top-28">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-8.5rem)]">
+      <aside id="tasks-sidebar" class="hidden lg:block lg:col-span-4 space-y-4 lg:sticky lg:top-28">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-11rem)] lg:max-h-[calc(100vh-8.5rem)]">
           <!-- Panel Header -->
           <div class="p-4 bg-gradient-to-r from-teal-700 to-teal-800 text-white">
             <div class="flex items-center justify-between">
@@ -970,10 +976,18 @@
     }
 
     function shortStationLabel(station) {
-      if (station === 'BHS / Secondary Data Assessment') return 'BHS / Sec. Data';
-      if (station === 'Pre-Deployment Orientation') return 'Prep / Orient.';
+      if (station === 'BHS / Secondary Data Assessment') return 'Sec. Data';
+      if (station === 'Pre-Deployment Orientation') return 'Prep';
       if (station === 'Holiday / No Duty') return 'Holiday';
       return station;
+    }
+
+    function mobileCompactStationLabel(station) {
+      if (station === 'RHU Palo') return 'RHU';
+      if (station === 'BHS / Secondary Data Assessment') return 'SecData';
+      if (station === 'Pre-Deployment Orientation') return 'Prep';
+      if (station === 'Holiday / No Duty') return 'Holiday';
+      return station.replace(/\s+/g, '');
     }
 
     function getClerkDotColor(clerk) {
@@ -1031,10 +1045,85 @@
       const lastDayOfMonth = new Date(mInfo.year, mInfo.month + 1, 0);
       const startWeekday = firstDayOfMonth.getDay(); // 0 (Sun) to 6 (Sat)
       const totalDays = lastDayOfMonth.getDate();
+      const isMobile = window.innerWidth < 768;
 
       const grid = document.getElementById('calendar-grid');
       let html = '';
 
+      if (isMobile) {
+        // 5-Column Monday–Friday Calendar Layout for Mobile Phones (No wasted weekend columns, all data fits!)
+        const firstMondayOffset = startWeekday === 0 ? 1 : startWeekday === 6 ? 2 : 0;
+        const firstActiveDate = new Date(mInfo.year, mInfo.month, 1 + firstMondayOffset);
+        const leadingWeekdaySlots = firstActiveDate.getDay() - 1; // 0 (Mon) to 4 (Fri)
+
+        for (let i = 0; i < leadingWeekdaySlots; i++) {
+          html += `<div class="min-h-[96px] bg-slate-100/70 p-1"></div>`;
+        }
+
+        let renderedSlots = leadingWeekdaySlots;
+
+        for (let day = 1; day <= totalDays; day++) {
+          const currentObj = new Date(mInfo.year, mInfo.month, day);
+          const dow = currentObj.getDay();
+          if (dow === 0 || dow === 6) continue;
+
+          renderedSlots += 1;
+          const dateKey = formatDateKey(currentObj);
+          const entry = scheduleData[dateKey];
+          const isHoliday =
+            entry &&
+            entry.assignments.Jazzy.includes('Holiday') &&
+            entry.assignments.Leila.includes('Holiday') &&
+            entry.assignments.Aubrey.includes('Holiday');
+
+          const cardBg = isHoliday
+            ? 'bg-amber-50/90 active:bg-amber-100'
+            : 'bg-white active:bg-teal-50';
+
+          let assignmentsHtml = '';
+          if (entry) {
+            if (isHoliday) {
+              assignmentsHtml = `
+                <div class="my-auto py-1.5 px-1 rounded-md bg-amber-100 border border-amber-300 text-amber-900 text-center">
+                  <div class="text-[9px] font-extrabold leading-tight">HOLIDAY</div>
+                  <div class="text-[8px] font-medium">No Duty</div>
+                </div>
+              `;
+            } else {
+              const visibleClerks = activeClerkFilter === 'ALL' ? CLERKS : [activeClerkFilter];
+              assignmentsHtml = `<div class="space-y-0.5 mt-1">` + visibleClerks.map(c => {
+                const st = entry.assignments[c];
+                const badgeCls = getStationBadgeStyle(st);
+                return `
+                  <div class="px-1 py-0.5 rounded border text-[9px] leading-tight font-bold truncate ${badgeCls}" title="${c}: ${st}">
+                    ${c[0]}: ${mobileCompactStationLabel(st)}
+                  </div>
+                `;
+              }).join('') + `</div>`;
+            }
+          }
+
+          html += `
+            <div onclick="openEditDayModal('${dateKey}')"
+              class="min-h-[96px] ${cardBg} p-1 flex flex-col justify-between transition cursor-pointer relative">
+              <div class="flex items-center justify-between">
+                <span class="text-[11px] font-extrabold ${isHoliday ? 'text-amber-800' : 'text-slate-800'}">${day}</span>
+              </div>
+              ${assignmentsHtml}
+            </div>
+          `;
+        }
+
+        const trailing = (5 - (renderedSlots % 5)) % 5;
+        for (let i = 0; i < trailing; i++) {
+          html += `<div class="min-h-[96px] bg-slate-100/70 p-1"></div>`;
+        }
+
+        grid.innerHTML = html;
+        return;
+      }
+
+      // Desktop / Tablet 7-Column Calendar Layout
       // Leading empty cells
       for (let i = 0; i < startWeekday; i++) {
         html += `<div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/70 p-2"></div>`;
@@ -1134,12 +1223,54 @@
     function renderScheduleTable() {
       const monthFilter = document.getElementById('table-month-filter').value;
       const tbody = document.getElementById('schedule-table-body');
+      const mobileCards = document.getElementById('schedule-mobile-cards');
       const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
       const keys = Object.keys(scheduleData).sort().filter(k => {
         if (monthFilter === 'ALL') return true;
         return k.startsWith(monthFilter);
       });
+
+      if (mobileCards) {
+        mobileCards.innerHTML = keys.map(dateKey => {
+          const entry = scheduleData[dateKey];
+          const dObj = parseDateLocal(dateKey);
+          const formattedDate = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+          const dayStr = dayNames[entry.dayOfWeek];
+
+          const isHoliday =
+            entry.assignments.Jazzy.includes('Holiday') &&
+            entry.assignments.Leila.includes('Holiday') &&
+            entry.assignments.Aubrey.includes('Holiday');
+
+          return `
+            <div onclick="openEditDayModal('${dateKey}')" class="p-3 ${isHoliday ? 'bg-amber-50/70' : 'bg-white active:bg-slate-50'} transition cursor-pointer">
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-xs font-extrabold text-slate-900">${formattedDate}</span>
+                  <span class="text-[11px] font-bold text-teal-700">(${dayStr})</span>
+                </div>
+                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">
+                  ${entry.weekLabel}
+                </span>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5">
+                ${CLERKS.map(c => {
+                  const st = entry.assignments[c];
+                  const dimmed = activeClerkFilter !== 'ALL' && activeClerkFilter !== c ? 'opacity-35' : '';
+                  return `
+                    <div class="p-1.5 rounded-lg border text-center ${getStationBadgeStyle(st)} ${dimmed}">
+                      <div class="text-[10px] font-extrabold uppercase tracking-wide">${c}</div>
+                      <div class="text-[11px] font-bold truncate mt-0.5">${shortStationLabel(st)}</div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+              ${entry.note ? `<p class="text-[11px] text-slate-500 mt-2 leading-snug">${entry.note}</p>` : ''}
+            </div>
+          `;
+        }).join('');
+      }
 
       tbody.innerHTML = keys.map(dateKey => {
         const entry = scheduleData[dateKey];
@@ -1951,6 +2082,14 @@
     window.addEventListener('DOMContentLoaded', () => {
       populateStationDropdowns();
       initCloudSync();
+    });
+
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        renderCalendar();
+      }, 150);
     });
   </script>
 </body>
