@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PALO COMMUNITY CLERKS ACTIVITY PLANNER</title>
+  <title>PALO COMMUNITY CLERKS PORTAL</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -14,249 +14,149 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            clinical: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              200: '#99f6e4',
-              500: '#14b8a6',
-              600: '#0d9488',
-              700: '#0f766e',
-              800: '#115e59',
-              900: '#134e4a',
-            }
-          }
+          fontFamily: { sans: ['Inter', 'sans-serif'] }
         }
       }
     };
   </script>
   <style>
-    /* Custom subtle scrollbars and print styling */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #f1f5f9;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
     @media print {
-      .no-print {
-        display: none !important;
-      }
-      body {
-        background: #ffffff !important;
-      }
-      .print-full {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-shadow: none !important;
-        border: 1px solid #e2e8f0 !important;
-      }
+      .no-print { display: none !important; }
+      body { background: #ffffff !important; }
+      .print-full { width: 100% !important; max-width: 100% !important; box-shadow: none !important; border: 1px solid #e2e8f0 !important; }
     }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- Toast Notification Banner (Replaces alert) -->
+  <!-- Toast Notification Banner -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Top Navigation & Portal Header -->
   <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm">
-    <div class="max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8 py-2 sm:py-3">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+    <div class="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
         <!-- Brand & Title -->
-        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
-          <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-br from-teal-600 to-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0">
-            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <div class="flex items-center gap-3.5">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-teal-600 to-emerald-700 text-white flex items-center justify-center shadow-md shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
-          <div class="min-w-0 flex-1">
-            <h1 class="text-xs sm:text-base xl:text-lg font-extrabold tracking-tight text-slate-900 truncate">
-              PALO COMMUNITY CLERKS ACTIVITY PLANNER
-            </h1>
-            <p class="text-[10px] sm:text-xs text-slate-500 truncate">
-              Medical Clerkship Duty Rotation &amp; Community Health Portal (Nov 2026 – Apr 2027)
-            </p>
-          </div>
+          <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">
+            PALO COMMUNITY CLERKS PORTAL
+          </h1>
         </div>
 
-        <!-- Upper-Right Corner: Device Screen Fit Switcher & PDF Downloads -->
-        <div class="flex flex-wrap items-center justify-end gap-1.5 no-print shrink-0">
-          <!-- Device Screen Fit Switcher (Phone / Tablet / Laptop / Auto) -->
-          <div class="inline-flex items-center bg-slate-100 p-0.5 rounded-lg border border-slate-200" title="Switch Screen Fit Mode">
-            <button onclick="setDeviceMode('auto')" id="dev-btn-auto" class="dev-mode-btn px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-bold bg-white text-teal-700 shadow-2xs transition cursor-pointer">
-              Auto
-            </button>
-            <button onclick="setDeviceMode('phone')" id="dev-btn-phone" class="dev-mode-btn px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer">
-              📱 Phone
-            </button>
-            <button onclick="setDeviceMode('tablet')" id="dev-btn-tablet" class="dev-mode-btn px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer">
-              📟 Tablet
-            </button>
-            <button onclick="setDeviceMode('laptop')" id="dev-btn-laptop" class="dev-mode-btn px-2 py-1 rounded-md text-[10px] sm:text-[11px] font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer">
-              💻 Laptop
-            </button>
-          </div>
-          <button onclick="downloadCalendarPDF()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Calendar PDF
+        <!-- Portal Quick Actions -->
+        <div class="flex flex-wrap items-center gap-2 no-print">
+          <span id="save-status-badge" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span id="save-status-dot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span id="save-status-text">All Changes Saved</span>
+          </span>
+          <button onclick="manualSaveAll()" id="explicit-save-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition cursor-pointer">
+            Save Changes
           </button>
-          <button onclick="downloadTasksPDF()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs transition cursor-pointer whitespace-nowrap">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            Tasks PDF
+          <button onclick="downloadAllMonthsCalendarPDF()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition cursor-pointer">
+            Download Full Schedule PDF
+          </button>
+          <button onclick="downloadCHDPPDF()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
+            Download CHDP Master Plan PDF
+          </button>
+          <button onclick="openResetModal()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer">
+            Reset
           </button>
         </div>
       </div>
 
-      <!-- Clerk Profiles & Filter Bar (Responsive Grid on Phones, Single Row on Desktop) -->
-      <div class="mt-2 pt-2 border-t border-slate-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-2 no-print">
-        <!-- Clerk Filter Pills & Duty Counters -->
-        <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5">
-          <button onclick="setClerkFilter('ALL')" id="filter-btn-ALL" class="clerk-filter-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-slate-900 text-white shadow-2xs text-center">
-            All Clerks (3)
+      <!-- Straight-Aligned Navigation Tabs -->
+      <div class="mt-3 pt-3 border-t border-slate-100 no-print">
+        <nav class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl w-full overflow-x-auto">
+          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab flex-1 min-w-[200px] text-center px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer bg-white text-teal-700 shadow-sm whitespace-nowrap">
+            📅 Duty Calendar &amp; Daily Summary
           </button>
-          <button onclick="setClerkFilter('Jazzy')" id="filter-btn-Jazzy" class="clerk-filter-btn inline-flex items-center justify-center sm:justify-start gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-teal-50">
-            <span class="w-4 h-4 rounded-full bg-teal-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">J</span>
-            <span>Jazzy</span>
-            <span id="stat-pill-Jazzy" class="hidden sm:inline text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+          <button onclick="switchView('table')" id="tab-table" class="view-tab flex-1 min-w-[180px] text-center px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            📋 Full Roster List
           </button>
-          <button onclick="setClerkFilter('Leila')" id="filter-btn-Leila" class="clerk-filter-btn inline-flex items-center justify-center sm:justify-start gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-indigo-50">
-            <span class="w-4 h-4 rounded-full bg-indigo-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">L</span>
-            <span>Leila</span>
-            <span id="stat-pill-Leila" class="hidden sm:inline text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
+          <button onclick="switchView('chdp')" id="tab-chdp" class="view-tab flex-1 min-w-[260px] text-center px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            🏘️ 5-Barangay Community Development Plan
           </button>
-          <button onclick="setClerkFilter('Aubrey')" id="filter-btn-Aubrey" class="clerk-filter-btn inline-flex items-center justify-center sm:justify-start gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer bg-white text-slate-700 border border-slate-200 hover:bg-purple-50">
-            <span class="w-4 h-4 rounded-full bg-purple-600 text-white text-[10px] font-bold flex items-center justify-center shrink-0">A</span>
-            <span>Aubrey</span>
-            <span id="stat-pill-Aubrey" class="hidden sm:inline text-[10px] px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 font-medium">0 RHU</span>
-          </button>
-        </div>
-
-        <!-- Primary View Switcher Tabs (Full-Width Equal Grid on Phones) -->
-        <div id="view-tabs-bar" class="grid grid-cols-4 sm:flex items-center gap-1 bg-slate-100 p-1 rounded-lg w-full lg:w-auto">
-          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer bg-white text-teal-700 shadow-2xs text-center truncate">
-            📅 Calendar
-          </button>
-          <button onclick="switchView('table')" id="tab-table" class="view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 text-center truncate">
-            📋 List
-          </button>
-          <button onclick="switchView('matrix')" id="tab-matrix" class="view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 text-center truncate">
-            📊 Matrix
-          </button>
-          <button onclick="switchView('tasks-mobile')" id="tab-tasks-mobile" class="lg:hidden view-tab px-2 py-1.5 rounded-md text-[11px] sm:text-xs font-semibold transition cursor-pointer text-slate-600 hover:text-slate-900 text-center truncate">
-            ✅ Tasks (<span id="mobile-task-count">0</span>)
-          </button>
-        </div>
+        </nav>
       </div>
     </div>
   </header>
 
-  <!-- Main Workspace: Split Screen (Left/Center Schedule Portal + Right Side-by-Side Task Checklist) -->
-  <main id="main-container" class="flex-1 max-w-[1600px] w-full mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-6 transition-all duration-200">
-    <div id="main-workspace-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6 items-start">
+  <!-- Main Workspace -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5">
 
-      <!-- LEFT / MAIN PANEL (8 cols on lg+): Calendar, List Schedule, or BHS Matrix -->
-      <div id="schedule-workspace" class="lg:col-span-8 space-y-5">
+    <!-- ===================================================================== -->
+    <!-- WORKSPACE A: DUTY CALENDAR + SIDE DAILY SUMMARY & MARK DONE PANEL     -->
+    <!-- ===================================================================== -->
+    <div id="schedule-and-side-wrapper" class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
 
-        <!-- VIEW 1: INTERACTIVE MONTH-BY-MONTH CALENDAR -->
-        <div id="view-calendar" class="space-y-4">
-          <!-- Month Selector & Quick Jump Controls -->
-          <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <!-- LEFT / MAIN PANEL (8 cols): Clean Duty-Only Calendar or Roster Table -->
+      <div id="schedule-workspace" class="lg:col-span-8 space-y-4">
+
+        <!-- VIEW 1: CLEAN DUTY-ONLY CALENDAR WITH CLERK NAMES -->
+        <div id="view-calendar" class="space-y-3.5">
+          <div class="bg-white rounded-2xl border border-slate-200 p-3.5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div class="flex items-center gap-2">
-              <button onclick="changeMonth(-1)" id="prev-month-btn" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer" title="Previous Month">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-                </svg>
+              <button onclick="changeMonth(-1)" id="prev-month-btn" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-40 transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" /></svg>
               </button>
-              <h2 id="current-month-title" class="text-lg sm:text-xl font-extrabold text-slate-900 min-w-[190px] text-center">
+              <h2 id="current-month-title" class="text-base sm:text-lg font-extrabold text-slate-900 min-w-[170px] text-center">
                 November 2026
               </h2>
-              <button onclick="changeMonth(1)" id="next-month-btn" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-40 disabled:cursor-not-allowed transition cursor-pointer" title="Next Month">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                </svg>
+              <button onclick="changeMonth(1)" id="next-month-btn" class="p-2 rounded-xl border border-slate-200 hover:bg-slate-100 text-slate-700 disabled:opacity-40 transition cursor-pointer">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" /></svg>
               </button>
             </div>
 
-            <!-- Month Quick Pills & PDF Option -->
             <div class="flex flex-wrap items-center gap-1.5">
-              <div class="flex flex-wrap items-center gap-1.5" id="month-quick-pills">
-                <!-- Populated by JS -->
-              </div>
-              <button onclick="downloadAllMonthsCalendarPDF()" class="ml-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 hover:bg-slate-900 text-white transition cursor-pointer" title="Download All 6 Months Calendar PDF">
-                All Months PDF
+              <div class="flex flex-wrap items-center gap-1" id="month-quick-pills"></div>
+              <button onclick="downloadCalendarPDF()" class="ml-1 px-2.5 py-1.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition cursor-pointer">
+                Month PDF
               </button>
             </div>
           </div>
 
-          <!-- Station Color Legend -->
-          <div class="bg-white rounded-2xl border border-slate-200 px-4 py-2.5 shadow-sm flex flex-wrap items-center gap-3 text-xs">
-            <span class="font-semibold text-slate-500">Station Badges:</span>
-            <span class="px-2 py-0.5 rounded-md font-semibold bg-teal-100 text-teal-800 border border-teal-200">RHU Palo</span>
-            <span class="px-2 py-0.5 rounded-md font-semibold bg-sky-100 text-sky-800 border border-sky-200">BHS 1–2</span>
-            <span class="px-2 py-0.5 rounded-md font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200">BHS 3–4</span>
-            <span class="px-2 py-0.5 rounded-md font-semibold bg-purple-100 text-purple-800 border border-purple-200">BHS 5–6</span>
-            <span class="px-2 py-0.5 rounded-md font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">BHS / Secondary Data</span>
-            <span class="px-2 py-0.5 rounded-md font-semibold bg-amber-100 text-amber-800 border border-amber-200">Holiday / No Duty</span>
+          <!-- Duty Legend -->
+          <div class="bg-white rounded-2xl border border-slate-200 px-4 py-2 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="font-bold text-slate-500">Duty Stations:</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-teal-100 text-teal-900 border border-teal-200">RHU Consults</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-sky-100 text-sky-900 border border-sky-200">RHU AM / San Jose PM</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200">Paired BHS Duty</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-amber-100 text-amber-900 border border-amber-200">Fri Advocacy / Outreach</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-rose-100 text-rose-800 border border-rose-200">Holiday</span>
+            </div>
+            <span class="text-[11px] text-slate-400 italic">Click any day to view/edit summary on the right</span>
           </div>
 
-          <!-- Calendar Grid Card (5-Column Mon-Fri on Mobile so all weekday data fits cleanly; 7-Column on Tablet/Desktop) -->
+          <!-- Calendar Grid Card -->
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden print-full">
-            <!-- Day of Week Headers -->
-            <div id="calendar-dow-header" class="grid grid-cols-5 md:grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-[11px] sm:text-xs font-bold uppercase tracking-wider text-slate-600">
-              <div id="dow-sun" class="hidden md:block py-2.5 text-slate-400">Sun</div>
-              <div class="py-2 sm:py-2.5 text-teal-800">Mon</div>
-              <div class="py-2 sm:py-2.5 text-teal-800">Tue</div>
-              <div class="py-2 sm:py-2.5 text-teal-800">Wed</div>
-              <div class="py-2 sm:py-2.5 text-teal-800">Thu</div>
-              <div class="py-2 sm:py-2.5 text-teal-800">Fri</div>
-              <div id="dow-sat" class="hidden md:block py-2.5 text-slate-400">Sat</div>
+            <div class="grid grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-xs font-bold uppercase tracking-wider text-slate-600">
+              <div class="py-2 text-slate-400">Sun</div>
+              <div class="py-2 text-teal-800">Mon</div>
+              <div class="py-2 text-teal-800">Tue</div>
+              <div class="py-2 text-teal-800">Wed</div>
+              <div class="py-2 text-teal-800">Thu</div>
+              <div class="py-2 text-teal-800">Fri</div>
+              <div class="py-2 text-slate-400">Sat</div>
             </div>
-            <!-- Calendar Days Container -->
-            <div id="calendar-grid" class="grid grid-cols-5 md:grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50">
-              <!-- Populated dynamically by JS -->
-            </div>
-          </div>
-
-          <!-- Save Changes Bar Below Calendar (Appears prominently when edits are made) -->
-          <div id="below-calendar-save-bar" class="hidden bg-amber-50 border border-amber-300 rounded-2xl px-4 py-3 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 no-print">
-            <div class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-amber-900">
-              <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse shrink-0"></span>
-              <span>You have edited the schedule or tasks. Click Save to keep your changes.</span>
-            </div>
-            <button onclick="manualSaveAll()" id="explicit-save-btn" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm transition cursor-pointer whitespace-nowrap">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-              </svg>
-              Save Changes
-            </button>
+            <div id="calendar-grid" class="grid grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50"></div>
           </div>
         </div>
 
-        <!-- VIEW 2: FULL LIST SCHEDULE TABLE -->
+        <!-- VIEW 2: FULL ROSTER TABLE -->
         <div id="view-table" class="hidden space-y-4">
           <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Complete Duty Rotation List (Mon–Fri)</h2>
-              <p class="text-xs text-slate-500">Filter by month or tap any day to adjust clerk stations and notes.</p>
-            </div>
-            <select id="table-month-filter" onchange="renderScheduleTable()" class="px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
+            <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Complete Duty Schedule &amp; Accomplishment Status (Nov 2026 – Apr 2027)</h2>
+            <select id="table-month-filter" onchange="renderScheduleTable()" class="px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white text-slate-700">
               <option value="ALL">All Months (Nov 2026 – Apr 2027)</option>
               <option value="2026-11">November 2026</option>
               <option value="2026-12">December 2026</option>
@@ -266,255 +166,244 @@
               <option value="2027-04">April 2027</option>
             </select>
           </div>
-
           <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <!-- Mobile Card List -->
-            <div id="schedule-mobile-cards" class="divide-y divide-slate-200 md:hidden">
-              <!-- Populated by JS -->
-            </div>
-            <!-- Desktop/Tablet Table -->
-            <div class="overflow-x-auto hidden md:block">
+            <div class="overflow-x-auto max-h-[650px]">
               <table class="w-full text-left border-collapse">
-                <thead>
-                  <tr class="bg-slate-100 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-600">
+                <thead class="bg-slate-100 sticky top-0 z-10 border-b border-slate-200 text-xs font-bold uppercase text-slate-600">
+                  <tr>
                     <th class="py-3 px-4">Date</th>
-                    <th class="py-3 px-3">Week</th>
-                    <th class="py-3 px-3 text-teal-800">Jazzy</th>
-                    <th class="py-3 px-3 text-indigo-800">Leila</th>
-                    <th class="py-3 px-3 text-purple-800">Aubrey</th>
-                    <th class="py-3 px-4">Activity / Notes</th>
-                    <th class="py-3 px-3 text-right no-print">Action</th>
+                    <th class="py-3 px-3">Duty Assignment (Jazzy, Leila &amp; Aubrey)</th>
+                    <th class="py-3 px-4">Daily Activity Summary</th>
+                    <th class="py-3 px-3 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody id="schedule-table-body" class="divide-y divide-slate-200 text-xs sm:text-sm">
-                  <!-- Populated by JS -->
-                </tbody>
+                <tbody id="schedule-table-body" class="divide-y divide-slate-200 text-xs sm:text-sm"></tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- VIEW 3: BHS 1-6 & RHU FAIRNESS MATRIX -->
-        <div id="view-matrix" class="hidden space-y-4">
-          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-4">
-            <div>
-              <h2 class="text-base sm:text-lg font-extrabold text-slate-900">Station &amp; BHS 1–6 Rotation Distribution</h2>
-              <p class="text-xs text-slate-500">Live summary of duty days across RHU Palo, BHS 1–6, and Secondary Data assessment.</p>
-            </div>
-            <div class="overflow-x-auto">
-              <table class="w-full text-left border-collapse text-xs sm:text-sm">
-                <thead>
-                  <tr class="bg-slate-100 border-b border-slate-200 text-[11px] font-bold uppercase text-slate-600">
-                    <th class="py-2.5 px-4">Medical Clerk</th>
-                    <th class="py-2.5 px-3 text-center text-teal-800">RHU Palo</th>
-                    <th class="py-2.5 px-2.5 text-center">BHS 1</th>
-                    <th class="py-2.5 px-2.5 text-center">BHS 2</th>
-                    <th class="py-2.5 px-2.5 text-center">BHS 3</th>
-                    <th class="py-2.5 px-2.5 text-center">BHS 4</th>
-                    <th class="py-2.5 px-2.5 text-center">BHS 5</th>
-                    <th class="py-2.5 px-2.5 text-center">BHS 6</th>
-                    <th class="py-2.5 px-3 text-center text-emerald-800">BHS / Sec. Data</th>
-                    <th class="py-2.5 px-3 text-center">Total Duty</th>
-                  </tr>
-                </thead>
-                <tbody id="matrix-table-body" class="divide-y divide-slate-200">
-                  <!-- Populated by JS -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Weekly RHU Palo Rotation Verification (Jan 11 - Apr 30, 2027) -->
-          <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
-            <div>
-              <h3 class="text-sm sm:text-base font-extrabold text-slate-900">Weekly RHU Palo Coverage Audit (Jan 11 – Apr 30, 2027)</h3>
-              <p class="text-xs text-slate-500">Verifies every clerk rotates through RHU Palo each week while BHS 1–6 rotate in sequential order.</p>
-            </div>
-            <div id="weekly-audit-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
-              <!-- Populated by JS -->
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- RIGHT SIDEBAR (4 cols on lg+): COMMUNITY CLERKSHIP TASKS -->
-      <aside id="tasks-sidebar" class="hidden lg:block lg:col-span-4 space-y-4 sticky top-28">
-        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div class="p-4 bg-gradient-to-r from-teal-700 to-emerald-800 text-white">
-            <div class="flex items-center justify-between gap-2">
-              <h2 class="text-sm sm:text-base font-extrabold tracking-tight">Community Clerkship Tasks</h2>
-              <span id="task-progress-badge" class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white/20 text-white">
-                0 / 0 Done
-              </span>
+      <!-- RIGHT SIDE PANEL (4 cols): SELECTED DAY SUMMARY + MARK DONE + MONTH ACTIVITY LOG -->
+      <aside id="side-summary-panel" class="lg:col-span-4 space-y-4 sticky top-24">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col max-h-[calc(100vh-7rem)]">
+          <!-- Side Panel Header -->
+          <div class="p-4 bg-gradient-to-r from-teal-700 to-teal-800 text-white">
+            <div class="flex items-center justify-between">
+              <h2 class="font-extrabold text-sm sm:text-base tracking-tight">Daily Activity Summary &amp; Tracker</h2>
+              <span id="duty-progress-badge" class="text-xs font-bold bg-white/20 px-2.5 py-0.5 rounded-full">0 / 0 Done</span>
             </div>
-            <div class="w-full bg-teal-950/50 h-2 rounded-full mt-2.5 overflow-hidden">
-              <div id="task-progress-bar" class="bg-emerald-300 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            <div class="w-full bg-teal-950/50 h-1.5 rounded-full mt-2.5 overflow-hidden">
+              <div id="duty-progress-bar" class="bg-emerald-300 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
             </div>
           </div>
 
-          <!-- Task Controls & Phase Filter -->
-          <div class="p-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between gap-2">
-            <select id="task-phase-filter" onchange="renderTasks()" class="flex-1 px-2.5 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold bg-white text-slate-700 focus:ring-2 focus:ring-teal-500 focus:outline-none">
-              <option value="ALL">All Phases</option>
-              <option value="Phase 1 (Nov 16–Dec 11)">Phase 1 (Nov 16–Dec 11)</option>
-              <option value="Holiday Break (Dec 14–Jan 10)">Holiday (Dec 14–Jan 10)</option>
-              <option value="Phase 3 (Jan 11–Apr 30)">Phase 3 (Jan 11–Apr 30)</option>
-            </select>
-            <button onclick="openTaskModal()" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-2xs transition cursor-pointer whitespace-nowrap">
-              + Add Task
-            </button>
+          <!-- Selected Date Detail Card -->
+          <div id="selected-day-card" class="p-4 bg-slate-50 border-b border-slate-200 space-y-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span id="sel-day-phase" class="text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-100 px-2 py-0.5 rounded">Phase</span>
+                <h3 id="sel-day-title" class="text-base font-extrabold text-slate-900 mt-1">Select a date on calendar</h3>
+                <p id="sel-day-duty" class="text-xs font-bold text-slate-600 mt-0.5">Duty Station</p>
+              </div>
+              <button id="sel-day-done-btn" onclick="toggleSelectedDayDone()" class="px-3 py-1.5 rounded-xl text-xs font-bold border transition cursor-pointer shrink-0">
+                Mark Done
+              </button>
+            </div>
+
+            <div>
+              <label class="block text-[11px] font-bold text-slate-500 uppercase mb-1">Summary of Activities for this Day:</label>
+              <textarea id="sel-day-summary-input" rows="3" onchange="updateSelectedDaySummary()" placeholder="Activity summary for this duty day..." class="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs text-slate-800 focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
+            </div>
+
+            <div class="flex items-center justify-between pt-1">
+              <button onclick="openEditDayModal(selectedDateKey)" class="text-xs font-bold text-teal-700 hover:underline cursor-pointer">
+                Edit Duty Station / Preset
+              </button>
+              <span id="sel-day-status-text" class="text-[11px] font-semibold text-slate-500">Pending</span>
+            </div>
           </div>
 
-          <!-- Task List Container -->
-          <div id="task-list-container" class="p-3 space-y-2.5 max-h-[540px] overflow-y-auto">
-            <!-- Populated dynamically by JS -->
+          <!-- Scrollable Month Activity Summary List with Quick Mark Done -->
+          <div class="px-3.5 py-2 bg-white border-b border-slate-100 flex items-center justify-between">
+            <span id="side-month-list-label" class="text-xs font-extrabold text-slate-700">November 2026 — Daily Activities</span>
+            <span class="text-[10px] text-slate-400">Check box to mark done</span>
           </div>
+          <div id="side-month-activity-list" class="p-3 space-y-2 overflow-y-auto flex-1"></div>
         </div>
       </aside>
     </div>
 
-    <!-- Lower-Right Corner Safeguarded Reset Footer -->
-    <div class="mt-8 pt-4 border-t border-slate-200/80 flex items-center justify-between gap-3 no-print">
-      <p class="text-[11px] text-slate-400">
-        Palo Community Medical Clerkship Rotation • Click any weekday card or task to edit
-      </p>
-      <button onclick="openResetModal()" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-medium bg-slate-100 hover:bg-rose-50 text-slate-400 hover:text-rose-700 border border-slate-200 hover:border-rose-200 transition cursor-pointer whitespace-nowrap" title="Restore default schedule">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-        </svg>
-        Reset Default Schedule
-      </button>
+    <!-- ===================================================================== -->
+    <!-- WORKSPACE B: 5-BARANGAY COMMUNITY HEALTH DEVELOPMENT PLAN (CHDP)      -->
+    <!-- ===================================================================== -->
+    <div id="view-chdp" class="hidden space-y-6">
+
+      <!-- CHDP Header & PDF Export Banner -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <div>
+          <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wider mb-1">
+            5 Sentinel Barangays • Palo, Leyte
+          </span>
+          <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">
+            Community Health Development Plan (CHDP)
+          </h2>
+        </div>
+        <div class="flex flex-wrap items-center gap-2 shrink-0">
+          <button onclick="loadSampleCHDPData()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition cursor-pointer">
+            Load Sample Data
+          </button>
+          <button onclick="downloadCHDPPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            Download Entire CHDP as PDF
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 1: STRAIGHT-ALIGNED 5-BARANGAY TABS & PER-ENTRY EDIT / SAVE / DELETE -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div class="bg-slate-100 p-2 border-b border-slate-200">
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5" id="brgy-selector-tabs"></div>
+        </div>
+
+        <div id="brgy-form-container" class="p-5 space-y-6"></div>
+      </div>
+
+      <!-- STEP 2: AUTO-COMPUTED COMMON DENOMINATOR & MAJOR PROJECT MATRIX -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="border-b border-slate-100 pb-3">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">Auto-Computation Engine</span>
+          <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">
+            Step 2: Cross-Barangay Common Denominator Synthesis (5 Barangays)
+          </h3>
+          <p class="text-xs text-slate-500">
+            Scoring: Rank #1 = 5 pts, #2 = 4 pts, #3 = 3 pts, #4 = 2 pts, #5 = 1 pt. Conditions appearing in <strong>&ge; 3 of 5 barangays</strong> (or top cumulative points) are automatically designated as <strong>Major Projects</strong>.
+          </p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold">
+                <th class="py-2.5 px-3">Health Condition / Problem</th>
+                <th class="py-2.5 px-2 text-center">Castilla</th>
+                <th class="py-2.5 px-2 text-center">San Agustin</th>
+                <th class="py-2.5 px-2 text-center">San Jose</th>
+                <th class="py-2.5 px-2 text-center">Cabarasan Daku</th>
+                <th class="py-2.5 px-2 text-center">Cangumbang</th>
+                <th class="py-2.5 px-3 text-center bg-indigo-50 text-indigo-900">Frequency</th>
+                <th class="py-2.5 px-3 text-center bg-indigo-50 text-indigo-900">Total Points</th>
+                <th class="py-2.5 px-3 text-center">Auto-Designation</th>
+              </tr>
+            </thead>
+            <tbody id="chdp-synthesis-body" class="divide-y divide-slate-200"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- STEP 3: UNIFIED MAJOR PROJECT ACTION PLAN (EDIT / SAVE / DELETE PER ENTRY) -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
+          <div>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-teal-700 bg-teal-100 px-2.5 py-0.5 rounded-full">Action Blueprint</span>
+            <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">
+              Step 3: Community Health Development Action Plan (Major Projects Implementation)
+            </h3>
+            <p class="text-xs text-slate-500">
+              Edit, save, or delete individual action plan entries below. All saved entries are automatically included in the CHDP PDF export.
+            </p>
+          </div>
+          <button onclick="addCHDPActionRow()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition cursor-pointer shrink-0">
+            + Add Action Plan Entry
+          </button>
+        </div>
+
+        <div id="chdp-action-plan-list" class="space-y-4"></div>
+      </div>
+
     </div>
+
   </main>
 
-  <!-- MODAL 1: EDIT DAILY SCHEDULE MODAL -->
+  <!-- MODAL: EDIT DUTY STATION / PRESET -->
   <div id="edit-day-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
-    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md overflow-hidden">
       <div class="px-5 py-4 bg-slate-900 text-white flex items-center justify-between">
         <div>
           <span id="modal-phase-tag" class="text-[10px] font-bold uppercase tracking-wider text-teal-300">Phase</span>
-          <h3 id="modal-date-title" class="text-base sm:text-lg font-extrabold">Edit Duty Schedule</h3>
+          <h3 id="modal-date-title" class="text-base font-extrabold">Edit Duty Assignment</h3>
         </div>
-        <button onclick="closeEditDayModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
+        <button onclick="closeEditDayModal()" class="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 cursor-pointer">✕</button>
       </div>
-
       <form onsubmit="saveDayEdit(event)" class="p-5 space-y-4">
         <input type="hidden" id="edit-date-key" />
-
-        <!-- Quick Presets -->
-        <div class="flex flex-wrap items-center gap-1.5 pb-3 border-b border-slate-100">
-          <span class="text-[11px] font-bold text-slate-500 mr-1">Quick Fill:</span>
-          <button type="button" onclick="applyDayPreset('ALL_RHU')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 cursor-pointer">
-            All @ RHU Palo
-          </button>
-          <button type="button" onclick="applyDayPreset('ALL_SEC')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 cursor-pointer">
-            All @ BHS / Sec. Data
-          </button>
-          <button type="button" onclick="applyDayPreset('HOLIDAY')" class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 cursor-pointer">
-            Holiday / No Duty
-          </button>
-        </div>
-
-        <!-- Clerk Station Selectors -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div>
-            <label class="block text-xs font-bold text-teal-800 mb-1">Jazzy's Station</label>
-            <select id="edit-station-Jazzy" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:ring-2 focus:ring-teal-500 focus:outline-none">
-              <!-- Options populated by JS -->
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-indigo-800 mb-1">Leila's Station</label>
-            <select id="edit-station-Leila" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:ring-2 focus:ring-indigo-500 focus:outline-none">
-              <!-- Options populated by JS -->
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold text-purple-800 mb-1">Aubrey's Station</label>
-            <select id="edit-station-Aubrey" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold bg-white focus:ring-2 focus:ring-purple-500 focus:outline-none">
-              <!-- Options populated by JS -->
-            </select>
-          </div>
-        </div>
-
         <div>
-          <label class="block text-xs font-bold text-slate-700 mb-1">Daily Activity / Community Assessment Notes</label>
-          <textarea id="edit-day-note" rows="3" placeholder="Enter specific barangay activity, clinic duty focus, or reminders..." class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:ring-2 focus:ring-teal-500 focus:outline-none"></textarea>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Duty Assignment</label>
+          <select id="edit-duty-select" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white">
+            <option value="RHU Consult Duty">RHU Consult Duty (Mon)</option>
+            <option value="RHU AM / San Jose PM">RHU AM / San Jose PM (Tue)</option>
+            <option value="BHS: San Agustin & Castilla">BHS: San Agustin &amp; Castilla (Wed Paired)</option>
+            <option value="BHS: Cabarasan Daku & Cangumbang">BHS: Cabarasan Daku &amp; Cangumbang (Thu Paired)</option>
+            <option value="Fri: Advocacy & Outreach">Fri: Advocacy &amp; Outreach</option>
+            <option value="Pre-Deployment Prep">Pre-Deployment Prep</option>
+            <option value="HOLIDAY (No Duty)">HOLIDAY (No Duty)</option>
+          </select>
         </div>
-
-        <div class="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
-          <button type="button" onclick="closeEditDayModal()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
-            Cancel
-          </button>
-          <button type="submit" class="px-5 py-2 rounded-xl text-xs sm:text-sm font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-sm cursor-pointer">
-            Apply Schedule Edit
-          </button>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Assigned Clerks</label>
+          <input type="text" id="edit-clerks-input" value="Jazzy, Leila & Aubrey" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm font-semibold" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-slate-700 mb-1">Daily Activity Summary (Shown on Side Panel)</label>
+          <textarea id="edit-day-note" rows="3" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm"></textarea>
+        </div>
+        <div class="flex items-center gap-2">
+          <input type="checkbox" id="edit-day-done" class="w-4 h-4 rounded text-teal-600" />
+          <label for="edit-day-done" class="text-xs font-bold text-slate-700">Mark this day's activities as Accomplished / Done</label>
+        </div>
+        <div class="pt-2 flex justify-end gap-2 border-t border-slate-100">
+          <button type="button" onclick="closeEditDayModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancel</button>
+          <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer">Save</button>
         </div>
       </form>
     </div>
   </div>
 
-  <!-- MODAL 3: RESET CONFIRMATION MODAL (Replaces confirm()) -->
+  <!-- MODAL: RESET CONFIRMATION -->
   <div id="reset-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 backdrop-blur-xs p-4">
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 space-y-4">
-      <div class="flex items-center gap-3 text-rose-600">
-        <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
-          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-        </div>
-        <h3 class="text-lg font-extrabold text-slate-900">Reset to Default Schedule?</h3>
-      </div>
-      <p class="text-sm text-slate-600 leading-relaxed">
-        This will restore the original November 2026 – April 2027 duty rotation for <strong>Jazzy, Leila, and Aubrey</strong> and reset all custom edits and tasks. This action cannot be undone.
+      <h3 class="text-lg font-extrabold text-rose-700">Reset Portal to Default?</h3>
+      <p class="text-sm text-slate-600">
+        This will restore the default November 16, 2026 – April 30, 2027 schedule, clear accomplished checkmarks, and reset the 5-Barangay CHDP forms.
       </p>
-      <div class="flex items-center justify-end gap-2 pt-2">
-        <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">
-          Cancel
-        </button>
-        <button onclick="confirmResetDefault()" class="px-4 py-2 rounded-xl text-sm font-bold bg-rose-600 hover:bg-rose-700 text-white shadow-sm cursor-pointer">
-          Yes, Reset Everything
-        </button>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancel</button>
+        <button onclick="confirmResetDefault()" class="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white cursor-pointer">Yes, Reset All</button>
       </div>
     </div>
   </div>
 
-  <!-- VERCEL CLOUD SYNC CONFIGURATION -->
-  <script>
-    window.VERCEL_FIREBASE_CONFIG = {
-      apiKey: "AIzaSyDr6R-MnkLGu0ATxwoXVRW1n31579drn5o",
-      authDomain: "palo-clerks.firebaseapp.com",
-      projectId: "palo-clerks"
-    };
-  </script>
-
-  <!-- APPLICATION LOGIC -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
     import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    // =========================================================================
-    // 1. CONSTANTS & CONFIGURATION
-    // =========================================================================
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'palo-community-clerks-planner';
-    const CLERKS = ['Jazzy', 'Leila', 'Aubrey'];
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'palo-clerks-portal-v4';
+    const BARANGAYS = ['Castilla', 'San Agustin', 'San Jose', 'Cabarasan Daku', 'Cangumbang'];
 
-    const STATION_OPTIONS = [
-      'RHU Palo',
-      'BHS 1',
-      'BHS 2',
-      'BHS 3',
-      'BHS 4',
-      'BHS 5',
-      'BHS 6',
-      'BHS / Secondary Data Assessment',
-      'Holiday / No Duty',
-      'Pre-Deployment Orientation'
+    const CONDITION_SUGGESTIONS = [
+      'Uncontrolled Hypertension / Cardiovascular Risk',
+      'Acute Respiratory Tract Infections (ARI / URTI)',
+      'Childhood Underweight / Stunting (Malnutrition)',
+      'Incomplete Child Immunization (EPI Defaulters)',
+      'Type 2 Diabetes Mellitus / Poor Glycemic Control',
+      'Presumptive / Active Tuberculosis (TB)',
+      'Acute Gastroenteritis / Unsafe Water & Sanitation (WASH)',
+      'Dengue / Vector-Borne Illness & Flood Vulnerability',
+      'High-Risk Pregnancy / Incomplete Antenatal Care (ANC)',
+      'Bronchial Asthma / Wood-Smoke Exposure',
+      'Unmet Family Planning Need'
     ];
 
     const MONTHS_LIST = [
@@ -526,521 +415,276 @@
       { year: 2027, month: 3,  label: 'April 2027',    short: 'Apr 2027', key: '2027-04' }
     ];
 
-    // Global State
-    let scheduleData = {}; // Key: 'YYYY-MM-DD' -> { date, dayOfWeek, phase, weekLabel, assignments: { Jazzy, Leila, Aubrey }, note }
-    let tasksData = [];
-    let currentMonthIndex = 0; // Starts at November 2026
-    let activeClerkFilter = 'ALL';
+    let scheduleData = {};
+    let chdpData = {};
+    let currentMonthIndex = 0;
+    let selectedDateKey = '2026-11-16';
+    let activeBrgyTab = 'Castilla';
     let activeView = 'calendar';
-    let deviceMode = 'auto'; // 'auto' | 'phone' | 'tablet' | 'laptop'
-    let hasUnsavedChanges = false;
 
-    // Cloud Sync State
-    let db = null;
-    let auth = null;
-    let currentUser = null;
-    let isCloudReady = false;
-    let isApplyingRemoteSnapshot = false;
+    let isEditingBrgyProfile = false;
+    let editingConditionIndex = null;
+    let editingActionPlanIndex = null;
 
-    // =========================================================================
-    // 2. SCHEDULE GENERATION ENGINE (EXACT SEQUENTIAL ROTATION RULES)
-    // =========================================================================
-    function formatDateKey(dateObj) {
-      const y = dateObj.getFullYear();
-      const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const d = String(dateObj.getDate()).padStart(2, '0');
-      return `${y}-${m}-${d}`;
+    let db = null, auth = null, currentUser = null, isCloudReady = false, isApplyingRemote = false;
+
+    function formatDateKey(d) {
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
-    function parseDateLocal(dateStr) {
-      const [y, m, d] = dateStr.split('-').map(Number);
+    function parseDateLocal(str) {
+      const [y, m, d] = str.split('-').map(Number);
       return new Date(y, m - 1, d);
     }
 
+    // =========================================================================
+    // 1. GENERATE DEFAULT SCHEDULE (NOV 2026 - APR 30, 2027)
+    // =========================================================================
     function generateDefaultSchedule() {
       const data = {};
-      const startDate = new Date(2026, 10, 1); // Nov 1, 2026
-      const endDate = new Date(2027, 3, 30);   // Apr 30, 2027
+      const start = new Date(2026, 10, 1);
+      const end = new Date(2027, 3, 30);
 
-      const phase3Start = new Date(2027, 0, 11);
-      let phase3DayIndex = 0;
-      let bhsSlotIndex = 0;
+      const specificOverrides = {
+        '2026-11-02': { phase: 'Pre-Deployment', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: "All Souls' Day — Pre-deployment preparation." },
+        '2026-11-16': { phase: 'Phase 1: Pre-Entry', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'PRE-ENTRY START: Preceptor orientation & Palo RHU Consultation Duty.' },
+        '2026-11-17': { phase: 'Phase 1: Pre-Entry', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM (Courtesy Call with MHO, PHN & RHM) & Barangay San Jose PM Courtesy Call and BHS Ocular Survey.' },
+        '2026-11-18': { phase: 'Phase 1: Pre-Entry', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Courtesy Calls, BHS Ocular Surveys & Target Client List (TCL) review at Barangays San Agustin & Castilla.' },
+        '2026-11-19': { phase: 'Phase 1: Pre-Entry', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Courtesy Calls, BHS Ocular Surveys & TCL review at Barangays Cabarasan Daku & Cangumbang.' },
+        '2026-11-20': { phase: 'Phase 1: Pre-Entry', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Finalize secondary data extraction tools, advocacy scheduling, referral directory & Weekly Preceptor Meeting.' },
+        '2026-11-30': { phase: 'Phase 2: Assessment', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Bonifacio Day — Regular Holiday (No Duty).' },
+        '2026-12-08': { phase: 'Phase 2: Assessment', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Feast of the Immaculate Conception — Special Non-Working Holiday (No Duty).' },
+        '2026-12-11': { phase: 'Phase 2: Assessment', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (San Jose, San Agustin & Castilla) + Weekly Preceptor Meet.' },
+        '2026-12-15': { phase: 'Phase 2: Community Diagnosis', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM & San Jose PM + San Agustin & Castilla Top 5 Community Diagnosis Validation.' },
+        '2026-12-16': { phase: 'Phase 2: Community Diagnosis', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Cabarasan Daku & Cangumbang BHS + Cross-Barangay Top 5 Common Denominator Synthesis & December Log.' },
+        '2027-01-04': { phase: 'Phase 3: CHDP', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'RESUME DUTY: Palo RHU Consultation Duty & Community Health Development Plan (CHDP) Workshop Preparation.' },
+        '2027-01-05': { phase: 'Phase 3: CHDP', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM & Barangay San Jose PM Simultaneous BHS Tasks + CHDP Workshop.' },
+        '2027-01-06': { phase: 'Phase 3: CHDP', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays San Agustin & Castilla Simultaneous BHS Tasks + Participatory CHDP Workshops.' },
+        '2027-01-07': { phase: 'Phase 3: CHDP', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays Cabarasan Daku & Cangumbang Simultaneous BHS Tasks + Participatory CHDP Workshops.' },
+        '2027-01-08': { phase: 'Phase 3: CHDP', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy (TB/Social Hygiene) & Consolidate 5 Barangay-Endorsed CHDPs.' },
+        '2027-01-13': { phase: 'Phase 4: Implementation', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'San Agustin & Castilla Simultaneous BHS Tasks (ANC, EPI, OPT+) + Launch Common Denominator Major Project.' },
+        '2027-01-15': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 2: Social Hygiene (San Jose, San Agustin & Castilla).' },
+        '2027-01-22': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 2: Social Hygiene (Cabarasan Daku & Cangumbang) + Weekly Meet.' },
+        '2027-01-29': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Integrated Community Outreach (EPI, Deworming, Vitamin A, Mother\'s Classes) + January Monitoring Log.' },
+        '2027-02-05': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (San Jose, San Agustin & Castilla).' },
+        '2027-02-12': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (Cabarasan Daku & Cangumbang) + Household Contact Tracing.' },
+        '2027-02-19': { phase: 'Phase 4: Midpoint Review', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'MIDPOINT REVIEW: Friday Advocacy Duty + Formal Midpoint Evaluation with Preceptor.' },
+        '2027-02-25': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'EDSA People Power Anniversary — Special Working/Non-Working Day (Verify local schedule).' },
+        '2027-02-26': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Social Hygiene Advocacy 2 + Mother\'s Class & February Monthly Monitoring Log.' },
+        '2027-03-12': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'TB Advocacy 1 wrap-up across all 5 sentinel barangays & Weekly Preceptor Meet.' },
+        '2027-03-19': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Integrated Outreach (EPI, Deworming, Vit A, Mother\'s Class) & Endline Evaluation Preparation.' },
+        '2027-03-24': { phase: 'Phase 4: Implementation', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Cabarasan Daku & Cangumbang BHS + Pre-Holy Week Advocacy & March Monitoring Log.' },
+        '2027-03-25': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Maundy Thursday — Holy Week Regular Holiday (No Duty).' },
+        '2027-03-26': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Good Friday — Holy Week Regular Holiday (No Duty).' },
+        '2027-04-02': { phase: 'Phase 5: Evaluation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Social Hygiene Advocacy 2 (Cabarasan Daku & Cangumbang) + Endline Data Check.' },
+        '2027-04-09': { phase: 'Phase 5: Evaluation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Araw ng Kagitingan — Regular Holiday (No Duty).' },
+        '2027-04-16': { phase: 'Phase 5: Evaluation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Integrated Outreach (Deworming, Vit A, Mother\'s Class) & Final Evaluation Report Prep.' },
+        '2027-04-20': { phase: 'Phase 5: Turnover', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM & Barangay San Jose PM Community Feedback Assembly & Signed Turnover.' },
+        '2027-04-21': { phase: 'Phase 5: Turnover', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays San Agustin & Castilla Community Feedback Assemblies & Signed Turnover.' },
+        '2027-04-22': { phase: 'Phase 5: Turnover', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays Cabarasan Daku & Cangumbang Community Feedback Assemblies & Signed Turnover.' },
+        '2027-04-23': { phase: 'Phase 5: Turnover', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Advocacy Archive Turnover & Preceptor Final Report Review.' },
+        '2027-04-27': { phase: 'Phase 5: Turnover', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'Present Final 5-Barangay Health Outcomes to Palo RHU (MHO & Staff).' },
+        '2027-04-28': { phase: 'Phase 5: Turnover', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Confidential RHU/BHS Turnover of Active Patient Follow-up Registries.' },
+        '2027-04-29': { phase: 'Phase 5: Turnover', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Preceptor Evaluation & Clinical Logbook Signing.' },
+        '2027-04-30': { phase: 'Phase 5: Turnover', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'CLERKSHIP END: Signed Turnover & Final Evaluation Report Submission.' }
+      };
 
-      for (let d = new Date(startDate); d <= endDate; d.setDate(d.getDate() + 1)) {
-        const dayOfWeek = d.getDay();
-        if (dayOfWeek === 0 || dayOfWeek === 6) continue;
+      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+        const dow = d.getDay();
+        if (dow === 0 || dow === 6) continue;
+        const key = formatDateKey(d);
 
-        const dateKey = formatDateKey(d);
-        let phase = '';
-        let weekLabel = '';
-        let assignments = { Jazzy: '', Leila: '', Aubrey: '' };
-        let note = '';
-
-        if (dateKey >= '2026-11-02' && dateKey <= '2026-11-13') {
-          phase = 'Pre-Deployment Prep';
-          weekLabel = 'Prep Week';
-          assignments = {
-            Jazzy: 'Pre-Deployment Orientation',
-            Leila: 'Pre-Deployment Orientation',
-            Aubrey: 'Pre-Deployment Orientation'
-          };
-          note = 'Pre-deployment briefing, courtesy call prep & catchment barangay assignment.';
-        } else if (dateKey >= '2026-11-16' && dateKey <= '2026-12-11') {
-          phase = 'Phase 1 (Nov 16–Dec 11)';
-          const weekNum = Math.floor((d - new Date(2026, 10, 16)) / (7 * 86400000)) + 1;
-          weekLabel = `Phase 1 • Wk ${weekNum}`;
-
-          if (dayOfWeek === 1 || dayOfWeek === 3) {
-            assignments = {
-              Jazzy: 'RHU Palo',
-              Leila: 'RHU Palo',
-              Aubrey: 'RHU Palo'
-            };
-            note = 'RHU Palo Clinic Duty: OPD shadowing, records review & municipal health workflow.';
-          } else {
-            assignments = {
-              Jazzy: 'BHS / Secondary Data Assessment',
-              Leila: 'BHS / Secondary Data Assessment',
-              Aubrey: 'BHS / Secondary Data Assessment'
-            };
-            note = 'BHS & Catchment Barangay Community Assessment using secondary demographic & morbidity data.';
-          }
-        } else if (dateKey >= '2026-12-14' && dateKey <= '2027-01-10') {
-          phase = 'Holiday Break (Dec 14–Jan 10)';
-          weekLabel = 'Holiday Break';
-          assignments = {
-            Jazzy: 'Holiday / No Duty',
-            Leila: 'Holiday / No Duty',
-            Aubrey: 'Holiday / No Duty'
-          };
-          note = 'Holiday / No Duty Break (Dec 14, 2026 – Jan 10, 2027).';
-        } else if (dateKey >= '2027-01-11' && dateKey <= '2027-04-30') {
-          phase = 'Phase 3 (Jan 11–Apr 30)';
-          const daysSinceP3 = Math.floor((d - phase3Start) / 86400000);
-          const weekIdx = Math.floor(daysSinceP3 / 7);
-          weekLabel = `Rotation Wk ${weekIdx + 1}`;
-
-          const rhuClerkIdx = phase3DayIndex % 3;
-          const bhsClerk1Idx = (rhuClerkIdx + 1) % 3;
-          const bhsClerk2Idx = (rhuClerkIdx + 2) % 3;
-
-          const rhuClerk = CLERKS[rhuClerkIdx];
-          const bhsClerk1 = CLERKS[bhsClerk1Idx];
-          const bhsClerk2 = CLERKS[bhsClerk2Idx];
-
-          const bhsStation1 = `BHS ${(bhsSlotIndex % 6) + 1}`;
-          const bhsStation2 = `BHS ${((bhsSlotIndex + 1) % 6) + 1}`;
-
-          assignments[rhuClerk] = 'RHU Palo';
-          assignments[bhsClerk1] = bhsStation1;
-          assignments[bhsClerk2] = bhsStation2;
-
-          note = `${rhuClerk} at RHU Palo; ${bhsClerk1} at ${bhsStation1}; ${bhsClerk2} at ${bhsStation2}.`;
-
-          phase3DayIndex += 1;
-          bhsSlotIndex += 2;
+        if (specificOverrides[key]) {
+          data[key] = { date: key, dayOfWeek: dow, completed: false, ...specificOverrides[key] };
+          continue;
         }
 
-        data[dateKey] = {
-          date: dateKey,
-          dayOfWeek,
-          phase,
-          weekLabel,
-          assignments,
-          note
-        };
+        if (key >= '2026-11-02' && key <= '2026-11-13') {
+          data[key] = {
+            date: key, dayOfWeek: dow, phase: 'Pre-Deployment', duty: 'Pre-Deployment Prep',
+            clerks: 'Jazzy, Leila & Aubrey',
+            summary: 'Pre-deployment briefing, courtesy call coordination & catchment profile review.', completed: false
+          };
+        } else if (key >= '2026-12-17' && key <= '2027-01-03') {
+          data[key] = {
+            date: key, dayOfWeek: dow, phase: 'Holiday Break', duty: 'HOLIDAY (No Duty)',
+            clerks: 'No Duty',
+            summary: 'Christmas & New Year Holiday Break (Dec 17, 2026 – Jan 3, 2027; Resumes Jan 4).', completed: false
+          };
+        } else {
+          let phase = key < '2026-12-17' ? 'Phase 2: Assessment' : (key < '2027-03-29' ? 'Phase 4: Implementation' : 'Phase 5: Evaluation');
+          let duty = '';
+          let summary = '';
+          if (dow === 1) {
+            duty = 'RHU Consult Duty';
+            summary = 'Palo RHU Consultation Duty: Outpatient consults & clinical management.';
+          } else if (dow === 2) {
+            duty = 'RHU AM / San Jose PM';
+            summary = 'RHU Consults AM & Barangay San Jose PM Simultaneous BHS Tasks (Prenatal, EPI, Consult/OPT+ & Major Project).';
+          } else if (dow === 3) {
+            duty = 'BHS: San Agustin & Castilla';
+            summary = 'Barangays San Agustin & Castilla (Paired) Simultaneous BHS Tasks (Prenatal, EPI, Consult/OPT+ & Major Project).';
+          } else if (dow === 4) {
+            duty = 'BHS: Cabarasan Daku & Cangumbang';
+            summary = 'Barangays Cabarasan Daku & Cangumbang (Paired) Simultaneous BHS Tasks (Prenatal, EPI, Consult/OPT+ & Major Project).';
+          } else if (dow === 5) {
+            duty = 'Fri: Advocacy & Outreach';
+            summary = 'Public Health Advocacies (TB & Social Hygiene), Barangay Outreach (EPI, Deworming, Vit A, Mother\'s Classes) & Weekly Preceptor Meet.';
+          }
+          data[key] = { date: key, dayOfWeek: dow, phase, duty, clerks: 'Jazzy, Leila & Aubrey', summary, completed: false };
+        }
       }
-
       return data;
     }
 
-    function generateDefaultTasks() {
-      return [
-        {
-          id: 't1',
-          title: 'Courtesy Call with Municipal Health Officer (MHO) & RHU Palo Staff',
-          assignee: 'All Clerks',
-          phase: 'Phase 1 (Nov 16–Dec 11)',
-          station: 'RHU Palo',
-          dueDate: '2026-11-18',
-          completed: false
-        },
-        {
-          id: 't2',
-          title: 'Retrieve FHSIS Annual/Quarterly Secondary Data of Catchment Barangays',
-          assignee: 'All Clerks',
-          phase: 'Phase 1 (Nov 16–Dec 11)',
-          station: 'BHS / Secondary Data',
-          dueDate: '2026-11-24',
-          completed: false
-        },
-        {
-          id: 't3',
-          title: 'Compile Top 10 Leading Causes of Morbidity & Mortality (Secondary Data)',
-          assignee: 'Jazzy',
-          phase: 'Phase 1 (Nov 16–Dec 11)',
-          station: 'BHS / Secondary Data',
-          dueDate: '2026-12-01',
-          completed: false
-        },
-        {
-          id: 't4',
-          title: 'Construct Catchment Barangay Spot Map & Demographic Profile',
-          assignee: 'Leila',
-          phase: 'Phase 1 (Nov 16–Dec 11)',
-          station: 'BHS / Secondary Data',
-          dueDate: '2026-12-04',
-          completed: false
-        },
-        {
-          id: 't5',
-          title: 'Analyze Maternal, Child Health (MCH) & EPI Coverage Indicators',
-          assignee: 'Aubrey',
-          phase: 'Phase 1 (Nov 16–Dec 11)',
-          station: 'BHS / Secondary Data',
-          dueDate: '2026-12-08',
-          completed: false
-        },
-        {
-          id: 't6',
-          title: 'Present Preliminary Community Diagnosis Report before Holiday Break',
-          assignee: 'All Clerks',
-          phase: 'Phase 1 (Nov 16–Dec 11)',
-          station: 'RHU Palo',
-          dueDate: '2026-12-11',
-          completed: false
-        },
-        {
-          id: 't7',
-          title: 'Holiday Break — No Duty (Organize Field Logbooks & Community Action Plan)',
-          assignee: 'All Clerks',
-          phase: 'Holiday Break (Dec 14–Jan 10)',
-          station: 'Holiday / No Duty',
-          dueDate: '2027-01-08',
-          completed: false
-        },
-        {
-          id: 't8',
-          title: 'RHU Palo OPD Consultations, Prenatal Clinic & TB-DOTS Case Management',
-          assignee: 'All Clerks',
-          phase: 'Phase 3 (Jan 11–Apr 30)',
-          station: 'RHU Palo',
-          dueDate: '2027-02-15',
-          completed: false
-        },
-        {
-          id: 't9',
-          title: 'BHS 1–3 Field Immunization, Family Planning & Nutrition (OPT Plus) Drive',
-          assignee: 'All Clerks',
-          phase: 'Phase 3 (Jan 11–Apr 30)',
-          station: 'BHS 1–3',
-          dueDate: '2027-03-10',
-          completed: false
-        },
-        {
-          id: 't10',
-          title: 'BHS 4–6 Household Health Education & Hypertensive/Diabetic Club Screening',
-          assignee: 'All Clerks',
-          phase: 'Phase 3 (Jan 11–Apr 30)',
-          station: 'BHS 4–6',
-          dueDate: '2027-03-26',
-          completed: false
-        },
-        {
-          id: 't11',
-          title: 'Final Community Health Intervention Evaluation & Exit Presentation at RHU Palo',
-          assignee: 'All Clerks',
-          phase: 'Phase 3 (Jan 11–Apr 30)',
-          station: 'RHU Palo & BHS 1–6',
-          dueDate: '2027-04-29',
-          completed: false
-        }
-      ];
+    // =========================================================================
+    // 2. GENERATE DEFAULT 5-BARANGAY CHDP STRUCTURE
+    // =========================================================================
+    function generateDefaultCHDP() {
+      const barangays = {};
+      BARANGAYS.forEach(name => {
+        barangays[name] = {
+          population: '',
+          households: '',
+          midwife: '',
+          ficRate: '',
+          ancRate: '',
+          htnCount: '',
+          tbCount: '',
+          malnutritionRate: '',
+          washCoverage: '',
+          conditions: [
+            { id: `${name}_c1`, condition: '', indicator: '', magnitude: 3, severity: 3, modifiability: 3 },
+            { id: `${name}_c2`, condition: '', indicator: '', magnitude: 3, severity: 3, modifiability: 3 },
+            { id: `${name}_c3`, condition: '', indicator: '', magnitude: 3, severity: 3, modifiability: 3 },
+            { id: `${name}_c4`, condition: '', indicator: '', magnitude: 3, severity: 3, modifiability: 3 },
+            { id: `${name}_c5`, condition: '', indicator: '', magnitude: 3, severity: 3, modifiability: 3 }
+          ]
+        };
+      });
+      return {
+        barangays,
+        customActionPlans: []
+      };
     }
 
     // =========================================================================
-    // 3. CLOUD SYNC PERSISTENCE & EXPLICIT SAVE STATE
+    // 3. CLOUD SYNC & SESSION PERSISTENCE
     // =========================================================================
-    function setUnsavedState(dirty) {
-      hasUnsavedChanges = dirty;
-      const saveBar = document.getElementById('below-calendar-save-bar');
-      if (!saveBar) return;
-
+    function setUnsavedState(dirty, label = null) {
+      const badge = document.getElementById('save-status-badge');
+      const dot = document.getElementById('save-status-dot');
+      const text = document.getElementById('save-status-text');
+      if (!badge || !dot || !text) return;
       if (dirty) {
-        saveBar.classList.remove('hidden');
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-50 text-amber-800 border border-amber-300';
+        dot.className = 'w-2 h-2 rounded-full bg-amber-500 animate-ping';
+        text.textContent = label || 'Unsaved Changes';
       } else {
-        saveBar.classList.add('hidden');
+        badge.className = 'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200';
+        dot.className = 'w-2 h-2 rounded-full bg-emerald-500';
+        text.textContent = label || (isCloudReady ? 'Cloud Synced' : 'All Changes Saved');
       }
     }
 
     async function initCloudSync() {
-      // Load default in-memory state immediately so UI renders without delay
       scheduleData = generateDefaultSchedule();
-      tasksData = generateDefaultTasks();
+      chdpData = generateDefaultCHDP();
       refreshAllViews();
 
-      // Check for injected cloud config or optional user-supplied window.VERCEL_FIREBASE_CONFIG
-      const rawConfig =
-        typeof __firebase_config !== 'undefined'
-          ? JSON.parse(__firebase_config)
-          : window.VERCEL_FIREBASE_CONFIG || null;
-
+      const rawConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : (window.VERCEL_FIREBASE_CONFIG || null);
       if (!rawConfig || !rawConfig.apiKey) {
         isCloudReady = false;
-        setUnsavedState(false);
+        setUnsavedState(false, 'Session Ready');
         return;
       }
 
       try {
+        setUnsavedState(true, 'Connecting...');
         const app = initializeApp(rawConfig);
         auth = getAuth(app);
         db = getFirestore(app);
-
         if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          const cred = await signInWithCustomToken(auth, __initial_auth_token);
-          currentUser = cred.user;
+          currentUser = (await signInWithCustomToken(auth, __initial_auth_token)).user;
         } else {
-          const cred = await signInAnonymously(auth);
-          currentUser = cred.user;
+          currentUser = (await signInAnonymously(auth)).user;
         }
-
-        if (!currentUser) return;
         isCloudReady = true;
-
-        const plannerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'planner_state', 'shared_board');
-
-        // Seed initial state if document does not exist yet
-        const initialSnap = await getDoc(plannerDocRef);
-        if (!initialSnap.exists()) {
-          await setDoc(plannerDocRef, {
-            scheduleJson: JSON.stringify(scheduleData),
-            tasksJson: JSON.stringify(tasksData),
-            updatedAt: new Date().toISOString()
-          });
+        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'portal_state', 'master_v4');
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+          await setDoc(ref, { scheduleJson: JSON.stringify(scheduleData), chdpJson: JSON.stringify(chdpData), updatedAt: new Date().toISOString() });
         }
-
-        // Real-time listener so Jazzy, Leila, and Aubrey see updates instantaneously
-        onSnapshot(
-          plannerDocRef,
-          (snapshot) => {
-            if (!snapshot.exists()) return;
-            const data = snapshot.data();
-            isApplyingRemoteSnapshot = true;
-            try {
-              if (data.scheduleJson) {
-                scheduleData = JSON.parse(data.scheduleJson);
-              }
-              if (data.tasksJson) {
-                tasksData = JSON.parse(data.tasksJson);
-              }
-              refreshAllViews();
-              setUnsavedState(false);
-            } catch (parseErr) {
-              console.error('Error parsing remote snapshot:', parseErr);
-            } finally {
-              isApplyingRemoteSnapshot = false;
-            }
-          },
-          (error) => {
-            console.error('Realtime sync error:', error);
-            showToast('Sync interrupted. Changes remain active in session.', 'error');
-          }
-        );
-      } catch (err) {
-        console.error('Cloud initialization failed:', err);
+        onSnapshot(ref, (s) => {
+          if (!s.exists()) return;
+          isApplyingRemote = true;
+          try {
+            const d = s.data();
+            if (d.scheduleJson) scheduleData = JSON.parse(d.scheduleJson);
+            if (d.chdpJson) chdpData = JSON.parse(d.chdpJson);
+            refreshAllViews();
+            setUnsavedState(false, 'Cloud Synced');
+          } finally { isApplyingRemote = false; }
+        });
+      } catch (e) {
         isCloudReady = false;
-        setUnsavedState(false);
+        setUnsavedState(false, 'Session Ready');
       }
     }
 
-    async function persistToCloud(notify = true) {
-      if (isApplyingRemoteSnapshot) return;
-
+    async function persistAll(notify = true, customToast = 'Changes saved!') {
+      if (isApplyingRemote) return;
       if (!isCloudReady || !db || !currentUser) {
-        setUnsavedState(false);
-        if (notify) showToast('Changes saved!');
+        setUnsavedState(false, 'Saved in Session');
+        if (notify) showToast(customToast);
         return;
       }
-
       try {
-        const plannerDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'planner_state', 'shared_board');
-        await setDoc(plannerDocRef, {
-          scheduleJson: JSON.stringify(scheduleData),
-          tasksJson: JSON.stringify(tasksData),
-          updatedAt: new Date().toISOString()
-        });
-        setUnsavedState(false);
-        if (notify) showToast('Changes saved!');
-      } catch (err) {
-        console.error('Failed to save changes:', err);
-        showToast('Save failed. Check connection.', 'error');
+        setUnsavedState(true, 'Syncing...');
+        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'portal_state', 'master_v4');
+        await setDoc(ref, { scheduleJson: JSON.stringify(scheduleData), chdpJson: JSON.stringify(chdpData), updatedAt: new Date().toISOString() });
+        setUnsavedState(false, 'Cloud Synced');
+        if (notify) showToast(customToast);
+      } catch (e) {
+        showToast('Cloud save failed.', 'error');
       }
     }
 
-    function saveScheduleState(notify = true) {
-      persistToCloud(notify);
-    }
+    function manualSaveAll() { persistAll(true, 'All changes saved!'); }
 
-    function saveTasksState(notify = true) {
-      persistToCloud(notify);
-    }
-
-    function manualSaveAll() {
-      persistToCloud(true);
-    }
-
-    // =========================================================================
-    // 4. UI HELPERS (TOASTS, BADGES, LABELS)
-    // =========================================================================
-    function showToast(message, type = 'success') {
+    function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
-      if (!container) return;
-      const toast = document.createElement('div');
-      const isErr = type === 'error';
-      toast.className = `pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl shadow-lg border text-xs sm:text-sm font-semibold transition-all duration-300 ${
-        isErr
-          ? 'bg-rose-900 text-white border-rose-700'
-          : 'bg-slate-900 text-white border-slate-700'
-      }`;
-      toast.innerHTML = `
-        <span class="w-2 h-2 rounded-full ${isErr ? 'bg-rose-400' : 'bg-emerald-400'}"></span>
-        <span>${message}</span>
-      `;
-      container.appendChild(toast);
-      setTimeout(() => {
-        toast.classList.add('opacity-0', 'translate-y-2');
-        setTimeout(() => toast.remove(), 300);
-      }, 2800);
+      const el = document.createElement('div');
+      el.className = `${type === 'error' ? 'bg-rose-600' : 'bg-slate-900'} text-white px-4 py-2.5 rounded-xl shadow-lg text-xs font-semibold flex items-center gap-2 transition-all duration-300 pointer-events-auto`;
+      el.innerHTML = `<span class="w-2 h-2 rounded-full ${type === 'error' ? 'bg-rose-200' : 'bg-emerald-400'}"></span><span>${msg}</span>`;
+      container.appendChild(el);
+      setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 300); }, 2500);
     }
 
-    function getStationBadgeStyle(station) {
-      if (!station) return 'bg-slate-100 text-slate-600 border-slate-200';
-      if (station === 'RHU Palo') return 'bg-teal-100 text-teal-900 border-teal-300';
-      if (station === 'BHS 1' || station === 'BHS 2') return 'bg-sky-100 text-sky-900 border-sky-300';
-      if (station === 'BHS 3' || station === 'BHS 4') return 'bg-indigo-100 text-indigo-900 border-indigo-300';
-      if (station === 'BHS 5' || station === 'BHS 6') return 'bg-purple-100 text-purple-900 border-purple-300';
-      if (station.includes('Secondary Data')) return 'bg-emerald-100 text-emerald-900 border-emerald-300';
-      if (station.includes('Holiday')) return 'bg-amber-100 text-amber-900 border-amber-300';
-      return 'bg-slate-100 text-slate-700 border-slate-300';
+    // =========================================================================
+    // 4. DUTY BADGE STYLING (CLEAN DUTIES + CLERK NAMES ONLY)
+    // =========================================================================
+    function getDutyBadgeStyle(duty) {
+      if (!duty) return 'bg-slate-100 text-slate-600 border-slate-200';
+      if (duty.includes('HOLIDAY')) return 'bg-rose-100 text-rose-800 border-rose-300';
+      if (duty.includes('Pre-Deployment')) return 'bg-slate-100 text-slate-600 border-slate-300';
+      if (duty === 'RHU Consult Duty') return 'bg-teal-100 text-teal-900 border-teal-300';
+      if (duty.includes('San Jose')) return 'bg-sky-100 text-sky-900 border-sky-300';
+      if (duty.includes('BHS:')) return 'bg-emerald-100 text-emerald-900 border-emerald-300';
+      if (duty.includes('Fri:')) return 'bg-amber-100 text-amber-900 border-amber-300';
+      return 'bg-indigo-100 text-indigo-900 border-indigo-300';
     }
 
-    function getClerkDotColor(clerk) {
-      if (clerk === 'Jazzy') return 'bg-teal-600';
-      if (clerk === 'Leila') return 'bg-indigo-600';
-      return 'bg-purple-600';
-    }
-
-    function shortStationLabel(station) {
-      if (!station) return '—';
-      if (station.includes('Secondary Data')) return 'BHS / Sec. Data';
-      if (station.includes('Holiday')) return 'Holiday';
-      if (station.includes('Pre-Deployment')) return 'Prep / Orient.';
-      return station;
-    }
-
-    function mobileCompactStationLabel(station) {
-      if (!station) return '—';
-      if (station === 'RHU Palo') return 'RHU';
-      if (station.includes('Secondary Data')) return 'BHS/Sec';
-      if (station.includes('Holiday')) return 'Hol.';
-      if (station.includes('Pre-Deployment')) return 'Prep';
-      return station.replace(' ', '');
-    }
-
+    // =========================================================================
+    // 5. RENDER CLEAN DUTY CALENDAR WITH JAZZY, LEILA & AUBREY NAMES
+    // =========================================================================
     function renderMonthPills() {
       const container = document.getElementById('month-quick-pills');
-      if (!container) return;
-      container.innerHTML = MONTHS_LIST.map((m, idx) => {
-        const active = idx === currentMonthIndex;
-        return `
-          <button onclick="selectMonth(${idx})" class="px-2.5 py-1 rounded-xl text-xs font-bold transition cursor-pointer ${
-            active
-              ? 'bg-teal-600 text-white shadow-2xs'
-              : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-          }">
-            ${m.short}
-          </button>
-        `;
-      }).join('');
-    }
-
-    // =========================================================================
-    // 5. DEVICE VIEWPORT SWITCHER & CALENDAR RENDERER
-    // =========================================================================
-    function getEffectiveDeviceMode() {
-      if (deviceMode !== 'auto') return deviceMode;
-      const w = window.innerWidth;
-      if (w < 768) return 'phone';
-      if (w < 1024) return 'tablet';
-      return 'laptop';
-    }
-
-    function setDeviceMode(mode) {
-      deviceMode = mode;
-      document.querySelectorAll('.dev-mode-btn').forEach(btn => {
-        btn.classList.remove('bg-white', 'text-teal-700', 'shadow-2xs', 'font-bold');
-        btn.classList.add('text-slate-600', 'font-semibold');
-      });
-      const activeBtn = document.getElementById(`dev-btn-${mode}`);
-      if (activeBtn) {
-        activeBtn.classList.add('bg-white', 'text-teal-700', 'shadow-2xs', 'font-bold');
-        activeBtn.classList.remove('text-slate-600', 'font-semibold');
-      }
-
-      const eff = getEffectiveDeviceMode();
-      const mainContainer = document.getElementById('main-container');
-      const workspaceGrid = document.getElementById('main-workspace-grid');
-      const scheduleWorkspace = document.getElementById('schedule-workspace');
-      const tasksSidebar = document.getElementById('tasks-sidebar');
-      const tasksMobileTab = document.getElementById('tab-tasks-mobile');
-      const dowHeader = document.getElementById('calendar-dow-header');
-      const dowSun = document.getElementById('dow-sun');
-      const dowSat = document.getElementById('dow-sat');
-      const calGrid = document.getElementById('calendar-grid');
-      const mobileCards = document.getElementById('schedule-mobile-cards');
-      const desktopTable = mobileCards ? mobileCards.nextElementSibling : null;
-
-      if (eff === 'phone') {
-        mainContainer.className = 'flex-1 max-w-[460px] w-full mx-auto px-2 py-3 transition-all duration-200';
-        workspaceGrid.className = 'grid grid-cols-1 gap-4 items-start';
-        scheduleWorkspace.className = 'col-span-1 space-y-4';
-        tasksSidebar.className = 'col-span-1 space-y-4';
-        if (tasksMobileTab) tasksMobileTab.classList.remove('hidden');
-        dowHeader.className = 'grid grid-cols-5 bg-slate-100 border-b border-slate-200 text-center text-[11px] font-bold uppercase tracking-wider text-slate-600';
-        dowSun.className = 'hidden';
-        dowSat.className = 'hidden';
-        calGrid.className = 'grid grid-cols-5 divide-x divide-y divide-slate-200 bg-slate-50';
-        if (mobileCards) mobileCards.classList.remove('hidden');
-        if (desktopTable) desktopTable.classList.add('hidden');
-      } else if (eff === 'tablet') {
-        mainContainer.className = 'flex-1 max-w-[900px] w-full mx-auto px-4 py-4 transition-all duration-200';
-        workspaceGrid.className = 'grid grid-cols-1 gap-5 items-start';
-        scheduleWorkspace.className = 'col-span-1 space-y-5';
-        tasksSidebar.className = 'col-span-1 space-y-4';
-        if (tasksMobileTab) tasksMobileTab.classList.remove('hidden');
-        dowHeader.className = 'grid grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-xs font-bold uppercase tracking-wider text-slate-600';
-        dowSun.className = 'block py-2.5 text-slate-400';
-        dowSat.className = 'block py-2.5 text-slate-400';
-        calGrid.className = 'grid grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50';
-        if (mobileCards) mobileCards.classList.add('hidden');
-        if (desktopTable) desktopTable.classList.remove('hidden');
-      } else {
-        mainContainer.className = 'flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 transition-all duration-200';
-        workspaceGrid.className = 'grid grid-cols-12 gap-6 items-start';
-        scheduleWorkspace.className = 'col-span-8 space-y-5';
-        tasksSidebar.className = 'col-span-4 space-y-4 sticky top-28';
-        if (tasksMobileTab) tasksMobileTab.classList.add('hidden');
-        dowHeader.className = 'grid grid-cols-7 bg-slate-100 border-b border-slate-200 text-center text-xs font-bold uppercase tracking-wider text-slate-600';
-        dowSun.className = 'block py-2.5 text-slate-400';
-        dowSat.className = 'block py-2.5 text-slate-400';
-        calGrid.className = 'grid grid-cols-7 divide-x divide-y divide-slate-200 bg-slate-50';
-        if (mobileCards) mobileCards.classList.add('hidden');
-        if (desktopTable) desktopTable.classList.remove('hidden');
-        if (activeView === 'tasks-mobile') activeView = 'calendar';
-      }
-
-      switchView(activeView);
-      renderCalendar();
+      container.innerHTML = MONTHS_LIST.map((m, idx) => `
+        <button onclick="selectMonth(${idx})" class="px-2.5 py-1 rounded-xl text-xs font-bold transition cursor-pointer ${idx === currentMonthIndex ? 'bg-teal-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">
+          ${m.short}
+        </button>
+      `).join('');
     }
 
     function renderCalendar() {
@@ -1050,277 +694,208 @@
       document.getElementById('next-month-btn').disabled = currentMonthIndex === MONTHS_LIST.length - 1;
       renderMonthPills();
 
-      const firstDayOfMonth = new Date(mInfo.year, mInfo.month, 1);
-      const lastDayOfMonth = new Date(mInfo.year, mInfo.month + 1, 0);
-      const startWeekday = firstDayOfMonth.getDay(); // 0 (Sun) to 6 (Sat)
-      const totalDays = lastDayOfMonth.getDate();
-      const isMobile = getEffectiveDeviceMode() === 'phone';
+      const firstDay = new Date(mInfo.year, mInfo.month, 1);
+      const lastDay = new Date(mInfo.year, mInfo.month + 1, 0);
+      const startWeekday = firstDay.getDay();
+      const totalDays = lastDay.getDate();
 
       const grid = document.getElementById('calendar-grid');
       let html = '';
 
-      if (isMobile) {
-        // 5-Column Monday–Friday Calendar Layout for Mobile Phones (No wasted weekend columns, all data fits!)
-        const firstMondayOffset = startWeekday === 0 ? 1 : startWeekday === 6 ? 2 : 0;
-        const firstActiveDate = new Date(mInfo.year, mInfo.month, 1 + firstMondayOffset);
-        const leadingWeekdaySlots = firstActiveDate.getDay() - 1; // 0 (Mon) to 4 (Fri)
-
-        for (let i = 0; i < leadingWeekdaySlots; i++) {
-          html += `<div class="min-h-[96px] bg-slate-100/70 p-1"></div>`;
-        }
-
-        let renderedSlots = leadingWeekdaySlots;
-
-        for (let day = 1; day <= totalDays; day++) {
-          const currentObj = new Date(mInfo.year, mInfo.month, day);
-          const dow = currentObj.getDay();
-          if (dow === 0 || dow === 6) continue;
-
-          renderedSlots += 1;
-          const dateKey = formatDateKey(currentObj);
-          const entry = scheduleData[dateKey];
-          const isHoliday =
-            entry &&
-            entry.assignments.Jazzy.includes('Holiday') &&
-            entry.assignments.Leila.includes('Holiday') &&
-            entry.assignments.Aubrey.includes('Holiday');
-
-          const cardBg = isHoliday
-            ? 'bg-amber-50/90 active:bg-amber-100'
-            : 'bg-white active:bg-teal-50';
-
-          let assignmentsHtml = '';
-          if (entry) {
-            if (isHoliday) {
-              assignmentsHtml = `
-                <div class="my-auto py-1.5 px-1 rounded-md bg-amber-100 border border-amber-300 text-amber-900 text-center">
-                  <div class="text-[9px] font-extrabold leading-tight">HOLIDAY</div>
-                  <div class="text-[8px] font-medium">No Duty</div>
-                </div>
-              `;
-            } else {
-              const visibleClerks = activeClerkFilter === 'ALL' ? CLERKS : [activeClerkFilter];
-              assignmentsHtml = `<div class="space-y-0.5 mt-1">` + visibleClerks.map(c => {
-                const st = entry.assignments[c];
-                const badgeCls = getStationBadgeStyle(st);
-                return `
-                  <div class="px-1 py-0.5 rounded border text-[9px] leading-tight font-bold truncate ${badgeCls}" title="${c}: ${st}">
-                    ${c[0]}: ${mobileCompactStationLabel(st)}
-                  </div>
-                `;
-              }).join('') + `</div>`;
-            }
-          }
-
-          html += `
-            <div onclick="openEditDayModal('${dateKey}')"
-              class="min-h-[96px] ${cardBg} p-1 flex flex-col justify-between transition cursor-pointer relative">
-              <div class="flex items-center justify-between">
-                <span class="text-[11px] font-extrabold ${isHoliday ? 'text-amber-800' : 'text-slate-800'}">${day}</span>
-              </div>
-              ${assignmentsHtml}
-            </div>
-          `;
-        }
-
-        const trailing = (5 - (renderedSlots % 5)) % 5;
-        for (let i = 0; i < trailing; i++) {
-          html += `<div class="min-h-[96px] bg-slate-100/70 p-1"></div>`;
-        }
-
-        grid.innerHTML = html;
-        return;
-      }
-
-      // Desktop / Tablet 7-Column Calendar Layout
-      // Leading empty cells
       for (let i = 0; i < startWeekday; i++) {
-        html += `<div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/70 p-2"></div>`;
+        html += `<div class="min-h-[100px] sm:min-h-[114px] bg-slate-100/60 p-2"></div>`;
       }
 
-      // Actual days
       for (let day = 1; day <= totalDays; day++) {
-        const currentObj = new Date(mInfo.year, mInfo.month, day);
-        const dow = currentObj.getDay();
-        const dateKey = formatDateKey(currentObj);
-        const isWeekend = dow === 0 || dow === 6;
+        const dObj = new Date(mInfo.year, mInfo.month, day);
+        const dow = dObj.getDay();
+        const dateKey = formatDateKey(dObj);
 
-        if (isWeekend) {
+        if (dow === 0 || dow === 6) {
           html += `
-            <div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/60 p-2 flex flex-col justify-between">
-              <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-400">${day}</span>
-                <span class="text-[10px] font-medium text-slate-400 uppercase">Off</span>
-              </div>
-              <div class="text-[10px] text-slate-400 text-center my-auto">Weekend</div>
+            <div class="min-h-[100px] sm:min-h-[114px] bg-slate-100/50 p-2 flex flex-col justify-between">
+              <span class="text-xs font-bold text-slate-400">${day}</span>
+              <span class="text-[10px] text-slate-400 text-center my-auto">Weekend</span>
             </div>
           `;
           continue;
         }
 
         const entry = scheduleData[dateKey];
-        const isHoliday =
-          entry &&
-          entry.assignments.Jazzy.includes('Holiday') &&
-          entry.assignments.Leila.includes('Holiday') &&
-          entry.assignments.Aubrey.includes('Holiday');
+        const isSelected = dateKey === selectedDateKey;
+        const isHoliday = entry && entry.duty.includes('HOLIDAY');
+        const isDone = entry && entry.completed;
 
-        const cardBg = isHoliday
-          ? 'bg-amber-50/80 hover:bg-amber-100/80'
-          : 'bg-white hover:bg-teal-50/40';
+        const ringCls = isSelected ? 'ring-2 ring-inset ring-teal-600 bg-teal-50/40' : (isHoliday ? 'bg-rose-50/50' : 'bg-white hover:bg-slate-50');
 
-        let assignmentsHtml = '';
+        let dutyBadgeHtml = '';
+        let clerksHtml = '';
         if (entry) {
-          if (isHoliday) {
-            assignmentsHtml = `
-              <div class="my-auto py-2 px-1.5 rounded-lg bg-amber-100 border border-amber-300 text-amber-900 text-center">
-                <div class="text-[11px] font-extrabold leading-tight">HOLIDAY</div>
-                <div class="text-[10px] font-medium">No Duty</div>
-              </div>
-            `;
-          } else {
-            const visibleClerks = activeClerkFilter === 'ALL' ? CLERKS : [activeClerkFilter];
-            assignmentsHtml = `<div class="space-y-1 mt-1.5">` + visibleClerks.map(c => {
-              const st = entry.assignments[c];
-              const badgeCls = getStationBadgeStyle(st);
-              const dotCls = getClerkDotColor(c);
-              return `
-                <div class="flex items-center justify-between gap-1 px-1.5 py-0.5 rounded-md border text-[10px] sm:text-[11px] font-semibold ${badgeCls}" title="${c}: ${st}">
-                  <span class="flex items-center gap-1 truncate">
-                    <span class="w-1.5 h-1.5 rounded-full ${dotCls} shrink-0"></span>
-                    <span class="font-bold">${c[0]}:</span>
-                    <span class="truncate">${shortStationLabel(st)}</span>
-                  </span>
-                </div>
-              `;
-            }).join('') + `</div>`;
-          }
+          const badgeStyle = getDutyBadgeStyle(entry.duty);
+          const clerksLabel = entry.clerks || (isHoliday ? 'No Duty' : 'Jazzy, Leila & Aubrey');
+          dutyBadgeHtml = `
+            <div class="my-auto px-1.5 py-1.5 rounded-lg border text-[10px] sm:text-[10.5px] font-extrabold leading-tight text-center ${badgeStyle} ${isDone ? 'opacity-70' : ''}">
+              ${entry.duty}
+            </div>
+          `;
+          clerksHtml = !isHoliday ? `
+            <div class="text-[9.5px] font-bold text-slate-600 text-center truncate" title="${clerksLabel}">
+              ${clerksLabel}
+            </div>
+          ` : `<div class="h-2"></div>`;
         }
 
         html += `
-          <div onclick="openEditDayModal('${dateKey}')"
-            class="min-h-[115px] sm:min-h-[135px] ${cardBg} p-1.5 sm:p-2 flex flex-col justify-between transition cursor-pointer group relative">
+          <div onclick="selectDate('${dateKey}')"
+            class="min-h-[100px] sm:min-h-[114px] ${ringCls} p-1.5 sm:p-2 flex flex-col justify-between transition cursor-pointer group">
             <div class="flex items-center justify-between">
-              <span class="text-xs sm:text-sm font-extrabold ${isHoliday ? 'text-amber-800' : 'text-slate-800'}">${day}</span>
-              <span class="opacity-0 group-hover:opacity-100 transition text-[10px] font-bold text-teal-700 bg-teal-100 px-1.5 py-0.5 rounded">
-                Edit
-              </span>
+              <span class="text-xs sm:text-sm font-extrabold ${isHoliday ? 'text-rose-700' : 'text-slate-800'}">${day}</span>
+              ${isDone
+                ? `<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[9px] font-extrabold bg-emerald-600 text-white">✓ Done</span>`
+                : (!isHoliday ? `<span class="w-2 h-2 rounded-full bg-slate-200 group-hover:bg-teal-400"></span>` : '')
+              }
             </div>
-            ${assignmentsHtml}
-            ${
-              entry && entry.note && !isHoliday
-                ? `<p class="text-[9.5px] text-slate-400 truncate mt-1" title="${entry.note.replace(/"/g, '&quot;')}">${entry.note}</p>`
-                : ''
-            }
+            ${dutyBadgeHtml}
+            ${clerksHtml}
           </div>
         `;
       }
 
-      // Trailing empty cells to complete 7-col grid
-      const totalCells = startWeekday + totalDays;
-      const trailing = (7 - (totalCells % 7)) % 7;
+      const trailing = (7 - ((startWeekday + totalDays) % 7)) % 7;
       for (let i = 0; i < trailing; i++) {
-        html += `<div class="min-h-[115px] sm:min-h-[135px] bg-slate-100/70 p-2"></div>`;
+        html += `<div class="min-h-[100px] sm:min-h-[114px] bg-slate-100/60 p-2"></div>`;
       }
 
       grid.innerHTML = html;
+      renderSideSummaryPanel();
+    }
+
+    function selectDate(dateKey) {
+      selectedDateKey = dateKey;
+      renderCalendar();
+    }
+
+    function renderSideSummaryPanel() {
+      const mInfo = MONTHS_LIST[currentMonthIndex];
+      const monthEntries = Object.values(scheduleData)
+        .filter(e => e.date.startsWith(mInfo.key) && !e.duty.includes('HOLIDAY') && !e.duty.includes('Pre-Deployment'))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      const doneCount = monthEntries.filter(e => e.completed).length;
+      const totalCount = monthEntries.length;
+      const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
+
+      document.getElementById('duty-progress-badge').textContent = `${doneCount} / ${totalCount} Done`;
+      document.getElementById('duty-progress-bar').style.width = `${pct}%`;
+
+      const sel = scheduleData[selectedDateKey];
+      if (sel) {
+        const dObj = parseDateLocal(sel.date);
+        document.getElementById('sel-day-phase').textContent = sel.phase;
+        document.getElementById('sel-day-title').textContent = dObj.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+        document.getElementById('sel-day-duty').textContent = `Duty: ${sel.duty} (${sel.clerks || 'Jazzy, Leila & Aubrey'})`;
+        document.getElementById('sel-day-summary-input').value = sel.summary || '';
+
+        const btn = document.getElementById('sel-day-done-btn');
+        const statusTxt = document.getElementById('sel-day-status-text');
+        if (sel.completed) {
+          btn.textContent = '✓ Accomplished';
+          btn.className = 'px-3 py-1.5 rounded-xl text-xs font-extrabold bg-emerald-600 text-white border border-emerald-700 shadow-xs cursor-pointer shrink-0';
+          statusTxt.textContent = 'Status: Accomplished / Done';
+          statusTxt.className = 'text-[11px] font-bold text-emerald-700';
+        } else {
+          btn.textContent = 'Mark Done';
+          btn.className = 'px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-emerald-50 text-slate-700 border border-slate-300 cursor-pointer shrink-0';
+          statusTxt.textContent = 'Status: Pending';
+          statusTxt.className = 'text-[11px] font-semibold text-slate-500';
+        }
+      }
+
+      document.getElementById('side-month-list-label').textContent = `${mInfo.label} — Daily Activity Summaries`;
+      const allMonthRows = Object.values(scheduleData)
+        .filter(e => e.date.startsWith(mInfo.key))
+        .sort((a, b) => a.date.localeCompare(b.date));
+
+      const listEl = document.getElementById('side-month-activity-list');
+      listEl.innerHTML = allMonthRows.map(e => {
+        const dObj = parseDateLocal(e.date);
+        const shortD = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
+        const isSel = e.date === selectedDateKey;
+        const isHol = e.duty.includes('HOLIDAY');
+
+        return `
+          <div onclick="selectDate('${e.date}')"
+            class="p-2.5 rounded-xl border transition cursor-pointer ${isSel ? 'border-teal-500 bg-teal-50/60' : (e.completed ? 'border-slate-200 bg-slate-50 opacity-80' : 'border-slate-200 bg-white hover:border-teal-300')}">
+            <div class="flex items-start gap-2.5">
+              ${!isHol ? `
+                <input type="checkbox" ${e.completed ? 'checked' : ''} onclick="event.stopPropagation(); toggleDateDone('${e.date}')"
+                  class="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0" title="Mark day done" />
+              ` : `<span class="mt-0.5 w-4 h-4 text-center text-xs text-rose-500 font-bold shrink-0">•</span>`}
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-xs font-extrabold text-slate-900">${shortD}</span>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${getDutyBadgeStyle(e.duty)}">${e.duty}</span>
+                </div>
+                <p class="text-[11.5px] mt-1 leading-snug ${e.completed ? 'line-through text-slate-400' : 'text-slate-600'}">
+                  ${e.summary}
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleDateDone(dateKey) {
+      if (!scheduleData[dateKey]) return;
+      scheduleData[dateKey].completed = !scheduleData[dateKey].completed;
+      persistAll(false);
+      renderCalendar();
+      renderScheduleTable();
+      showToast(scheduleData[dateKey].completed ? 'Marked day as Done!' : 'Marked as Pending');
+    }
+
+    function toggleSelectedDayDone() {
+      if (selectedDateKey) toggleDateDone(selectedDateKey);
+    }
+
+    function updateSelectedDaySummary() {
+      if (!selectedDateKey || !scheduleData[selectedDateKey]) return;
+      scheduleData[selectedDateKey].summary = document.getElementById('sel-day-summary-input').value.trim();
+      persistAll(true, 'Daily activity summary saved!');
+      renderSideSummaryPanel();
+      renderScheduleTable();
     }
 
     // =========================================================================
-    // 6. RENDER WEEKLY / LIST SCHEDULE TABLE
+    // 6. FULL ROSTER TABLE VIEW
     // =========================================================================
     function renderScheduleTable() {
-      const monthFilter = document.getElementById('table-month-filter').value;
+      const mFilter = document.getElementById('table-month-filter').value;
       const tbody = document.getElementById('schedule-table-body');
-      const mobileCards = document.getElementById('schedule-mobile-cards');
-      const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const keys = Object.keys(scheduleData).sort().filter(k => mFilter === 'ALL' || k.startsWith(mFilter));
 
-      const keys = Object.keys(scheduleData).sort().filter(k => {
-        if (monthFilter === 'ALL') return true;
-        return k.startsWith(monthFilter);
-      });
-
-      if (mobileCards) {
-        mobileCards.innerHTML = keys.map(dateKey => {
-          const entry = scheduleData[dateKey];
-          const dObj = parseDateLocal(dateKey);
-          const formattedDate = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-          const dayStr = dayNames[entry.dayOfWeek];
-
-          const isHoliday =
-            entry.assignments.Jazzy.includes('Holiday') &&
-            entry.assignments.Leila.includes('Holiday') &&
-            entry.assignments.Aubrey.includes('Holiday');
-
-          return `
-            <div onclick="openEditDayModal('${dateKey}')" class="p-3 ${isHoliday ? 'bg-amber-50/70' : 'bg-white active:bg-slate-50'} transition cursor-pointer">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-xs font-extrabold text-slate-900">${formattedDate}</span>
-                  <span class="text-[11px] font-bold text-teal-700">(${dayStr})</span>
-                </div>
-                <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-700">
-                  ${entry.weekLabel}
-                </span>
-              </div>
-              <div class="grid grid-cols-3 gap-1.5">
-                ${CLERKS.map(c => {
-                  const st = entry.assignments[c];
-                  const dimmed = activeClerkFilter !== 'ALL' && activeClerkFilter !== c ? 'opacity-35' : '';
-                  return `
-                    <div class="p-1.5 rounded-lg border text-center ${getStationBadgeStyle(st)} ${dimmed}">
-                      <div class="text-[10px] font-extrabold uppercase tracking-wide">${c}</div>
-                      <div class="text-[11px] font-bold truncate mt-0.5">${shortStationLabel(st)}</div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-              ${entry.note ? `<p class="text-[11px] text-slate-500 mt-2 leading-snug">${entry.note}</p>` : ''}
-            </div>
-          `;
-        }).join('');
-      }
-
-      tbody.innerHTML = keys.map(dateKey => {
-        const entry = scheduleData[dateKey];
-        const dObj = parseDateLocal(dateKey);
-        const formattedDate = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        const dayStr = dayNames[entry.dayOfWeek];
-
-        const isHoliday =
-          entry.assignments.Jazzy.includes('Holiday') &&
-          entry.assignments.Leila.includes('Holiday') &&
-          entry.assignments.Aubrey.includes('Holiday');
-
+      tbody.innerHTML = keys.map(k => {
+        const e = scheduleData[k];
+        const dObj = parseDateLocal(k);
+        const dateStr = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', weekday: 'short' });
+        const isHol = e.duty.includes('HOLIDAY');
         return `
-          <tr class="${isHoliday ? 'bg-amber-50/70' : 'hover:bg-slate-50'} transition">
-            <td class="py-2.5 px-4 whitespace-nowrap">
-              <div class="font-bold text-slate-900">${formattedDate}</div>
-              <div class="text-[11px] font-semibold text-teal-700">${dayStr}</div>
-            </td>
+          <tr class="${isHol ? 'bg-rose-50/40' : 'hover:bg-slate-50'}">
+            <td class="py-2.5 px-4 font-bold text-slate-900 whitespace-nowrap">${dateStr}</td>
             <td class="py-2.5 px-3 whitespace-nowrap">
-              <span class="inline-block px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700">
-                ${entry.weekLabel}
-              </span>
+              <div class="inline-flex flex-col gap-0.5">
+                <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${getDutyBadgeStyle(e.duty)}">${e.duty}</span>
+                ${!isHol ? `<span class="text-[11px] font-semibold text-slate-500 pl-1">${e.clerks || 'Jazzy, Leila & Aubrey'}</span>` : ''}
+              </div>
             </td>
-            ${CLERKS.map(c => {
-              const st = entry.assignments[c];
-              const dimmed = activeClerkFilter !== 'ALL' && activeClerkFilter !== c ? 'opacity-35' : '';
-              return `
-                <td class="py-2.5 px-3 whitespace-nowrap ${dimmed}">
-                  <span class="inline-flex items-center px-2.5 py-1 rounded-lg border text-xs font-bold ${getStationBadgeStyle(st)}">
-                    ${shortStationLabel(st)}
-                  </span>
-                </td>
-              `;
-            }).join('')}
-            <td class="py-2.5 px-4 text-xs text-slate-600 max-w-xs">
-              <p class="line-clamp-2">${entry.note || '—'}</p>
-            </td>
-            <td class="py-2.5 px-3 text-right whitespace-nowrap no-print">
-              <button onclick="openEditDayModal('${dateKey}')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-teal-50 hover:bg-teal-100 text-teal-800 border border-teal-200 transition cursor-pointer">
-                Edit
-              </button>
+            <td class="py-2.5 px-4 text-xs text-slate-600">${e.summary}</td>
+            <td class="py-2.5 px-3 text-center whitespace-nowrap">
+              ${!isHol ? `
+                <button onclick="toggleDateDone('${k}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border cursor-pointer ${e.completed ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-emerald-50'}">
+                  ${e.completed ? '✓ Done' : 'Mark Done'}
+                </button>
+              ` : '<span class="text-xs text-slate-400">—</span>'}
             </td>
           </tr>
         `;
@@ -1328,299 +903,18 @@
     }
 
     // =========================================================================
-    // 7. RENDER STATION & BHS 1-6 FAIRNESS MATRIX + AUDIT
+    // 7. EDIT DAY MODAL
     // =========================================================================
-    function renderMatrixAndStats() {
-      const counts = {
-        Jazzy: { rhu: 0, bhs1: 0, bhs2: 0, bhs3: 0, bhs4: 0, bhs5: 0, bhs6: 0, sec: 0, total: 0 },
-        Leila: { rhu: 0, bhs1: 0, bhs2: 0, bhs3: 0, bhs4: 0, bhs5: 0, bhs6: 0, sec: 0, total: 0 },
-        Aubrey: { rhu: 0, bhs1: 0, bhs2: 0, bhs3: 0, bhs4: 0, bhs5: 0, bhs6: 0, sec: 0, total: 0 }
-      };
-
-      Object.values(scheduleData).forEach(entry => {
-        CLERKS.forEach(c => {
-          const st = entry.assignments[c];
-          if (!st || st.includes('Holiday') || st.includes('Pre-Deployment')) return;
-          counts[c].total += 1;
-          if (st === 'RHU Palo') counts[c].rhu += 1;
-          else if (st === 'BHS 1') counts[c].bhs1 += 1;
-          else if (st === 'BHS 2') counts[c].bhs2 += 1;
-          else if (st === 'BHS 3') counts[c].bhs3 += 1;
-          else if (st === 'BHS 4') counts[c].bhs4 += 1;
-          else if (st === 'BHS 5') counts[c].bhs5 += 1;
-          else if (st === 'BHS 6') counts[c].bhs6 += 1;
-          else if (st.includes('Secondary Data')) counts[c].sec += 1;
-        });
-      });
-
-      // Update Top Header Pills
-      CLERKS.forEach(c => {
-        const pill = document.getElementById(`stat-pill-${c}`);
-        if (pill) {
-          pill.textContent = `${counts[c].rhu} RHU • ${counts[c].total}d`;
-        }
-      });
-
-      // Update Matrix Table
-      const matrixBody = document.getElementById('matrix-table-body');
-      matrixBody.innerHTML = CLERKS.map(c => {
-        const d = counts[c];
-        return `
-          <tr class="hover:bg-slate-50">
-            <td class="py-3 px-4 font-extrabold text-slate-900 flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full ${getClerkDotColor(c)} text-white text-xs flex items-center justify-center">${c[0]}</span>
-              ${c}
-            </td>
-            <td class="py-3 px-3 text-center font-extrabold text-teal-800 bg-teal-50/40">${d.rhu}</td>
-            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs1}</td>
-            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs2}</td>
-            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs3}</td>
-            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs4}</td>
-            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs5}</td>
-            <td class="py-3 px-2.5 text-center font-semibold">${d.bhs6}</td>
-            <td class="py-3 px-3 text-center font-semibold text-emerald-800 bg-emerald-50/40">${d.sec}</td>
-            <td class="py-3 px-3 text-center font-extrabold text-slate-900">${d.total} days</td>
-          </tr>
-        `;
-      }).join('');
-
-      // Weekly RHU Audit for Phase 3 (Jan 11 - Apr 30, 2027)
-      const weeklyMap = {};
-      Object.keys(scheduleData).sort().forEach(k => {
-        if (k < '2027-01-11' || k > '2027-04-30') return;
-        const entry = scheduleData[k];
-        const wk = entry.weekLabel;
-        if (!weeklyMap[wk]) {
-          weeklyMap[wk] = { label: wk, dates: [], rhuClerks: new Set(), bhsSet: new Set() };
-        }
-        weeklyMap[wk].dates.push(k);
-        CLERKS.forEach(c => {
-          const st = entry.assignments[c];
-          if (st === 'RHU Palo') weeklyMap[wk].rhuClerks.add(c);
-          if (st.startsWith('BHS ')) weeklyMap[wk].bhsSet.add(st);
-        });
-      });
-
-      const auditGrid = document.getElementById('weekly-audit-grid');
-      auditGrid.innerHTML = Object.values(weeklyMap).map(w => {
-        const allThreeRHU = CLERKS.every(c => w.rhuClerks.has(c));
-        const bhsList = Array.from(w.bhsSet).sort().join(', ') || 'None';
-        const firstD = parseDateLocal(w.dates[0]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        const lastD = parseDateLocal(w.dates[w.dates.length - 1]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        return `
-          <div class="p-3 rounded-xl border ${allThreeRHU ? 'border-emerald-200 bg-emerald-50/40' : 'border-amber-300 bg-amber-50/60'}">
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-extrabold text-slate-900">${w.label}</span>
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${allThreeRHU ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-200 text-amber-900'}">
-                ${allThreeRHU ? '✓ All 3 @ RHU' : 'Check RHU'}
-              </span>
-            </div>
-            <div class="text-[11px] text-slate-500 mt-0.5">${firstD} – ${lastD}, 2027</div>
-            <div class="text-[11px] text-slate-700 mt-2">
-              <span class="font-semibold">BHS Covered:</span> ${bhsList}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    // =========================================================================
-    // 8. RENDER & MANAGE TASKS SIDEBAR
-    // =========================================================================
-    function renderTasks() {
-      const phaseFilter = document.getElementById('task-phase-filter').value;
-      const container = document.getElementById('task-list-container');
-
-      const filtered = tasksData.filter(t => {
-        const phaseOk = phaseFilter === 'ALL' || t.phase === phaseFilter;
-        const clerkOk =
-          activeClerkFilter === 'ALL' ||
-          t.assignee === 'All Clerks' ||
-          t.assignee === activeClerkFilter;
-        return phaseOk && clerkOk;
-      });
-
-      const completedTotal = tasksData.filter(t => t.completed).length;
-      const totalTasks = tasksData.length;
-      const pct = totalTasks === 0 ? 0 : Math.round((completedTotal / totalTasks) * 100);
-
-      document.getElementById('task-progress-badge').textContent = `${completedTotal} / ${totalTasks} Done`;
-      document.getElementById('task-progress-bar').style.width = `${pct}%`;
-      const mobCount = document.getElementById('mobile-task-count');
-      if (mobCount) mobCount.textContent = `${completedTotal}/${totalTasks}`;
-
-      if (filtered.length === 0) {
-        container.innerHTML = `
-          <div class="text-center py-8 px-4 text-slate-400 text-xs">
-            No tasks match the current filter. Click <strong>+ Add Task</strong> above to create one.
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = filtered.map(task => {
-        const assigneeBadge =
-          task.assignee === 'Jazzy'
-            ? 'bg-teal-100 text-teal-800'
-            : task.assignee === 'Leila'
-            ? 'bg-indigo-100 text-indigo-800'
-            : task.assignee === 'Aubrey'
-            ? 'bg-purple-100 text-purple-800'
-            : 'bg-slate-200 text-slate-800';
-
-        return `
-          <div class="p-3 rounded-xl border ${task.completed ? 'bg-slate-50 border-slate-200 opacity-75' : 'bg-white border-slate-200 hover:border-teal-300'} shadow-2xs transition group">
-            <div class="flex items-start gap-2.5">
-              <input type="checkbox" ${task.completed ? 'checked' : ''} onchange="toggleTask('${task.id}')"
-                class="mt-1 w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer shrink-0" />
-              <div class="flex-1 min-w-0">
-                <p class="text-xs sm:text-[13px] font-semibold leading-snug ${task.completed ? 'line-through text-slate-400' : 'text-slate-800'}">
-                  ${task.title}
-                </p>
-                <div class="flex flex-wrap items-center gap-1.5 mt-2">
-                  <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${assigneeBadge}">
-                    ${task.assignee}
-                  </span>
-                  ${task.station ? `<span class="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-teal-50 text-teal-800 border border-teal-200">${task.station}</span>` : ''}
-                  ${task.dueDate ? `<span class="text-[10px] font-medium text-slate-400">Due: ${task.dueDate}</span>` : ''}
-                </div>
-              </div>
-              <div class="flex items-center gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition">
-                <button onclick="openTaskModal('${task.id}')" title="Edit Task" class="p-1 rounded-lg text-slate-400 hover:text-teal-700 hover:bg-teal-50 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                </button>
-                <button onclick="deleteTask('${task.id}')" title="Delete Task" class="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function toggleTask(id) {
-      const idx = tasksData.findIndex(t => t.id === id);
-      if (idx !== -1) {
-        tasksData[idx].completed = !tasksData[idx].completed;
-        setUnsavedState(true);
-        saveTasksState(false);
-        renderTasks();
-      }
-    }
-
-    function deleteTask(id) {
-      tasksData = tasksData.filter(t => t.id !== id);
-      setUnsavedState(true);
-      saveTasksState();
-      renderTasks();
-    }
-
-    function openTaskModal(taskId = null) {
-      const modal = document.getElementById('task-modal');
-      const titleHeader = document.getElementById('task-modal-title');
-      if (taskId) {
-        const t = tasksData.find(item => item.id === taskId);
-        if (!t) return;
-        titleHeader.textContent = 'Edit Activity / Task';
-        document.getElementById('task-edit-id').value = t.id;
-        document.getElementById('task-title-input').value = t.title;
-        document.getElementById('task-assignee-input').value = t.assignee;
-        document.getElementById('task-phase-input').value = t.phase;
-        document.getElementById('task-station-input').value = t.station || '';
-        document.getElementById('task-due-input').value = t.dueDate || '';
-      } else {
-        titleHeader.textContent = 'Add New Activity / Task';
-        document.getElementById('task-edit-id').value = '';
-        document.getElementById('task-title-input').value = '';
-        document.getElementById('task-assignee-input').value = 'All Clerks';
-        document.getElementById('task-phase-input').value = 'Phase 1 (Nov 16–Dec 11)';
-        document.getElementById('task-station-input').value = '';
-        document.getElementById('task-due-input').value = '';
-      }
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeTaskModal() {
-      const modal = document.getElementById('task-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    function saveTask(e) {
-      e.preventDefault();
-      const id = document.getElementById('task-edit-id').value;
-      const title = document.getElementById('task-title-input').value.trim();
-      const assignee = document.getElementById('task-assignee-input').value;
-      const phase = document.getElementById('task-phase-input').value;
-      const station = document.getElementById('task-station-input').value.trim();
-      const dueDate = document.getElementById('task-due-input').value;
-
-      if (!title) return;
-
-      if (id) {
-        const idx = tasksData.findIndex(t => t.id === id);
-        if (idx !== -1) {
-          tasksData[idx] = { ...tasksData[idx], title, assignee, phase, station, dueDate };
-        }
-      } else {
-        tasksData.unshift({
-          id: 'task_' + Date.now(),
-          title,
-          assignee,
-          phase,
-          station,
-          dueDate,
-          completed: false
-        });
-      }
-
-      saveTasksState();
-      renderTasks();
-      closeTaskModal();
-    }
-
-    // =========================================================================
-    // 9. DAILY SCHEDULE EDIT MODAL LOGIC
-    // =========================================================================
-    function populateStationDropdowns() {
-      CLERKS.forEach(c => {
-        const sel = document.getElementById(`edit-station-${c}`);
-        sel.innerHTML = STATION_OPTIONS.map(opt => `<option value="${opt}">${opt}</option>`).join('');
-        sel.addEventListener('change', () => setUnsavedState(true));
-      });
-      const noteEl = document.getElementById('edit-day-note');
-      if (noteEl) {
-        noteEl.addEventListener('input', () => setUnsavedState(true));
-      }
-    }
-
     function openEditDayModal(dateKey) {
-      const entry = scheduleData[dateKey];
-      if (!entry) return;
-
-      const dObj = parseDateLocal(dateKey);
-      const formatted = dObj.toLocaleDateString('en-US', {
-        weekday: 'long',
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric'
-      });
-
+      const e = scheduleData[dateKey];
+      if (!e) return;
       document.getElementById('edit-date-key').value = dateKey;
-      document.getElementById('modal-phase-tag').textContent = `${entry.phase} • ${entry.weekLabel}`;
-      document.getElementById('modal-date-title').textContent = formatted;
-
-      CLERKS.forEach(c => {
-        document.getElementById(`edit-station-${c}`).value = entry.assignments[c];
-      });
-      document.getElementById('edit-day-note').value = entry.note || '';
-
+      document.getElementById('modal-phase-tag').textContent = e.phase;
+      document.getElementById('modal-date-title').textContent = parseDateLocal(dateKey).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+      document.getElementById('edit-duty-select').value = e.duty;
+      document.getElementById('edit-clerks-input').value = e.clerks || 'Jazzy, Leila & Aubrey';
+      document.getElementById('edit-day-note').value = e.summary || '';
+      document.getElementById('edit-day-done').checked = !!e.completed;
       const modal = document.getElementById('edit-day-modal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -1632,356 +926,793 @@
       modal.classList.remove('flex');
     }
 
-    function applyDayPreset(preset) {
-      if (preset === 'ALL_RHU') {
-        CLERKS.forEach(c => (document.getElementById(`edit-station-${c}`).value = 'RHU Palo'));
-        document.getElementById('edit-day-note').value = 'All 3 clerks on duty at RHU Palo.';
-      } else if (preset === 'ALL_SEC') {
-        CLERKS.forEach(
-          c => (document.getElementById(`edit-station-${c}`).value = 'BHS / Secondary Data Assessment')
-        );
-        document.getElementById('edit-day-note').value =
-          'BHS & Catchment Barangay Community Assessment using secondary data.';
-      } else if (preset === 'HOLIDAY') {
-        CLERKS.forEach(c => (document.getElementById(`edit-station-${c}`).value = 'Holiday / No Duty'));
-        document.getElementById('edit-day-note').value = 'Holiday / No Duty.';
-      }
-      setUnsavedState(true);
-    }
-
-    function saveDayEdit(e) {
-      e.preventDefault();
-      const dateKey = document.getElementById('edit-date-key').value;
-      if (!scheduleData[dateKey]) return;
-
-      CLERKS.forEach(c => {
-        scheduleData[dateKey].assignments[c] = document.getElementById(`edit-station-${c}`).value;
-      });
-      scheduleData[dateKey].note = document.getElementById('edit-day-note').value.trim();
-
-      saveScheduleState();
+    function saveDayEdit(ev) {
+      ev.preventDefault();
+      const k = document.getElementById('edit-date-key').value;
+      if (!scheduleData[k]) return;
+      scheduleData[k].duty = document.getElementById('edit-duty-select').value;
+      scheduleData[k].clerks = document.getElementById('edit-clerks-input').value.trim() || 'Jazzy, Leila & Aubrey';
+      scheduleData[k].summary = document.getElementById('edit-day-note').value.trim();
+      scheduleData[k].completed = document.getElementById('edit-day-done').checked;
+      persistAll(true, 'Duty day saved!');
       refreshAllViews();
       closeEditDayModal();
     }
 
     // =========================================================================
-    // 10. VIEW SWITCHING, CLERK FILTERING, PDF GENERATION, CSV & RESET
+    // 8. 5-BARANGAY CHDP TAB WITH PER-ENTRY EDIT, SAVE & DELETE + AUTO-COMPUTE
     // =========================================================================
-    function renderSingleMonthPDFPage(doc, mInfo, isFirstPage) {
-      if (!isFirstPage) {
-        doc.addPage('letter', 'landscape');
+    function renderCHDPWorkspace() {
+      const tabsEl = document.getElementById('brgy-selector-tabs');
+      tabsEl.innerHTML = BARANGAYS.map(b => {
+        const list = chdpData.barangays[b].conditions || [];
+        const filledCount = list.filter(item => item.condition.trim() !== '').length;
+        const active = b === activeBrgyTab;
+        return `
+          <button onclick="selectBrgyTab('${b}')"
+            class="w-full px-3 py-2 rounded-xl text-xs sm:text-sm font-bold transition cursor-pointer flex items-center justify-center gap-1.5 ${
+              active ? 'bg-white text-indigo-700 shadow-sm ring-1 ring-indigo-200' : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+            }">
+            <span class="truncate">Brgy. ${b}</span>
+            <span class="px-1.5 py-0.2 rounded-full text-[10px] shrink-0 ${filledCount >= 5 ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}">${filledCount}</span>
+          </button>
+        `;
+      }).join('');
+
+      const bObj = chdpData.barangays[activeBrgyTab];
+      if (!bObj.conditions) bObj.conditions = [];
+      const datalistHtml = `<datalist id="cond-suggestions">${CONDITION_SUGGESTIONS.map(s => `<option value="${s}">`).join('')}</datalist>`;
+
+      const profileHtml = `
+        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2.5">
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Barangay ${activeBrgyTab} — Secondary Data &amp; Baseline Indicators</h4>
+            </div>
+            <div class="flex items-center gap-1.5">
+              ${isEditingBrgyProfile ? `
+                <button onclick="saveBrgyProfile()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white shadow-2xs cursor-pointer">
+                  Save Profile
+                </button>
+              ` : `
+                <button onclick="toggleEditBrgyProfile(true)" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-2xs cursor-pointer">
+                  Edit Profile
+                </button>
+              `}
+              <button onclick="clearBrgyProfile()" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer">
+                Delete / Clear
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+            ${[
+              { key: 'population', label: 'Total Population', ph: 'e.g., 2,450' },
+              { key: 'households', label: 'Total Households', ph: 'e.g., 520' },
+              { key: 'midwife', label: 'Midwife / BHW Focal', ph: 'Name of RHM / BHW' },
+              { key: 'ficRate', label: 'FIC (%) / EPI Defaulters', ph: 'e.g., 82% (6 defaulters)' },
+              { key: 'ancRate', label: 'ANC >=4 (%) / High-Risk', ph: 'e.g., 78% (4 high-risk)' },
+              { key: 'htnCount', label: 'Registered HTN / DM', ph: 'e.g., 68 HTN / 19 DM' },
+              { key: 'tbCount', label: 'Active / Presumptive TB', ph: 'e.g., 5 active, 8 presumptive' },
+              { key: 'malnutritionRate', label: 'OPT+ UW / Stunted (%)', ph: 'e.g., 7.5% UW, 11% Stunted' }
+            ].map(f => `
+              <div>
+                <label class="block text-[11px] font-bold text-slate-600 mb-1">${f.label}</label>
+                <input id="brgy-field-${f.key}" type="text" value="${bObj[f.key] || ''}" ${isEditingBrgyProfile ? '' : 'disabled'}
+                  placeholder="${f.ph}"
+                  class="w-full px-2.5 py-1.5 rounded-lg border text-xs font-semibold ${isEditingBrgyProfile ? 'border-indigo-400 bg-white text-slate-900' : 'border-slate-200 bg-slate-100/70 text-slate-700'}" />
+              </div>
+            `).join('')}
+            <div class="col-span-2">
+              <label class="block text-[11px] font-bold text-slate-600 mb-1">WASH / Safe Water &amp; Flood Vulnerability Notes</label>
+              <input id="brgy-field-washCoverage" type="text" value="${bObj.washCoverage || ''}" ${isEditingBrgyProfile ? '' : 'disabled'}
+                placeholder="e.g., 88% sanitary toilet; 35 flood-prone HHs"
+                class="w-full px-2.5 py-1.5 rounded-lg border text-xs font-semibold ${isEditingBrgyProfile ? 'border-indigo-400 bg-white text-slate-900' : 'border-slate-200 bg-slate-100/70 text-slate-700'}" />
+            </div>
+          </div>
+        </div>
+      `;
+
+      const conditionsHtml = `
+        <div class="space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <h4 class="text-sm font-extrabold text-slate-900">Ranked Health Conditions for Barangay ${activeBrgyTab}</h4>
+            </div>
+            <button onclick="addConditionRow()" class="px-3 py-1.5 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white shadow-2xs cursor-pointer">
+              + Add Condition Entry
+            </button>
+          </div>
+
+          <div class="overflow-x-auto border border-slate-200 rounded-xl">
+            <table class="w-full text-left border-collapse text-xs">
+              <thead>
+                <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold">
+                  <th class="py-2.5 px-3 w-20 text-center">Rank / Pts</th>
+                  <th class="py-2.5 px-3">Health Condition / Problem</th>
+                  <th class="py-2.5 px-3">Baseline Secondary Indicator / Denominator</th>
+                  <th class="py-2.5 px-2 w-20 text-center">Mag (1–5)</th>
+                  <th class="py-2.5 px-2 w-20 text-center">Sev (1–5)</th>
+                  <th class="py-2.5 px-2 w-20 text-center">Mod (1–5)</th>
+                  <th class="py-2.5 px-2 w-20 text-center bg-indigo-50 text-indigo-900">Score</th>
+                  <th class="py-2.5 px-3 w-40 text-center">Row Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                ${bObj.conditions.length === 0 ? `
+                  <tr><td colspan="8" class="py-6 text-center text-slate-400">No conditions listed for Barangay ${activeBrgyTab}. Click <strong>+ Add Condition Entry</strong> above.</td></tr>
+                ` : bObj.conditions.map((row, idx) => {
+                  const isRowEditing = editingConditionIndex === idx;
+                  const pts = idx < 5 ? (5 - idx) : 0;
+                  const wScore = ((Number(row.magnitude || 0) * 0.35) + (Number(row.severity || 0) * 0.35) + (Number(row.modifiability || 0) * 0.30)).toFixed(2);
+
+                  if (isRowEditing) {
+                    return `
+                      <tr class="bg-indigo-50/50">
+                        <td class="py-2 px-3 text-center font-extrabold text-indigo-700">#${idx + 1} <span class="text-[10px] text-slate-500">(${pts} pts)</span></td>
+                        <td class="py-2 px-3">
+                          <input id="cond-edit-name-${idx}" type="text" list="cond-suggestions" value="${row.condition}"
+                            placeholder="Select or type condition..." class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-400 bg-white font-semibold text-slate-900" />
+                        </td>
+                        <td class="py-2 px-3">
+                          <input id="cond-edit-ind-${idx}" type="text" value="${row.indicator}"
+                            placeholder="e.g., 68/520 HHs hypertensive" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-400 bg-white text-slate-800" />
+                        </td>
+                        <td class="py-2 px-2 text-center">
+                          <input id="cond-edit-mag-${idx}" type="number" min="1" max="5" value="${row.magnitude}" class="w-14 px-1.5 py-1 rounded-lg border border-indigo-400 bg-white text-center font-bold" />
+                        </td>
+                        <td class="py-2 px-2 text-center">
+                          <input id="cond-edit-sev-${idx}" type="number" min="1" max="5" value="${row.severity}" class="w-14 px-1.5 py-1 rounded-lg border border-indigo-400 bg-white text-center font-bold" />
+                        </td>
+                        <td class="py-2 px-2 text-center">
+                          <input id="cond-edit-mod-${idx}" type="number" min="1" max="5" value="${row.modifiability}" class="w-14 px-1.5 py-1 rounded-lg border border-indigo-400 bg-white text-center font-bold" />
+                        </td>
+                        <td class="py-2 px-2 text-center font-extrabold text-indigo-900">${wScore}</td>
+                        <td class="py-2 px-3 text-center whitespace-nowrap">
+                          <div class="inline-flex items-center gap-1">
+                            <button onclick="saveConditionRow(${idx})" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer">Save</button>
+                            <button onclick="deleteConditionRow(${idx})" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-600 hover:bg-rose-700 text-white cursor-pointer">Delete</button>
+                          </div>
+                        </td>
+                      </tr>
+                    `;
+                  }
+
+                  return `
+                    <tr class="hover:bg-slate-50">
+                      <td class="py-2.5 px-3 text-center font-extrabold ${idx < 5 ? 'text-indigo-700' : 'text-slate-400'}">
+                        #${idx + 1} <span class="text-[10px] font-medium text-slate-400">(${pts} pts)</span>
+                      </td>
+                      <td class="py-2.5 px-3 font-bold text-slate-900">
+                        ${row.condition || '<span class="italic font-normal text-slate-400">Empty slot — click Edit</span>'}
+                      </td>
+                      <td class="py-2.5 px-3 text-slate-600">${row.indicator || '—'}</td>
+                      <td class="py-2.5 px-2 text-center font-semibold">${row.magnitude}</td>
+                      <td class="py-2.5 px-2 text-center font-semibold">${row.severity}</td>
+                      <td class="py-2.5 px-2 text-center font-semibold">${row.modifiability}</td>
+                      <td class="py-2.5 px-2 text-center font-extrabold text-indigo-900 bg-indigo-50/40">${wScore}</td>
+                      <td class="py-2.5 px-3 text-center whitespace-nowrap">
+                        <div class="inline-flex items-center gap-1">
+                          <button onclick="editConditionRow(${idx})" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 cursor-pointer">Edit</button>
+                          <button onclick="deleteConditionRow(${idx})" class="px-2.5 py-1 rounded-lg text-[11px] font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer">Delete</button>
+                        </div>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('brgy-form-container').innerHTML = datalistHtml + profileHtml + conditionsHtml;
+      computeAndRenderSynthesis();
+    }
+
+    function selectBrgyTab(b) {
+      activeBrgyTab = b;
+      isEditingBrgyProfile = false;
+      editingConditionIndex = null;
+      renderCHDPWorkspace();
+    }
+
+    function toggleEditBrgyProfile(state) {
+      isEditingBrgyProfile = state;
+      renderCHDPWorkspace();
+    }
+
+    function saveBrgyProfile() {
+      const bObj = chdpData.barangays[activeBrgyTab];
+      ['population', 'households', 'midwife', 'ficRate', 'ancRate', 'htnCount', 'tbCount', 'malnutritionRate', 'washCoverage'].forEach(k => {
+        const el = document.getElementById(`brgy-field-${k}`);
+        if (el) bObj[k] = el.value.trim();
+      });
+      isEditingBrgyProfile = false;
+      persistAll(true, `Saved Barangay ${activeBrgyTab} profile!`);
+      renderCHDPWorkspace();
+    }
+
+    function clearBrgyProfile() {
+      const bObj = chdpData.barangays[activeBrgyTab];
+      ['population', 'households', 'midwife', 'ficRate', 'ancRate', 'htnCount', 'tbCount', 'malnutritionRate', 'washCoverage'].forEach(k => {
+        bObj[k] = '';
+      });
+      isEditingBrgyProfile = false;
+      persistAll(true, `Cleared Barangay ${activeBrgyTab} profile fields!`);
+      renderCHDPWorkspace();
+    }
+
+    function editConditionRow(idx) {
+      editingConditionIndex = idx;
+      renderCHDPWorkspace();
+    }
+
+    function saveConditionRow(idx) {
+      const bObj = chdpData.barangays[activeBrgyTab];
+      const row = bObj.conditions[idx];
+      if (!row) return;
+      row.condition = document.getElementById(`cond-edit-name-${idx}`).value.trim();
+      row.indicator = document.getElementById(`cond-edit-ind-${idx}`).value.trim();
+      row.magnitude = Math.min(5, Math.max(1, Number(document.getElementById(`cond-edit-mag-${idx}`).value) || 1));
+      row.severity = Math.min(5, Math.max(1, Number(document.getElementById(`cond-edit-sev-${idx}`).value) || 1));
+      row.modifiability = Math.min(5, Math.max(1, Number(document.getElementById(`cond-edit-mod-${idx}`).value) || 1));
+      editingConditionIndex = null;
+      persistAll(true, `Saved condition #${idx + 1} for ${activeBrgyTab}!`);
+      renderCHDPWorkspace();
+    }
+
+    function deleteConditionRow(idx) {
+      const bObj = chdpData.barangays[activeBrgyTab];
+      bObj.conditions.splice(idx, 1);
+      if (editingConditionIndex === idx) editingConditionIndex = null;
+      persistAll(true, `Deleted condition entry from ${activeBrgyTab}!`);
+      renderCHDPWorkspace();
+    }
+
+    function addConditionRow() {
+      const bObj = chdpData.barangays[activeBrgyTab];
+      bObj.conditions.push({
+        id: `${activeBrgyTab}_c_${Date.now()}`,
+        condition: '',
+        indicator: '',
+        magnitude: 3,
+        severity: 3,
+        modifiability: 3
+      });
+      editingConditionIndex = bObj.conditions.length - 1;
+      renderCHDPWorkspace();
+    }
+
+    function computeCommonDenominators() {
+      const map = {};
+      BARANGAYS.forEach(b => {
+        const top5 = (chdpData.barangays[b].conditions || []).slice(0, 5);
+        top5.forEach((item, idx) => {
+          const raw = (item.condition || '').trim();
+          if (!raw) return;
+          const norm = raw.toLowerCase();
+          if (!map[norm]) {
+            map[norm] = { label: raw, ranks: {}, freq: 0, totalPts: 0 };
+          }
+          const pts = 5 - idx;
+          if (!map[norm].ranks[b]) {
+            map[norm].ranks[b] = { rank: idx + 1, pts };
+            map[norm].freq += 1;
+            map[norm].totalPts += pts;
+          }
+        });
+      });
+
+      const list = Object.values(map).sort((a, b) => (b.freq - a.freq) || (b.totalPts - a.totalPts));
+      list.forEach(item => {
+        item.isMajor = item.freq >= 3 || (item.freq >= 2 && item.totalPts >= 8);
+      });
+      return list;
+    }
+
+    function computeAndRenderSynthesis() {
+      const results = computeCommonDenominators();
+      const tbody = document.getElementById('chdp-synthesis-body');
+
+      if (results.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="9" class="py-6 text-center text-xs text-slate-400">
+              Enter and save health conditions in each barangay tab above (or click <strong>Load Sample Data</strong>) to auto-compute Major Projects.
+            </td>
+          </tr>
+        `;
+      } else {
+        tbody.innerHTML = results.map(r => `
+          <tr class="${r.isMajor ? 'bg-emerald-50/50' : 'hover:bg-slate-50'}">
+            <td class="py-2.5 px-3 font-extrabold text-slate-900">${r.label}</td>
+            ${BARANGAYS.map(b => {
+              const rk = r.ranks[b];
+              return `<td class="py-2.5 px-2 text-center text-xs font-semibold">${rk ? `#${rk.rank} (${rk.pts} pts)` : '—'}</td>`;
+            }).join('')}
+            <td class="py-2.5 px-3 text-center font-extrabold text-indigo-900 bg-indigo-50/40">${r.freq} / 5</td>
+            <td class="py-2.5 px-3 text-center font-extrabold text-indigo-900 bg-indigo-50/40">${r.totalPts} pts</td>
+            <td class="py-2.5 px-3 text-center">
+              ${r.isMajor
+                ? `<span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-600 text-white shadow-2xs">★ MAJOR PROJECT (5 Brgys)</span>`
+                : `<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">Barangay-Specific</span>`
+              }
+            </td>
+          </tr>
+        `).join('');
       }
 
+      renderCHDPActionPlans(results);
+    }
+
+    function renderCHDPActionPlans(computedResults) {
+      const majors = computedResults.filter(r => r.isMajor);
+      majors.forEach(m => {
+        const exists = chdpData.customActionPlans.find(p => p.projectTitle.toLowerCase() === m.label.toLowerCase());
+        if (!exists && !m.dismissed) {
+          chdpData.customActionPlans.unshift({
+            id: 'mp_' + Math.random().toString(36).slice(2, 8),
+            isAutoMajor: true,
+            projectTitle: m.label,
+            objective: `Reduce morbidity & complication risk of ${m.label} across Castilla, San Agustin, San Jose, Cabarasan Daku & Cangumbang by April 2027.`,
+            activities: 'Simultaneous BHS risk screening, CPG-aligned clinical management & RHU referrals, Waray IEC household counseling, and monthly BHW tracking.',
+            targetIndicator: '>= 80% of flagged/eligible residents screened, counselled, and linked to Palo RHU care.',
+            focalPersons: 'Jazzy, Leila, Aubrey, RHU Staff & Barangay BHWs',
+            timeline: 'Jan 18 – Apr 30, 2027'
+          });
+        }
+      });
+
+      const container = document.getElementById('chdp-action-plan-list');
+      if (chdpData.customActionPlans.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-xs text-slate-400 border border-dashed border-slate-200 rounded-xl">Auto-computed Major Projects will appear here automatically once >= 3 barangays share a Top 5 condition.</div>`;
+        return;
+      }
+
+      container.innerHTML = chdpData.customActionPlans.map((plan, idx) => {
+        const isEditing = editingActionPlanIndex === idx;
+
+        if (isEditing) {
+          return `
+            <div class="p-4 rounded-xl border-2 border-indigo-400 bg-indigo-50/30 space-y-3">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2 flex-1">
+                  <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-indigo-700 text-white">Editing Entry #${idx + 1}</span>
+                  <input id="ap-title-${idx}" type="text" value="${plan.projectTitle}" class="flex-1 px-2.5 py-1 rounded-lg border border-indigo-400 bg-white text-xs sm:text-sm font-extrabold text-slate-900" />
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="saveActionPlanRow(${idx})" class="px-3 py-1 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white cursor-pointer">Save</button>
+                  <button onclick="removeActionPlan(${idx})" class="px-3 py-1 rounded-lg text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white cursor-pointer">Delete</button>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div>
+                  <label class="block font-bold text-slate-600 mb-1">Specific Objective</label>
+                  <textarea id="ap-obj-${idx}" rows="2" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white">${plan.objective}</textarea>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-600 mb-1">CPG-Aligned Strategies &amp; Activities (5 Barangays)</label>
+                  <textarea id="ap-act-${idx}" rows="2" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white">${plan.activities}</textarea>
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-600 mb-1">Target &amp; Success Indicator</label>
+                  <input id="ap-tgt-${idx}" type="text" value="${plan.targetIndicator}" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white" />
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                  <div>
+                    <label class="block font-bold text-slate-600 mb-1">Responsible Persons</label>
+                    <input id="ap-foc-${idx}" type="text" value="${plan.focalPersons}" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white" />
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-600 mb-1">Timeframe</label>
+                    <input id="ap-tim-${idx}" type="text" value="${plan.timeline}" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        return `
+          <div class="p-4 rounded-xl border ${plan.isAutoMajor ? 'border-emerald-300 bg-emerald-50/30' : 'border-slate-200 bg-slate-50'} space-y-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase ${plan.isAutoMajor ? 'bg-emerald-600 text-white' : 'bg-slate-700 text-white'}">
+                  ${plan.isAutoMajor ? `Auto Major Project #${idx + 1}` : `Action Plan #${idx + 1}`}
+                </span>
+                <h4 class="text-xs sm:text-sm font-extrabold text-slate-900">${plan.projectTitle}</h4>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="editActionPlanRow(${idx})" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 cursor-pointer">Edit</button>
+                <button onclick="removeActionPlan(${idx})" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer">Delete</button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs text-slate-700 bg-white p-3 rounded-lg border border-slate-200/80">
+              <div><span class="font-bold text-slate-500">Objective:</span> ${plan.objective || '—'}</div>
+              <div><span class="font-bold text-slate-500">Activities:</span> ${plan.activities || '—'}</div>
+              <div><span class="font-bold text-slate-500">Target Indicator:</span> ${plan.targetIndicator || '—'}</div>
+              <div><span class="font-bold text-slate-500">Focal &amp; Timeline:</span> ${plan.focalPersons || '—'} (${plan.timeline || '—'})</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function editActionPlanRow(idx) {
+      editingActionPlanIndex = idx;
+      renderCHDPWorkspace();
+    }
+
+    function saveActionPlanRow(idx) {
+      const plan = chdpData.customActionPlans[idx];
+      if (!plan) return;
+      plan.projectTitle = document.getElementById(`ap-title-${idx}`).value.trim() || 'Untitled Project';
+      plan.objective = document.getElementById(`ap-obj-${idx}`).value.trim();
+      plan.activities = document.getElementById(`ap-act-${idx}`).value.trim();
+      plan.targetIndicator = document.getElementById(`ap-tgt-${idx}`).value.trim();
+      plan.focalPersons = document.getElementById(`ap-foc-${idx}`).value.trim();
+      plan.timeline = document.getElementById(`ap-tim-${idx}`).value.trim();
+      editingActionPlanIndex = null;
+      persistAll(true, 'Action plan entry saved!');
+      renderCHDPWorkspace();
+    }
+
+    function addCHDPActionRow() {
+      chdpData.customActionPlans.push({
+        id: 'cp_' + Date.now(),
+        isAutoMajor: false,
+        projectTitle: 'New Barangay Health Initiative',
+        objective: '',
+        activities: '',
+        targetIndicator: '',
+        focalPersons: 'Jazzy, Leila, Aubrey & BHWs',
+        timeline: 'Jan – Apr 2027'
+      });
+      editingActionPlanIndex = chdpData.customActionPlans.length - 1;
+      renderCHDPWorkspace();
+    }
+
+    function removeActionPlan(idx) {
+      chdpData.customActionPlans.splice(idx, 1);
+      if (editingActionPlanIndex === idx) editingActionPlanIndex = null;
+      persistAll(true, 'Action plan entry deleted!');
+      renderCHDPWorkspace();
+    }
+
+    function loadSampleCHDPData() {
+      const samples = {
+        'Castilla': {
+          population: '2,180', households: '465', midwife: 'RHM Santos / BHW Cruz', ficRate: '84% (5 defaulters)', ancRate: '80% (3 high-risk)', htnCount: '62 HTN / 18 DM', tbCount: '4 active, 7 presumptive', malnutritionRate: '6.8% UW, 10.2% Stunted', washCoverage: '90% sanitary toilet; 18 flood-prone HHs',
+          conditions: [
+            { id: 'c1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '62 registered HTN; 38% uncontrolled BP', magnitude: 4, severity: 5, modifiability: 5 },
+            { id: 'c2', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Top #1 outpatient morbidity (28% of consults)', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'c3', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '10.2% stunted in OPT Plus (0–59 mos)', magnitude: 3, severity: 4, modifiability: 4 },
+            { id: 'c4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '5 EPI defaulters traced in BHS TCL', magnitude: 3, severity: 4, modifiability: 5 },
+            { id: 'c5', condition: 'Presumptive / Active Tuberculosis (TB)', indicator: '4 active TB-DOTS; 7 presumptive needing Xpert', magnitude: 3, severity: 5, modifiability: 4 }
+          ]
+        },
+        'San Agustin': {
+          population: '2,640', households: '550', midwife: 'RHM Reyes / BHW Dizon', ficRate: '86% (4 defaulters)', ancRate: '82% (4 high-risk)', htnCount: '74 HTN / 22 DM', tbCount: '5 active, 9 presumptive', malnutritionRate: '7.4% UW, 11.5% Stunted', washCoverage: '91% safe water; 22 flood-prone HHs',
+          conditions: [
+            { id: 'sa1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '74 registered HTN; irregular maintenance intake', magnitude: 4, severity: 5, modifiability: 5 },
+            { id: 'sa2', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Top #1 BHS morbidity across pediatric & adult', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'sa3', condition: 'Presumptive / Active Tuberculosis (TB)', indicator: '5 active cases; 14 household contacts for TPT', magnitude: 3, severity: 5, modifiability: 4 },
+            { id: 'sa4', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '11.5% stunted; 7.4% underweight', magnitude: 3, severity: 4, modifiability: 4 },
+            { id: 'sa5', condition: 'Type 2 Diabetes Mellitus / Poor Glycemic Control', indicator: '22 registered DM; limited FBS monitoring', magnitude: 3, severity: 4, modifiability: 4 }
+          ]
+        },
+        'San Jose': {
+          population: '3,120', households: '670', midwife: 'RHM Velasco / BHW Morales', ficRate: '85% (6 defaulters)', ancRate: '79% (6 high-risk)', htnCount: '89 HTN / 29 DM', tbCount: '6 active, 11 presumptive', malnutritionRate: '6.2% UW, 9.8% Stunted', washCoverage: '86% sanitary toilet; 65 flood-prone HHs',
+          conditions: [
+            { id: 'sj1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '89 registered HTN; high PhilPEN risk flags', magnitude: 5, severity: 5, modifiability: 5 },
+            { id: 'sj2', condition: 'Dengue / Vector-Borne Illness & Flood Vulnerability', indicator: '65 low-lying flood-prone HHs; seasonal dengue', magnitude: 4, severity: 4, modifiability: 4 },
+            { id: 'sj3', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Top #1 RHU/BHS outpatient consultation cause', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'sj4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '6 incomplete children in BHS 3 EPI TCL', magnitude: 3, severity: 4, modifiability: 5 },
+            { id: 'sj5', condition: 'High-Risk Pregnancy / Incomplete Antenatal Care (ANC)', indicator: '21% with <4 ANC visits; 6 high-risk gravidas', magnitude: 3, severity: 5, modifiability: 5 }
+          ]
+        },
+        'Cabarasan Daku': {
+          population: '1,890', households: '410', midwife: 'RHM Bautista / BHW Lim', ficRate: '81% (7 defaulters)', ancRate: '76% (5 high-risk)', htnCount: '51 HTN / 14 DM', tbCount: '3 active, 6 presumptive', malnutritionRate: '8.9% UW, 13.1% Stunted', washCoverage: '84% safe water; 28 wood-fuel HHs',
+          conditions: [
+            { id: 'cd1', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '13.1% stunted & 8.9% underweight in OPT+', magnitude: 4, severity: 4, modifiability: 4 },
+            { id: 'cd2', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '51 registered HTN; distance barrier to RHU', magnitude: 4, severity: 5, modifiability: 5 },
+            { id: 'cd3', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: '28 wood-fuel HHs; high pediatric URTI', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'cd4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '7 EPI defaulters needing catch-up doses', magnitude: 3, severity: 4, modifiability: 5 },
+            { id: 'cd5', condition: 'Acute Gastroenteritis / Unsafe Water & Sanitation (WASH)', indicator: '16% HHs using unimproved water sources', magnitude: 3, severity: 4, modifiability: 4 }
+          ]
+        },
+        'Cangumbang': {
+          population: '1,740', households: '380', midwife: 'RHM Ocampo / BHW Perez', ficRate: '83% (5 defaulters)', ancRate: '77% (4 high-risk)', htnCount: '48 HTN / 12 DM', tbCount: '4 active, 8 presumptive', malnutritionRate: '8.1% UW, 12.4% Stunted', washCoverage: '85% safe water; 24 wood-fuel HHs',
+          conditions: [
+            { id: 'cg1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '48 registered HTN; low follow-up adherence', magnitude: 4, severity: 5, modifiability: 5 },
+            { id: 'cg2', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '12.4% stunted in OPT Plus registry', magnitude: 4, severity: 4, modifiability: 4 },
+            { id: 'cg3', condition: 'Presumptive / Active Tuberculosis (TB)', indicator: '4 active TB-DOTS; 8 presumptive symptomatic', magnitude: 3, severity: 5, modifiability: 4 },
+            { id: 'cg4', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Leading morbidity in BHS 5 consult log', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'cg5', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '5 children due for catch-up measles/OPV', magnitude: 3, severity: 4, modifiability: 5 }
+          ]
+        }
+      };
+
+      chdpData.barangays = samples;
+      chdpData.customActionPlans = [];
+      isEditingBrgyProfile = false;
+      editingConditionIndex = null;
+      editingActionPlanIndex = null;
+      persistAll(true, 'Sample 5-Barangay data loaded & Major Projects computed!');
+      renderCHDPWorkspace();
+    }
+
+    // =========================================================================
+    // 9. PERFECT-FORMAT PDF GENERATORS (SCHEDULE WITH CLERK NAMES + CHDP)
+    // =========================================================================
+    function renderSingleMonthPDFPage(doc, mInfo, isFirst) {
+      if (!isFirst) doc.addPage('letter', 'landscape');
       const pageWidth = doc.internal.pageSize.getWidth();
       const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 24;
 
-      // Formal Header Banner
-      doc.setFillColor(15, 118, 110); // Teal-700
-      doc.roundedRect(margin, margin, pageWidth - margin * 2, 46, 6, 6, 'F');
-
+      doc.setFillColor(15, 118, 110);
+      doc.roundedRect(margin, margin, pageWidth - margin * 2, 44, 6, 6, 'F');
       doc.setTextColor(255, 255, 255);
       doc.setFont('helvetica', 'bold');
-      doc.setFontSize(14);
-      doc.text('PALO COMMUNITY CLERKS ACTIVITY PLANNER — DUTY ROTATION SCHEDULE', margin + 14, margin + 20);
-
+      doc.setFontSize(13);
+      doc.text('MUNICIPALITY OF PALO, LEYTE — COMMUNITY CLERKSHIP DUTY SCHEDULE', margin + 14, margin + 19);
       doc.setFont('helvetica', 'normal');
-      doc.setFontSize(9.5);
-      doc.text(
-        `Month: ${mInfo.label.toUpperCase()}   |   Medical Clerks: Jazzy, Leila, Aubrey   |   Duty Days: Monday – Friday`,
-        margin + 14,
-        margin + 36
-      );
+      doc.setFontSize(9);
+      doc.text(`${mInfo.label.toUpperCase()}   |   Jazzy, Leila & Aubrey`, margin + 14, margin + 34);
 
-      // Build Month Matrix (Mon-Fri 5-column clean paper layout)
+      const firstDay = new Date(mInfo.year, mInfo.month, 1);
       const lastDay = new Date(mInfo.year, mInfo.month + 1, 0);
       const totalDays = lastDay.getDate();
 
       const weeks = [];
-      let currentWeek = ['', '', '', '', '']; // Mon, Tue, Wed, Thu, Fri
-
+      let row = new Array(7).fill('');
       for (let day = 1; day <= totalDays; day++) {
         const dObj = new Date(mInfo.year, mInfo.month, day);
-        const dow = dObj.getDay(); // 0=Sun..6=Sat
-        if (dow === 0 || dow === 6) continue;
-
-        const colIdx = dow - 1; // 0=Mon..4=Fri
-        const dateKey = formatDateKey(dObj);
-        const entry = scheduleData[dateKey];
-
-        if (entry) {
-          const isHol =
-            entry.assignments.Jazzy.includes('Holiday') &&
-            entry.assignments.Leila.includes('Holiday') &&
-            entry.assignments.Aubrey.includes('Holiday');
-
-          if (isHol) {
-            currentWeek[colIdx] = `${day} (${mInfo.short.split(' ')[0]})\nHOLIDAY / NO DUTY`;
-          } else {
-            currentWeek[colIdx] =
-              `${day} (${mInfo.short.split(' ')[0]})\n` +
-              `Jazzy: ${shortStationLabel(entry.assignments.Jazzy)}\n` +
-              `Leila: ${shortStationLabel(entry.assignments.Leila)}\n` +
-              `Aubrey: ${shortStationLabel(entry.assignments.Aubrey)}`;
-          }
+        const dow = dObj.getDay();
+        const key = formatDateKey(dObj);
+        if (dow === 0 || dow === 6) {
+          row[dow] = `${day}\nWeekend`;
+        } else if (scheduleData[key]) {
+          const e = scheduleData[key];
+          const isHol = e.duty.includes('HOLIDAY');
+          const statusTag = e.completed ? ' [DONE]' : '';
+          const clerksLine = !isHol ? `\n(${e.clerks || 'Jazzy, Leila & Aubrey'})` : '';
+          row[dow] = `${day}${statusTag}\n${e.duty}${clerksLine}`;
         } else {
-          currentWeek[colIdx] = `${day}`;
+          row[dow] = `${day}`;
         }
-
-        if (dow === 5 || day === totalDays) {
-          weeks.push(currentWeek);
-          currentWeek = ['', '', '', '', ''];
+        if (dow === 6 || day === totalDays) {
+          weeks.push(row);
+          row = new Array(7).fill('');
         }
       }
 
-      const tableStartY = margin + 56;
-      const availableHeight = pageHeight - tableStartY - 34;
-      const rowHeight = Math.min(78, Math.floor((availableHeight - 24) / Math.max(weeks.length, 1)));
+      const startY = margin + 52;
+      const availH = pageHeight - startY - 28;
+      const cellH = Math.min(74, Math.floor((availH - 22) / Math.max(weeks.length, 1)));
 
       doc.autoTable({
-        startY: tableStartY,
+        startY,
         margin: { left: margin, right: margin },
-        head: [['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']],
+        head: [['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT']],
         body: weeks,
         theme: 'grid',
         styles: {
-          font: 'helvetica',
-          fontSize: 8.5,
-          cellPadding: 5,
-          valign: 'top',
-          textColor: [30, 41, 59],
-          lineColor: [203, 213, 225],
-          lineWidth: 0.6,
-          minCellHeight: rowHeight
+          font: 'helvetica', fontSize: 8.2, cellPadding: 4.5, valign: 'top',
+          textColor: [30, 41, 59], lineColor: [203, 213, 225], lineWidth: 0.6, minCellHeight: cellH
         },
         headStyles: {
-          fillColor: [241, 245, 249],
-          textColor: [15, 118, 110],
-          fontStyle: 'bold',
-          fontSize: 9.5,
-          halign: 'center',
-          minCellHeight: 22
+          fillColor: [241, 245, 249], textColor: [15, 118, 110], fontStyle: 'bold', fontSize: 9, halign: 'center', minCellHeight: 20
+        },
+        columnStyles: {
+          0: { cellWidth: 66, fillColor: [248, 250, 252], textColor: [148, 163, 184] },
+          6: { cellWidth: 66, fillColor: [248, 250, 252], textColor: [148, 163, 184] }
         },
         didParseCell: function (data) {
           if (data.section === 'body') {
-            const val = String(data.cell.raw || '');
-            if (!val) {
-              data.cell.styles.fillColor = [248, 250, 252];
-            } else if (val.includes('HOLIDAY')) {
-              data.cell.styles.fillColor = [254, 243, 199];
-              data.cell.styles.textColor = [146, 64, 14];
+            const v = String(data.cell.raw || '');
+            if (v.includes('HOLIDAY')) {
+              data.cell.styles.fillColor = [254, 226, 226];
+              data.cell.styles.textColor = [153, 27, 27];
               data.cell.styles.fontStyle = 'bold';
+            } else if (v.includes('[DONE]')) {
+              data.cell.styles.fillColor = [236, 253, 245];
+              data.cell.styles.textColor = [6, 95, 70];
             }
           }
         }
       });
 
-      // Footer
       doc.setFontSize(8);
       doc.setTextColor(100, 116, 139);
-      doc.text(
-        `Generated on ${new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}  •  Palo Community Medical Clerkship Rotation`,
-        margin,
-        pageHeight - 12
-      );
-      doc.text(`Page ${mInfo.label}`, pageWidth - margin, pageHeight - 12, { align: 'right' });
+      doc.text('Palo Community Clerks Portal — Duty Rotation Schedule', margin, pageHeight - 12);
+      doc.text(`${mInfo.label}`, pageWidth - margin, pageHeight - 12, { align: 'right' });
     }
 
     function downloadCalendarPDF() {
-      try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
-        const mInfo = MONTHS_LIST[currentMonthIndex];
-        renderSingleMonthPDFPage(doc, mInfo, true);
-        doc.save(`Palo_Clerks_Calendar_${mInfo.label.replace(/\s+/g, '_')}.pdf`);
-        showToast(`Downloaded ${mInfo.label} Calendar PDF!`);
-      } catch (err) {
-        console.error(err);
-        showToast('Failed to generate Calendar PDF.', 'error');
-      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+      renderSingleMonthPDFPage(doc, MONTHS_LIST[currentMonthIndex], true);
+      doc.save(`Palo_Clerks_Duty_Schedule_${MONTHS_LIST[currentMonthIndex].label.replace(/\s+/g, '_')}.pdf`);
+      showToast('Downloaded Month Schedule PDF!');
     }
 
     function downloadAllMonthsCalendarPDF() {
-      try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
-        MONTHS_LIST.forEach((mInfo, idx) => {
-          renderSingleMonthPDFPage(doc, mInfo, idx === 0);
-        });
-        doc.save('Palo_Clerks_Full_Calendar_Nov2026_Apr2027.pdf');
-        showToast('Downloaded Complete 6-Month Calendar PDF!');
-      } catch (err) {
-        console.error(err);
-        showToast('Failed to generate full Calendar PDF.', 'error');
-      }
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+      MONTHS_LIST.forEach((m, idx) => renderSingleMonthPDFPage(doc, m, idx === 0));
+      doc.save('Palo_Clerks_Full_Duty_Schedule_Nov2026_Apr2027.pdf');
+      showToast('Downloaded Complete 6-Month Schedule PDF!');
     }
 
-    function downloadTasksPDF() {
-      try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
-        const pageWidth = doc.internal.pageSize.getWidth();
-        const pageHeight = doc.internal.pageSize.getHeight();
-        const margin = 32;
+    function downloadCHDPPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'landscape', unit: 'pt', format: 'letter' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+      const margin = 28;
 
-        // Formal Header
-        doc.setFillColor(15, 118, 110);
-        doc.roundedRect(margin, margin, pageWidth - margin * 2, 54, 6, 6, 'F');
+      doc.setFillColor(30, 58, 138);
+      doc.roundedRect(margin, margin, pageWidth - margin * 2, 48, 6, 6, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13.5);
+      doc.text('MUNICIPALITY OF PALO, LEYTE — 5-BARANGAY COMMUNITY HEALTH DEVELOPMENT PLAN (CHDP)', margin + 14, margin + 20);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8.8);
+      doc.text('Sentinel Barangays: Castilla, San Agustin, San Jose, Cabarasan Daku & Cangumbang', margin + 14, margin + 36);
 
-        doc.setTextColor(255, 255, 255);
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(13.5);
-        doc.text('PALO COMMUNITY CLERKS ACTIVITY PLANNER', margin + 14, margin + 21);
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10.5);
+      doc.text('I. 5-Barangay Secondary Health Indicator Profile Summary', margin, margin + 66);
 
-        doc.setFont('helvetica', 'bold');
-        doc.setFontSize(10.5);
-        doc.text('COMMUNITY CLERKSHIP TASK CHECKLIST & DELIVERABLES', margin + 14, margin + 36);
-
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8.5);
-        const completedCount = tasksData.filter(t => t.completed).length;
-        doc.text(
-          `Clerks: Jazzy, Leila, Aubrey   |   Progress: ${completedCount} of ${tasksData.length} Completed   |   Generated: ${new Date().toLocaleDateString('en-US')}`,
-          margin + 14,
-          margin + 48
-        );
-
-        // Organize Tasks by Phase in Logical Order
-        const phaseOrder = [
-          'Phase 1 (Nov 16–Dec 11)',
-          'Holiday Break (Dec 14–Jan 10)',
-          'Phase 3 (Jan 11–Apr 30)'
+      const profileRows = BARANGAYS.map(b => {
+        const d = chdpData.barangays[b];
+        return [
+          `Brgy. ${b}`,
+          `${d.population || '—'} / ${d.households || '—'}`,
+          d.midwife || '—',
+          d.ficRate || '—',
+          d.ancRate || '—',
+          d.htnCount || '—',
+          d.tbCount || '—',
+          d.malnutritionRate || '—',
+          d.washCoverage || '—'
         ];
+      });
 
-        const sortedTasks = [...tasksData].sort((a, b) => {
-          const idxA = phaseOrder.indexOf(a.phase);
-          const idxB = phaseOrder.indexOf(b.phase);
-          if (idxA !== idxB) return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
-          return (a.dueDate || '').localeCompare(b.dueDate || '');
-        });
+      doc.autoTable({
+        startY: margin + 72,
+        margin: { left: margin, right: margin },
+        head: [['Barangay', 'Pop / HHs', 'Midwife / BHW', 'FIC / EPI', 'ANC >=4 / Risk', 'HTN / DM', 'TB Cases', 'OPT+ Malnutrition', 'WASH / Flood Notes']],
+        body: profileRows,
+        theme: 'grid',
+        styles: { font: 'helvetica', fontSize: 7.5, cellPadding: 4, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
+        headStyles: { fillColor: [241, 245, 249], textColor: [30, 58, 138], fontStyle: 'bold' }
+      });
 
-        const tableBody = sortedTasks.map((t, i) => [
-          `${i + 1}`,
-          t.completed ? '[ DONE ]' : '[ PENDING ]',
-          t.title,
-          t.assignee,
-          t.station || '—',
-          t.phase.replace(/\s*\(.*?\)/, ''),
-          t.dueDate || '—'
-        ]);
+      let nextY = doc.lastAutoTable.finalY + 18;
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10.5);
+      doc.text('II. Cross-Barangay Community Diagnosis & Common Denominator Synthesis', margin, nextY);
 
-        doc.autoTable({
-          startY: margin + 66,
-          margin: { left: margin, right: margin, bottom: 36 },
-          head: [['#', 'Status', 'Activity / Task Description', 'Assigned', 'Station', 'Period', 'Target Date']],
-          body: tableBody,
-          theme: 'grid',
-          styles: {
-            font: 'helvetica',
-            fontSize: 8.5,
-            cellPadding: 5,
-            textColor: [30, 41, 59],
-            lineColor: [203, 213, 225],
-            lineWidth: 0.5,
-            valign: 'middle'
-          },
-          headStyles: {
-            fillColor: [241, 245, 249],
-            textColor: [15, 118, 110],
-            fontStyle: 'bold',
-            fontSize: 8.5
-          },
-          columnStyles: {
-            0: { cellWidth: 22, halign: 'center' },
-            1: { cellWidth: 58, halign: 'center', fontStyle: 'bold' },
-            2: { cellWidth: 'auto' },
-            3: { cellWidth: 62 },
-            4: { cellWidth: 74 },
-            5: { cellWidth: 58 },
-            6: { cellWidth: 62, halign: 'center' }
-          },
-          didParseCell: function (data) {
-            if (data.section === 'body' && data.column.index === 1) {
-              const txt = String(data.cell.raw || '');
-              if (txt.includes('DONE')) {
-                data.cell.styles.textColor = [5, 150, 105];
-                data.cell.styles.fillColor = [236, 253, 245];
-              } else {
-                data.cell.styles.textColor = [180, 83, 9];
-                data.cell.styles.fillColor = [255, 251, 235];
-              }
-            }
-          },
-          didDrawPage: function () {
-            doc.setFontSize(8);
-            doc.setTextColor(100, 116, 139);
-            doc.text(
-              'PALO COMMUNITY CLERKS ACTIVITY PLANNER — Task Checklist',
-              margin,
-              pageHeight - 16
-            );
-            doc.text(
-              `Page ${doc.internal.getNumberOfPages()}`,
-              pageWidth - margin,
-              pageHeight - 16,
-              { align: 'right' }
-            );
+      const computed = computeCommonDenominators();
+      const synRows = computed.length > 0
+        ? computed.map(r => [
+            r.label,
+            ...BARANGAYS.map(b => r.ranks[b] ? `#${r.ranks[b].rank} (${r.ranks[b].pts} pts)` : '—'),
+            `${r.freq} / 5`,
+            `${r.totalPts} pts`,
+            r.isMajor ? 'MAJOR PROJECT (5 Barangays)' : 'Barangay-Specific'
+          ])
+        : [['No conditions entered yet', '—', '—', '—', '—', '—', '0/5', '0', '—']];
+
+      doc.autoTable({
+        startY: nextY + 6,
+        margin: { left: margin, right: margin },
+        head: [['Health Condition / Problem', 'Castilla', 'San Agustin', 'San Jose', 'Cabarasan Daku', 'Cangumbang', 'Freq.', 'Points', 'Designation']],
+        body: synRows,
+        theme: 'grid',
+        styles: { font: 'helvetica', fontSize: 7.8, cellPadding: 4, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
+        headStyles: { fillColor: [241, 245, 249], textColor: [15, 118, 110], fontStyle: 'bold' },
+        didParseCell: function (data) {
+          if (data.section === 'body' && data.column.index === 8 && String(data.cell.raw).includes('MAJOR')) {
+            data.cell.styles.fillColor = [209, 250, 229];
+            data.cell.styles.textColor = [6, 95, 70];
+            data.cell.styles.fontStyle = 'bold';
+          }
+        }
+      });
+
+      doc.addPage('letter', 'landscape');
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(11);
+      doc.setTextColor(30, 58, 138);
+      doc.text('III. Per-Barangay Ranked Health Conditions & Unified Major Project Action Plan', margin, margin + 10);
+
+      const brgyTop5Rows = [];
+      BARANGAYS.forEach(b => {
+        (chdpData.barangays[b].conditions || []).forEach((item, idx) => {
+          if (item.condition.trim()) {
+            const w = ((Number(item.magnitude || 0) * 0.35) + (Number(item.severity || 0) * 0.35) + (Number(item.modifiability || 0) * 0.30)).toFixed(2);
+            brgyTop5Rows.push([`Brgy. ${b}`, `#${idx + 1}`, item.condition, item.indicator || '—', `${w} / 5.00`]);
           }
         });
+      });
 
-        doc.save('Palo_Community_Clerks_Tasks_Checklist.pdf');
-        showToast('Downloaded Organized Tasks PDF!');
-      } catch (err) {
-        console.error(err);
-        showToast('Failed to generate Tasks PDF.', 'error');
+      doc.autoTable({
+        startY: margin + 18,
+        margin: { left: margin, right: margin },
+        head: [['Barangay', 'Rank', 'Identified Health Condition', 'Baseline Secondary Indicator / Denominator', 'Weighted Score']],
+        body: brgyTop5Rows.length ? brgyTop5Rows : [['—', '—', 'No conditions filled out yet', '—', '—']],
+        theme: 'grid',
+        styles: { font: 'helvetica', fontSize: 7.6, cellPadding: 3.5, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
+        headStyles: { fillColor: [241, 245, 249], textColor: [30, 58, 138], fontStyle: 'bold' }
+      });
+
+      let actY = doc.lastAutoTable.finalY + 16;
+      if (actY > pageHeight - 130) {
+        doc.addPage('letter', 'landscape');
+        actY = margin + 10;
       }
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10.5);
+      doc.setTextColor(15, 118, 110);
+      doc.text('IV. Community Health Development Action Plan (Major Projects Implementation across 5 Barangays)', margin, actY);
+
+      const actionRows = chdpData.customActionPlans.map((p, i) => [
+        `${i + 1}. ${p.projectTitle}`,
+        p.objective,
+        p.activities,
+        p.targetIndicator,
+        p.focalPersons,
+        p.timeline
+      ]);
+
+      doc.autoTable({
+        startY: actY + 6,
+        margin: { left: margin, right: margin },
+        head: [['Major Project / Intervention', 'Specific Objective', 'CPG-Aligned Activities (5 Barangays)', 'Target Indicator', 'Focal Persons', 'Timeline']],
+        body: actionRows.length ? actionRows : [['—', '—', '—', '—', '—', '—']],
+        theme: 'grid',
+        styles: { font: 'helvetica', fontSize: 7.6, cellPadding: 4, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
+        headStyles: { fillColor: [15, 118, 110], textColor: [255, 255, 255], fontStyle: 'bold' }
+      });
+
+      doc.save('Palo_Leyte_5_Barangay_Community_Health_Development_Plan.pdf');
+      showToast('Downloaded Entire 5-Barangay CHDP PDF!');
     }
 
-    function setClerkFilter(clerk) {
-      activeClerkFilter = clerk;
-      document.querySelectorAll('.clerk-filter-btn').forEach(btn => {
-        btn.classList.remove('bg-slate-900', 'text-white', 'shadow-sm');
-        btn.classList.add('bg-white', 'text-slate-700', 'border', 'border-slate-200');
+    // =========================================================================
+    // 10. VIEW SWITCHING & RESET
+    // =========================================================================
+    function switchView(v) {
+      activeView = v;
+      document.querySelectorAll('.view-tab').forEach(t => {
+        t.classList.remove('bg-white', 'text-teal-700', 'shadow-sm');
+        t.classList.add('text-slate-600');
       });
-      const activeBtn = document.getElementById(`filter-btn-${clerk}`);
-      if (activeBtn) {
-        activeBtn.classList.remove('bg-white', 'text-slate-700', 'border', 'border-slate-200');
-        activeBtn.classList.add('bg-slate-900', 'text-white', 'shadow-sm');
-      }
-      refreshAllViews();
-    }
-
-    function switchView(viewName) {
-      activeView = viewName;
-      const scheduleWorkspace = document.getElementById('schedule-workspace');
-      const tasksSidebar = document.getElementById('tasks-sidebar');
-      const isSplitScreen = getEffectiveDeviceMode() === 'laptop';
-
-      // Reset tabs
-      document.querySelectorAll('.view-tab').forEach(tab => {
-        tab.classList.remove('bg-white', 'text-teal-700', 'shadow-sm');
-        tab.classList.add('text-slate-600');
-      });
-      const activeTab = document.getElementById(`tab-${viewName}`);
+      const activeTab = document.getElementById(`tab-${v}`);
       if (activeTab) {
         activeTab.classList.add('bg-white', 'text-teal-700', 'shadow-sm');
         activeTab.classList.remove('text-slate-600');
       }
 
-      if (viewName === 'tasks-mobile' && !isSplitScreen) {
-        scheduleWorkspace.classList.add('hidden');
-        tasksSidebar.classList.remove('hidden');
-      } else {
-        scheduleWorkspace.classList.remove('hidden');
-        if (!isSplitScreen) {
-          tasksSidebar.classList.add('hidden');
-        } else {
-          tasksSidebar.classList.remove('hidden');
-        }
+      const schedWrapper = document.getElementById('schedule-and-side-wrapper');
+      const chdpView = document.getElementById('view-chdp');
 
-        document.getElementById('view-calendar').classList.toggle('hidden', viewName !== 'calendar');
-        document.getElementById('view-table').classList.toggle('hidden', viewName !== 'table');
-        document.getElementById('view-matrix').classList.toggle('hidden', viewName !== 'matrix');
+      if (v === 'chdp') {
+        schedWrapper.classList.add('hidden');
+        chdpView.classList.remove('hidden');
+        renderCHDPWorkspace();
+      } else {
+        chdpView.classList.add('hidden');
+        schedWrapper.classList.remove('hidden');
+        document.getElementById('view-calendar').classList.toggle('hidden', v !== 'calendar');
+        document.getElementById('view-table').classList.toggle('hidden', v !== 'table');
       }
     }
 
@@ -1998,115 +1729,45 @@
       renderCalendar();
     }
 
-    function exportCSV() {
-      const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const rows = [
-        ['Date', 'Day', 'Phase', 'Week', 'Jazzy', 'Leila', 'Aubrey', 'Activity Notes']
-      ];
-
-      Object.keys(scheduleData).sort().forEach(k => {
-        const e = scheduleData[k];
-        rows.push([
-          e.date,
-          dayNames[e.dayOfWeek],
-          `"${e.phase}"`,
-          `"${e.weekLabel}"`,
-          `"${e.assignments.Jazzy}"`,
-          `"${e.assignments.Leila}"`,
-          `"${e.assignments.Aubrey}"`,
-          `"${(e.note || '').replace(/"/g, '""')}"`
-        ]);
-      });
-
-      const csvContent = 'data:text/csv;charset=utf-8,' + rows.map(r => r.join(',')).join('\n');
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement('a');
-      link.setAttribute('href', encodedUri);
-      link.setAttribute('download', 'Palo_Community_Clerks_Schedule_Nov2026_Apr2027.csv');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      showToast('CSV schedule downloaded!');
-    }
-
     function openResetModal() {
-      const modal = document.getElementById('reset-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      document.getElementById('reset-modal').classList.remove('hidden');
+      document.getElementById('reset-modal').classList.add('flex');
     }
 
     function closeResetModal() {
-      const modal = document.getElementById('reset-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      document.getElementById('reset-modal').classList.add('hidden');
+      document.getElementById('reset-modal').classList.remove('flex');
     }
 
     function confirmResetDefault() {
       scheduleData = generateDefaultSchedule();
-      tasksData = generateDefaultTasks();
-      saveScheduleState(false);
-      saveTasksState(false);
+      chdpData = generateDefaultCHDP();
+      isEditingBrgyProfile = false;
+      editingConditionIndex = null;
+      editingActionPlanIndex = null;
+      persistAll(false);
       refreshAllViews();
       closeResetModal();
-      showToast('Schedule & tasks restored to default!');
+      showToast('Portal reset to default!');
     }
 
     function refreshAllViews() {
       renderCalendar();
       renderScheduleTable();
-      renderMatrixAndStats();
-      renderTasks();
+      renderCHDPWorkspace();
     }
 
-    // =========================================================================
-    // 11. INITIALIZATION
-    // =========================================================================
-    // 11. EXPOSE HANDLERS TO GLOBAL WINDOW & INITIALIZE
-    // =========================================================================
     Object.assign(window, {
-      setDeviceMode,
-      manualSaveAll,
-      downloadCalendarPDF,
-      downloadAllMonthsCalendarPDF,
-      downloadTasksPDF,
-      exportCSV,
-      openResetModal,
-      closeResetModal,
-      confirmResetDefault,
-      setClerkFilter,
-      switchView,
-      changeMonth,
-      selectMonth,
-      renderScheduleTable,
-      renderTasks,
-      openTaskModal,
-      closeTaskModal,
-      saveTask,
-      toggleTask,
-      deleteTask,
-      openEditDayModal,
-      closeEditDayModal,
-      applyDayPreset,
-      saveDayEdit
+      manualSaveAll, downloadCalendarPDF, downloadAllMonthsCalendarPDF, downloadCHDPPDF,
+      switchView, changeMonth, selectMonth, selectDate, toggleDateDone, toggleSelectedDayDone,
+      updateSelectedDaySummary, renderScheduleTable, openEditDayModal, closeEditDayModal, saveDayEdit,
+      selectBrgyTab, toggleEditBrgyProfile, saveBrgyProfile, clearBrgyProfile,
+      editConditionRow, saveConditionRow, deleteConditionRow, addConditionRow,
+      editActionPlanRow, saveActionPlanRow, addCHDPActionRow, removeActionPlan,
+      loadSampleCHDPData, openResetModal, closeResetModal, confirmResetDefault
     });
 
-    window.addEventListener('DOMContentLoaded', () => {
-      populateStationDropdowns();
-      setDeviceMode('auto');
-      initCloudSync();
-    });
-
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        if (deviceMode === 'auto') {
-          setDeviceMode('auto');
-        } else {
-          renderCalendar();
-        }
-      }, 150);
-    });
+    window.addEventListener('DOMContentLoaded', () => initCloudSync());
   </script>
 </body>
 </html>
