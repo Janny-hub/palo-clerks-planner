@@ -47,9 +47,14 @@
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
             </svg>
           </div>
-          <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">
-            PALO COMMUNITY CLERKS PORTAL
-          </h1>
+          <div>
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-slate-900">
+              PALO COMMUNITY CLERKS PORTAL
+            </h1>
+            <p class="text-[11px] font-medium text-slate-500">
+              UPM-SHS Community Clerkship • Palo RHU &amp; 4 Barangays (San Jose, Arado, Castilla, San Agustin)
+            </p>
+          </div>
         </div>
 
         <!-- Portal Quick Actions -->
@@ -62,10 +67,13 @@
             Save Changes
           </button>
           <button onclick="downloadAllMonthsCalendarPDF()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-teal-600 hover:bg-teal-700 text-white shadow-sm transition cursor-pointer">
-            Download Full Schedule PDF
+            Full Schedule PDF
           </button>
           <button onclick="downloadCHDPPDF()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
-            Download CHDP Master Plan PDF
+            4-Brgy CHDP PDF
+          </button>
+          <button onclick="downloadDeliverablesPDF()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition cursor-pointer">
+            Deliverables PDF
           </button>
           <button onclick="openResetModal()" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 transition cursor-pointer">
             Reset
@@ -76,14 +84,17 @@
       <!-- Straight-Aligned Navigation Tabs -->
       <div class="mt-3 pt-3 border-t border-slate-100 no-print">
         <nav class="flex items-center gap-2 bg-slate-100 p-1 rounded-xl w-full overflow-x-auto">
-          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab flex-1 min-w-[200px] text-center px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer bg-white text-teal-700 shadow-sm whitespace-nowrap">
-            📅 Duty Calendar &amp; Daily Summary
+          <button onclick="switchView('calendar')" id="tab-calendar" class="view-tab flex-1 min-w-[190px] text-center px-3 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer bg-white text-teal-700 shadow-sm whitespace-nowrap">
+            📅 Duty Calendar &amp; Summary
           </button>
-          <button onclick="switchView('table')" id="tab-table" class="view-tab flex-1 min-w-[180px] text-center px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
+          <button onclick="switchView('table')" id="tab-table" class="view-tab flex-1 min-w-[160px] text-center px-3 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
             📋 Full Roster List
           </button>
-          <button onclick="switchView('chdp')" id="tab-chdp" class="view-tab flex-1 min-w-[260px] text-center px-4 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
-            🏘️ 5-Barangay Community Development Plan
+          <button onclick="switchView('chdp')" id="tab-chdp" class="view-tab flex-1 min-w-[230px] text-center px-3 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            🏘️ 4-Barangay Development Plan
+          </button>
+          <button onclick="switchView('deliverables')" id="tab-deliverables" class="view-tab flex-1 min-w-[220px] text-center px-3 py-2 rounded-lg text-xs sm:text-sm font-bold transition cursor-pointer text-slate-600 hover:text-slate-900 whitespace-nowrap">
+            📑 RHU &amp; Barangay Deliverables
           </button>
         </nav>
       </div>
@@ -124,14 +135,14 @@
             </div>
           </div>
 
-          <!-- Duty Legend -->
-          <div class="bg-white rounded-2xl border border-slate-200 px-4 py-2 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
+          <!-- Weekly Station Rotation Legend -->
+          <div class="bg-white rounded-2xl border border-slate-200 px-4 py-2.5 shadow-sm flex flex-wrap items-center justify-between gap-2 text-xs">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="font-bold text-slate-500">Duty Stations:</span>
-              <span class="px-2 py-0.5 rounded-md font-semibold bg-teal-100 text-teal-900 border border-teal-200">RHU Consults</span>
-              <span class="px-2 py-0.5 rounded-md font-semibold bg-sky-100 text-sky-900 border border-sky-200">RHU AM / San Jose PM</span>
-              <span class="px-2 py-0.5 rounded-md font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200">Paired BHS Duty</span>
-              <span class="px-2 py-0.5 rounded-md font-semibold bg-amber-100 text-amber-900 border border-amber-200">Fri Advocacy / Outreach</span>
+              <span class="font-bold text-slate-500">Weekly Rotation:</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-teal-100 text-teal-900 border border-teal-200">Mon–Tue: Palo RHU Whole Day</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-emerald-100 text-emerald-900 border border-emerald-200">Wed: Castilla &amp; San Agustin</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-sky-100 text-sky-900 border border-sky-200">Thu AM: San Jose (8–10) &amp; Arado (10–12)</span>
+              <span class="px-2 py-0.5 rounded-md font-semibold bg-amber-100 text-amber-900 border border-amber-200">Fri: Advocacy / Outreach</span>
               <span class="px-2 py-0.5 rounded-md font-semibold bg-rose-100 text-rose-800 border border-rose-200">Holiday</span>
             </div>
             <span class="text-[11px] text-slate-400 italic">Click any day to view/edit summary on the right</span>
@@ -236,7 +247,7 @@
     </div>
 
     <!-- ===================================================================== -->
-    <!-- WORKSPACE B: 5-BARANGAY COMMUNITY HEALTH DEVELOPMENT PLAN (CHDP)      -->
+    <!-- WORKSPACE B: 4-BARANGAY COMMUNITY HEALTH DEVELOPMENT PLAN (CHDP)      -->
     <!-- ===================================================================== -->
     <div id="view-chdp" class="hidden space-y-6">
 
@@ -244,7 +255,7 @@
       <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-indigo-100 text-indigo-800 uppercase tracking-wider mb-1">
-            5 Sentinel Barangays • Palo, Leyte
+            4 Sentinel Barangays • Palo, Leyte (San Jose, Arado, Castilla &amp; San Agustin)
           </span>
           <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">
             Community Health Development Plan (CHDP)
@@ -252,19 +263,19 @@
         </div>
         <div class="flex flex-wrap items-center gap-2 shrink-0">
           <button onclick="loadSampleCHDPData()" class="px-3.5 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 transition cursor-pointer">
-            Load Sample Data
+            Load Sample Data (4 Brgys)
           </button>
           <button onclick="downloadCHDPPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm transition cursor-pointer">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
-            Download Entire CHDP as PDF
+            Download Entire 4-Brgy CHDP as PDF
           </button>
         </div>
       </div>
 
-      <!-- STEP 1: STRAIGHT-ALIGNED 5-BARANGAY TABS & PER-ENTRY EDIT / SAVE / DELETE -->
+      <!-- STEP 1: STRAIGHT-ALIGNED 4-BARANGAY TABS & PER-ENTRY EDIT / SAVE / DELETE -->
       <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
         <div class="bg-slate-100 p-2 border-b border-slate-200">
-          <div class="grid grid-cols-2 sm:grid-cols-5 gap-1.5" id="brgy-selector-tabs"></div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-1.5" id="brgy-selector-tabs"></div>
         </div>
 
         <div id="brgy-form-container" class="p-5 space-y-6"></div>
@@ -275,10 +286,10 @@
         <div class="border-b border-slate-100 pb-3">
           <span class="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-full">Auto-Computation Engine</span>
           <h3 class="text-base sm:text-lg font-extrabold text-slate-900 mt-1">
-            Step 2: Cross-Barangay Common Denominator Synthesis (5 Barangays)
+            Step 2: Cross-Barangay Common Denominator Synthesis (4 Barangays)
           </h3>
           <p class="text-xs text-slate-500">
-            Scoring: Rank #1 = 5 pts, #2 = 4 pts, #3 = 3 pts, #4 = 2 pts, #5 = 1 pt. Conditions appearing in <strong>&ge; 3 of 5 barangays</strong> (or top cumulative points) are automatically designated as <strong>Major Projects</strong>.
+            Scoring: Rank #1 = 5 pts, #2 = 4 pts, #3 = 3 pts, #4 = 2 pts, #5 = 1 pt. Conditions appearing in <strong>&ge; 3 of 4 barangays</strong> (or top cumulative points) are automatically designated as <strong>Major Projects</strong>.
           </p>
         </div>
 
@@ -287,11 +298,10 @@
             <thead>
               <tr class="bg-slate-100 border-b border-slate-200 text-slate-700 font-bold">
                 <th class="py-2.5 px-3">Health Condition / Problem</th>
+                <th class="py-2.5 px-2 text-center">San Jose</th>
+                <th class="py-2.5 px-2 text-center">Arado</th>
                 <th class="py-2.5 px-2 text-center">Castilla</th>
                 <th class="py-2.5 px-2 text-center">San Agustin</th>
-                <th class="py-2.5 px-2 text-center">San Jose</th>
-                <th class="py-2.5 px-2 text-center">Cabarasan Daku</th>
-                <th class="py-2.5 px-2 text-center">Cangumbang</th>
                 <th class="py-2.5 px-3 text-center bg-indigo-50 text-indigo-900">Frequency</th>
                 <th class="py-2.5 px-3 text-center bg-indigo-50 text-indigo-900">Total Points</th>
                 <th class="py-2.5 px-3 text-center">Auto-Designation</th>
@@ -324,6 +334,124 @@
 
     </div>
 
+    <!-- ===================================================================== -->
+    <!-- WORKSPACE C: RHU & BARANGAY DELIVERABLES CHECKLIST & ENCOUNTER LOG    -->
+    <!-- ===================================================================== -->
+    <div id="view-deliverables" class="hidden space-y-6">
+
+      <!-- Deliverables Header & Progress Overview -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm space-y-4">
+        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+          <div>
+            <span class="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 uppercase tracking-wider mb-1">
+              UPM-SHS Community Clerkship • Palo, Leyte (Nov 2026 – Apr 30, 2027)
+            </span>
+            <h2 class="text-lg sm:text-xl font-extrabold text-slate-900">
+              Community Clerkship Deliverables: RHU &amp; Barangay Levels
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Track completion of core clinical, public health, community mobilization, and documentation deliverables across Palo RHU and the 4 catchment barangays.
+            </p>
+          </div>
+          <div class="flex flex-wrap items-center gap-2 shrink-0">
+            <button onclick="downloadDeliverablesPDF()" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-amber-600 hover:bg-amber-700 text-white shadow-sm transition cursor-pointer">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              Download Deliverables Checklist PDF
+            </button>
+          </div>
+        </div>
+
+        <!-- Overall Progress & 40-Patient Encounter Log Counter -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 pt-2">
+          <!-- Overall Checklist Progress -->
+          <div class="md:col-span-7 bg-slate-50 rounded-xl border border-slate-200 p-4 flex flex-col justify-between space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-extrabold uppercase tracking-wider text-slate-600">Overall Deliverables Completion</span>
+              <span id="deliv-overall-badge" class="text-xs font-extrabold px-2.5 py-0.5 rounded-full bg-teal-100 text-teal-800">0 / 0 (0%)</span>
+            </div>
+            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
+              <div id="deliv-overall-bar" class="bg-teal-600 h-full rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div class="grid grid-cols-3 gap-2 pt-1 text-xs">
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <div class="flex justify-between font-bold text-slate-700"><span>RHU Level</span><span id="deliv-rhu-badge">0/0</span></div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-1.5 overflow-hidden"><div id="deliv-rhu-bar" class="bg-teal-500 h-full" style="width:0%"></div></div>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <div class="flex justify-between font-bold text-slate-700"><span>Barangay Level</span><span id="deliv-brgy-badge">0/0</span></div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-1.5 overflow-hidden"><div id="deliv-brgy-bar" class="bg-emerald-500 h-full" style="width:0%"></div></div>
+              </div>
+              <div class="bg-white p-2 rounded-lg border border-slate-200">
+                <div class="flex justify-between font-bold text-slate-700"><span>Documentation</span><span id="deliv-doc-badge">0/0</span></div>
+                <div class="w-full bg-slate-100 h-1.5 rounded-full mt-1.5 overflow-hidden"><div id="deliv-doc-bar" class="bg-indigo-500 h-full" style="width:0%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 40-Patient Continuum-of-Care Log Counter -->
+          <div class="md:col-span-5 bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-xl p-4 flex flex-col justify-between shadow-xs">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-teal-200">Minimum Requirement</span>
+                <h3 class="text-sm sm:text-base font-extrabold">40-Patient Encounter Log</h3>
+              </div>
+              <span id="patient-log-status-pill" class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-slate-900">
+                40 Remaining to Target
+              </span>
+            </div>
+
+            <div class="my-3 flex items-center justify-between gap-3 bg-white/10 rounded-xl p-2.5 border border-white/15">
+              <div>
+                <span id="patient-encounter-count" class="text-2xl sm:text-3xl font-extrabold">0</span>
+                <span class="text-xs font-semibold text-teal-100"> / 40 logged encounters</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="adjustPatientEncounters(-1)" class="w-8 h-8 rounded-lg bg-white/20 hover:bg-white/30 font-extrabold text-sm cursor-pointer">-1</button>
+                <button onclick="adjustPatientEncounters(1)" class="w-8 h-8 rounded-lg bg-emerald-400 hover:bg-emerald-300 text-slate-900 font-extrabold text-sm cursor-pointer">+1</button>
+                <input id="patient-encounter-input" type="number" min="0" value="0" onchange="setPatientEncounters(this.value)"
+                  class="w-16 px-2 py-1 rounded-lg bg-white text-slate-900 text-xs font-extrabold text-center" title="Set exact encounter count" />
+              </div>
+            </div>
+
+            <p class="text-[11px] text-teal-100">
+              Covers initial consult, PE, diagnostics, holistic family care, treatment plan, informed consent, counseling, referrals &amp; home visit follow-ups.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deliverables Checklist Sections (RHU, Barangay, Documentation) -->
+      <div id="deliverables-sections-container" class="space-y-5"></div>
+
+      <!-- Add Custom Deliverable Entry Card -->
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <h3 class="text-sm font-extrabold text-slate-900 mb-3">+ Add Custom Deliverable or Milestone</h3>
+        <form onsubmit="addCustomDeliverableItem(event)" class="grid grid-cols-1 md:grid-cols-12 gap-3">
+          <div class="md:col-span-3">
+            <select id="new-deliv-section" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-bold bg-white text-slate-800">
+              <option value="rhu">1. RHU-Level Deliverable</option>
+              <option value="barangay">2. Barangay-Level Deliverable</option>
+              <option value="docs">3. Documentation Deliverable</option>
+            </select>
+          </div>
+          <div class="md:col-span-4">
+            <input id="new-deliv-title" type="text" required placeholder="Deliverable title (e.g., MHO Exit Presentation)"
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs font-semibold" />
+          </div>
+          <div class="md:col-span-3">
+            <input id="new-deliv-desc" type="text" placeholder="Details / target barangays..."
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs" />
+          </div>
+          <div class="md:col-span-2">
+            <button type="submit" class="w-full py-2 px-3 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white cursor-pointer">
+              + Add Item
+            </button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
   </main>
 
   <!-- MODAL: EDIT DUTY STATION / PRESET -->
@@ -341,10 +469,9 @@
         <div>
           <label class="block text-xs font-bold text-slate-700 mb-1">Duty Assignment</label>
           <select id="edit-duty-select" class="w-full px-3 py-2 rounded-xl border border-slate-300 text-sm font-semibold bg-white">
-            <option value="RHU Consult Duty">RHU Consult Duty (Mon)</option>
-            <option value="RHU AM / San Jose PM">RHU AM / San Jose PM (Tue)</option>
-            <option value="BHS: San Agustin & Castilla">BHS: San Agustin &amp; Castilla (Wed Paired)</option>
-            <option value="BHS: Cabarasan Daku & Cangumbang">BHS: Cabarasan Daku &amp; Cangumbang (Thu Paired)</option>
+            <option value="RHU Consult Duty">RHU Consult Duty (Mon &amp; Tue Whole Day)</option>
+            <option value="BHS: Castilla & San Agustin">BHS: Castilla &amp; San Agustin (Wed Paired)</option>
+            <option value="BHS AM: San Jose & Arado">BHS AM: San Jose (8–10) &amp; Arado (10–12) / PM Consolidation</option>
             <option value="Fri: Advocacy & Outreach">Fri: Advocacy &amp; Outreach</option>
             <option value="Pre-Deployment Prep">Pre-Deployment Prep</option>
             <option value="HOLIDAY (No Duty)">HOLIDAY (No Duty)</option>
@@ -375,7 +502,7 @@
     <div class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md p-6 space-y-4">
       <h3 class="text-lg font-extrabold text-rose-700">Reset Portal to Default?</h3>
       <p class="text-sm text-slate-600">
-        This will restore the default November 16, 2026 – April 30, 2027 schedule, clear accomplished checkmarks, and reset the 5-Barangay CHDP forms.
+        This will restore the default November 16, 2026 – April 30, 2027 schedule, clear accomplished checkmarks, reset the 4-Barangay CHDP forms, and reset the RHU &amp; Barangay Deliverables checklist.
       </p>
       <div class="flex justify-end gap-2 pt-2">
         <button onclick="closeResetModal()" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 cursor-pointer">Cancel</button>
@@ -389,8 +516,8 @@
     import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
     import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-    const appId = typeof __app_id !== 'undefined' ? __app_id : 'palo-clerks-portal-v4';
-    const BARANGAYS = ['Castilla', 'San Agustin', 'San Jose', 'Cabarasan Daku', 'Cangumbang'];
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'palo-clerks-portal-v5';
+    const BARANGAYS = ['San Jose', 'Arado', 'Castilla', 'San Agustin'];
 
     const CONDITION_SUGGESTIONS = [
       'Uncontrolled Hypertension / Cardiovascular Risk',
@@ -417,28 +544,33 @@
 
     let scheduleData = {};
     let chdpData = {};
+    let deliverablesData = {};
     let currentMonthIndex = 0;
     let selectedDateKey = '2026-11-16';
-    let activeBrgyTab = 'Castilla';
+    let activeBrgyTab = 'San Jose';
     let activeView = 'calendar';
 
     let isEditingBrgyProfile = false;
     let editingConditionIndex = null;
     let editingActionPlanIndex = null;
 
-    let db = null, auth = null, currentUser = null, isCloudReady = false, isApplyingRemote = false;
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+    let isCloudReady = false;
+    let isApplyingRemote = false;
 
-    function formatDateKey(d) {
-      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    function formatDateKey(dateObj) {
+      return `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, '0')}-${String(dateObj.getDate()).padStart(2, '0')}`;
     }
 
     function parseDateLocal(str) {
-      const [y, m, d] = str.split('-').map(Number);
-      return new Date(y, m - 1, d);
+      const parts = str.split('-').map(Number);
+      return new Date(parts[0], parts[1] - 1, parts[2]);
     }
 
     // =========================================================================
-    // 1. GENERATE DEFAULT SCHEDULE (NOV 2026 - APR 30, 2027)
+    // 1. GENERATE DEFAULT SCHEDULE (NOV 2026 - APR 30, 2027) — 4 BARANGAYS
     // =========================================================================
     function generateDefaultSchedule() {
       const data = {};
@@ -447,52 +579,52 @@
 
       const specificOverrides = {
         '2026-11-02': { phase: 'Pre-Deployment', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: "All Souls' Day — Pre-deployment preparation." },
-        '2026-11-16': { phase: 'Phase 1: Pre-Entry', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'PRE-ENTRY START: Preceptor orientation & Palo RHU Consultation Duty.' },
-        '2026-11-17': { phase: 'Phase 1: Pre-Entry', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM (Courtesy Call with MHO, PHN & RHM) & Barangay San Jose PM Courtesy Call and BHS Ocular Survey.' },
-        '2026-11-18': { phase: 'Phase 1: Pre-Entry', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Courtesy Calls, BHS Ocular Surveys & Target Client List (TCL) review at Barangays San Agustin & Castilla.' },
-        '2026-11-19': { phase: 'Phase 1: Pre-Entry', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Courtesy Calls, BHS Ocular Surveys & TCL review at Barangays Cabarasan Daku & Cangumbang.' },
-        '2026-11-20': { phase: 'Phase 1: Pre-Entry', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Finalize secondary data extraction tools, advocacy scheduling, referral directory & Weekly Preceptor Meeting.' },
+        '2026-11-16': { phase: 'Phase 1: Pre-Entry', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'PRE-ENTRY START: Preceptor orientation & Palo RHU whole-day Consultation Duty.' },
+        '2026-11-17': { phase: 'Phase 1: Pre-Entry', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'Palo RHU Whole-Day Consultation Duty, Courtesy Call with MHO/PHN/RHM & FHSIS secondary data extraction.' },
+        '2026-11-18': { phase: 'Phase 1: Pre-Entry', duty: 'BHS: Castilla & San Agustin', clerks: 'Jazzy, Leila & Aubrey', summary: 'Paired BHS Duty at Barangays Castilla & San Agustin: Courtesy Calls, BHS Ocular Surveys & Target Client List (TCL) extraction.' },
+        '2026-11-19': { phase: 'Phase 1: Pre-Entry', duty: 'BHS AM: San Jose & Arado', clerks: 'Jazzy, Leila & Aubrey', summary: '8:00–10:00 AM: Barangay San Jose BHS Courtesy Call & Ocular | 10:00 AM–12:00 PM: Barangay Arado BHS Courtesy Call & Ocular | PM: 4-Barangay Directory & Data Encoding.' },
+        '2026-11-20': { phase: 'Phase 1: Pre-Entry', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Finalize secondary data extraction tools, 4-barangay advocacy calendar, referral directory & Weekly Preceptor Meeting.' },
         '2026-11-30': { phase: 'Phase 2: Assessment', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Bonifacio Day — Regular Holiday (No Duty).' },
         '2026-12-08': { phase: 'Phase 2: Assessment', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Feast of the Immaculate Conception — Special Non-Working Holiday (No Duty).' },
-        '2026-12-11': { phase: 'Phase 2: Assessment', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (San Jose, San Agustin & Castilla) + Weekly Preceptor Meet.' },
-        '2026-12-15': { phase: 'Phase 2: Community Diagnosis', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM & San Jose PM + San Agustin & Castilla Top 5 Community Diagnosis Validation.' },
-        '2026-12-16': { phase: 'Phase 2: Community Diagnosis', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Cabarasan Daku & Cangumbang BHS + Cross-Barangay Top 5 Common Denominator Synthesis & December Log.' },
-        '2027-01-04': { phase: 'Phase 3: CHDP', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'RESUME DUTY: Palo RHU Consultation Duty & Community Health Development Plan (CHDP) Workshop Preparation.' },
-        '2027-01-05': { phase: 'Phase 3: CHDP', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM & Barangay San Jose PM Simultaneous BHS Tasks + CHDP Workshop.' },
-        '2027-01-06': { phase: 'Phase 3: CHDP', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays San Agustin & Castilla Simultaneous BHS Tasks + Participatory CHDP Workshops.' },
-        '2027-01-07': { phase: 'Phase 3: CHDP', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays Cabarasan Daku & Cangumbang Simultaneous BHS Tasks + Participatory CHDP Workshops.' },
-        '2027-01-08': { phase: 'Phase 3: CHDP', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy (TB/Social Hygiene) & Consolidate 5 Barangay-Endorsed CHDPs.' },
-        '2027-01-13': { phase: 'Phase 4: Implementation', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'San Agustin & Castilla Simultaneous BHS Tasks (ANC, EPI, OPT+) + Launch Common Denominator Major Project.' },
-        '2027-01-15': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 2: Social Hygiene (San Jose, San Agustin & Castilla).' },
-        '2027-01-22': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 2: Social Hygiene (Cabarasan Daku & Cangumbang) + Weekly Meet.' },
+        '2026-12-11': { phase: 'Phase 2: Assessment', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (Castilla & San Agustin) + Weekly Preceptor Meet.' },
+        '2026-12-15': { phase: 'Phase 2: Community Diagnosis', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'Palo RHU Whole-Day Consults & Top 5 Community Diagnosis Validation across the 4 sentinel barangays.' },
+        '2026-12-16': { phase: 'Phase 2: Community Diagnosis', duty: 'BHS: Castilla & San Agustin', clerks: 'Jazzy, Leila & Aubrey', summary: 'Castilla & San Agustin Paired BHS Tasks + Cross-Barangay Top 5 Common Denominator Synthesis (San Jose, Arado, Castilla & San Agustin) & December Log.' },
+        '2027-01-04': { phase: 'Phase 3: CHDP', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'RESUME DUTY: Palo RHU Whole-Day Consultation Duty & Community Health Development Plan (CHDP) Workshop Preparation.' },
+        '2027-01-05': { phase: 'Phase 3: CHDP', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'Palo RHU Whole-Day Consultation Duty & Finalize Waray CHDP presentation aids for the 4 barangays.' },
+        '2027-01-06': { phase: 'Phase 3: CHDP', duty: 'BHS: Castilla & San Agustin', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays Castilla & San Agustin Paired BHS Tasks + Participatory CHDP Workshops.' },
+        '2027-01-07': { phase: 'Phase 3: CHDP', duty: 'BHS AM: San Jose & Arado', clerks: 'Jazzy, Leila & Aubrey', summary: '8:00–10:00 AM: Barangay San Jose BHS & CHDP Workshop | 10:00 AM–12:00 PM: Barangay Arado BHS & CHDP Workshop | PM: Secondary Data Consolidation.' },
+        '2027-01-08': { phase: 'Phase 3: CHDP', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy (TB/Social Hygiene) & Consolidate 4 Barangay-Endorsed CHDPs.' },
+        '2027-01-13': { phase: 'Phase 4: Implementation', duty: 'BHS: Castilla & San Agustin', clerks: 'Jazzy, Leila & Aubrey', summary: 'Castilla & San Agustin Paired BHS Tasks (ANC, EPI, OPT+) + Launch Common Denominator Major Project.' },
+        '2027-01-14': { phase: 'Phase 4: Implementation', duty: 'BHS AM: San Jose & Arado', clerks: 'Jazzy, Leila & Aubrey', summary: '8:00–10:00 AM: San Jose BHS & Launch Major Project | 10:00 AM–12:00 PM: Arado BHS & Launch Major Project | PM: Data Consolidation & Follow-up.' },
+        '2027-01-15': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 2: Social Hygiene (Castilla & San Agustin).' },
+        '2027-01-22': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 2: Social Hygiene (San Jose & Arado) + Weekly Preceptor Meet.' },
         '2027-01-29': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Integrated Community Outreach (EPI, Deworming, Vitamin A, Mother\'s Classes) + January Monitoring Log.' },
-        '2027-02-05': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (San Jose, San Agustin & Castilla).' },
-        '2027-02-12': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (Cabarasan Daku & Cangumbang) + Household Contact Tracing.' },
+        '2027-02-05': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (Castilla & San Agustin).' },
+        '2027-02-12': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Public Health Advocacy 1: Tuberculosis (San Jose & Arado) + Household Contact Tracing.' },
         '2027-02-19': { phase: 'Phase 4: Midpoint Review', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'MIDPOINT REVIEW: Friday Advocacy Duty + Formal Midpoint Evaluation with Preceptor.' },
-        '2027-02-25': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'EDSA People Power Anniversary — Special Working/Non-Working Day (Verify local schedule).' },
+        '2027-02-25': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'EDSA People Power Anniversary — Special Day (Verify local RHU schedule; AM San Jose/Arado split if active).' },
         '2027-02-26': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Social Hygiene Advocacy 2 + Mother\'s Class & February Monthly Monitoring Log.' },
-        '2027-03-12': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'TB Advocacy 1 wrap-up across all 5 sentinel barangays & Weekly Preceptor Meet.' },
+        '2027-03-12': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'TB Advocacy 1 wrap-up across all 4 sentinel barangays & Weekly Preceptor Meet.' },
         '2027-03-19': { phase: 'Phase 4: Implementation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Integrated Outreach (EPI, Deworming, Vit A, Mother\'s Class) & Endline Evaluation Preparation.' },
-        '2027-03-24': { phase: 'Phase 4: Implementation', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Cabarasan Daku & Cangumbang BHS + Pre-Holy Week Advocacy & March Monitoring Log.' },
         '2027-03-25': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Maundy Thursday — Holy Week Regular Holiday (No Duty).' },
         '2027-03-26': { phase: 'Phase 4: Implementation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Good Friday — Holy Week Regular Holiday (No Duty).' },
-        '2027-04-02': { phase: 'Phase 5: Evaluation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Social Hygiene Advocacy 2 (Cabarasan Daku & Cangumbang) + Endline Data Check.' },
+        '2027-04-02': { phase: 'Phase 5: Evaluation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Social Hygiene Advocacy 2 (San Jose & Arado) + Endline Data Check.' },
         '2027-04-09': { phase: 'Phase 5: Evaluation', duty: 'HOLIDAY (No Duty)', clerks: 'No Duty', summary: 'Araw ng Kagitingan — Regular Holiday (No Duty).' },
         '2027-04-16': { phase: 'Phase 5: Evaluation', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Integrated Outreach (Deworming, Vit A, Mother\'s Class) & Final Evaluation Report Prep.' },
-        '2027-04-20': { phase: 'Phase 5: Turnover', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'RHU Consults AM & Barangay San Jose PM Community Feedback Assembly & Signed Turnover.' },
-        '2027-04-21': { phase: 'Phase 5: Turnover', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays San Agustin & Castilla Community Feedback Assemblies & Signed Turnover.' },
-        '2027-04-22': { phase: 'Phase 5: Turnover', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays Cabarasan Daku & Cangumbang Community Feedback Assemblies & Signed Turnover.' },
+        '2027-04-21': { phase: 'Phase 5: Turnover', duty: 'BHS: Castilla & San Agustin', clerks: 'Jazzy, Leila & Aubrey', summary: 'Barangays Castilla & San Agustin Community Feedback Assemblies & Signed Turnover.' },
+        '2027-04-22': { phase: 'Phase 5: Turnover', duty: 'BHS AM: San Jose & Arado', clerks: 'Jazzy, Leila & Aubrey', summary: '8:00–10:00 AM: Barangay San Jose Feedback Assembly & Signed Turnover | 10:00 AM–12:00 PM: Barangay Arado Feedback Assembly & Signed Turnover | PM: Consolidation.' },
         '2027-04-23': { phase: 'Phase 5: Turnover', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'Advocacy Archive Turnover & Preceptor Final Report Review.' },
-        '2027-04-27': { phase: 'Phase 5: Turnover', duty: 'RHU AM / San Jose PM', clerks: 'Jazzy, Leila & Aubrey', summary: 'Present Final 5-Barangay Health Outcomes to Palo RHU (MHO & Staff).' },
-        '2027-04-28': { phase: 'Phase 5: Turnover', duty: 'BHS: San Agustin & Castilla', clerks: 'Jazzy, Leila & Aubrey', summary: 'Confidential RHU/BHS Turnover of Active Patient Follow-up Registries.' },
-        '2027-04-29': { phase: 'Phase 5: Turnover', duty: 'BHS: Cabarasan Daku & Cangumbang', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Preceptor Evaluation & Clinical Logbook Signing.' },
-        '2027-04-30': { phase: 'Phase 5: Turnover', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'CLERKSHIP END: Signed Turnover & Final Evaluation Report Submission.' }
+        '2027-04-26': { phase: 'Phase 5: Turnover', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Palo RHU Whole-Day Consultation Duty & Outcome Slide Finalization.' },
+        '2027-04-27': { phase: 'Phase 5: Turnover', duty: 'RHU Consult Duty', clerks: 'Jazzy, Leila & Aubrey', summary: 'Present Final 4-Barangay Health Outcomes (San Jose, Arado, Castilla & San Agustin) to Palo RHU (MHO & Staff).' },
+        '2027-04-28': { phase: 'Phase 5: Turnover', duty: 'BHS: Castilla & San Agustin', clerks: 'Jazzy, Leila & Aubrey', summary: 'Confidential RHU/BHS Turnover of Active Patient Follow-up Registries.' },
+        '2027-04-29': { phase: 'Phase 5: Turnover', duty: 'BHS AM: San Jose & Arado', clerks: 'Jazzy, Leila & Aubrey', summary: 'Final Preceptor Evaluation & Clinical Logbook Signing.' },
+        '2027-04-30': { phase: 'Phase 5: Turnover', duty: 'Fri: Advocacy & Outreach', clerks: 'Jazzy, Leila & Aubrey', summary: 'CLERKSHIP END: Signed Turnover & Final Evaluation Report Submission (Due 5:00 PM).' }
       };
 
-      for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-        const dow = d.getDay();
+      for (let cursor = new Date(start); cursor <= end; cursor.setDate(cursor.getDate() + 1)) {
+        const dow = cursor.getDay();
         if (dow === 0 || dow === 6) continue;
-        const key = formatDateKey(d);
+        const key = formatDateKey(cursor);
 
         if (specificOverrides[key]) {
           data[key] = { date: key, dayOfWeek: dow, completed: false, ...specificOverrides[key] };
@@ -503,7 +635,7 @@
           data[key] = {
             date: key, dayOfWeek: dow, phase: 'Pre-Deployment', duty: 'Pre-Deployment Prep',
             clerks: 'Jazzy, Leila & Aubrey',
-            summary: 'Pre-deployment briefing, courtesy call coordination & catchment profile review.', completed: false
+            summary: 'Pre-deployment briefing, courtesy call coordination & 4-barangay catchment profile review.', completed: false
           };
         } else if (key >= '2026-12-17' && key <= '2027-01-03') {
           data[key] = {
@@ -512,24 +644,24 @@
             summary: 'Christmas & New Year Holiday Break (Dec 17, 2026 – Jan 3, 2027; Resumes Jan 4).', completed: false
           };
         } else {
-          let phase = key < '2026-12-17' ? 'Phase 2: Assessment' : (key < '2027-03-29' ? 'Phase 4: Implementation' : 'Phase 5: Evaluation');
+          const phase = key < '2026-12-17' ? 'Phase 2: Assessment' : (key < '2027-03-29' ? 'Phase 4: Implementation' : 'Phase 5: Evaluation');
           let duty = '';
           let summary = '';
           if (dow === 1) {
             duty = 'RHU Consult Duty';
-            summary = 'Palo RHU Consultation Duty: Outpatient consults & clinical management.';
+            summary = 'Monday Whole-Day Palo RHU Consultation Duty: Outpatient consults, FHSIS secondary data extraction & clinical management.';
           } else if (dow === 2) {
-            duty = 'RHU AM / San Jose PM';
-            summary = 'RHU Consults AM & Barangay San Jose PM Simultaneous BHS Tasks (Prenatal, EPI, Consult/OPT+ & Major Project).';
+            duty = 'RHU Consult Duty';
+            summary = 'Tuesday Whole-Day Palo RHU Consultation Duty: Outpatient consults, maternal/child clinic support, NCD/TB-DOTS tracking & BHS prep.';
           } else if (dow === 3) {
-            duty = 'BHS: San Agustin & Castilla';
-            summary = 'Barangays San Agustin & Castilla (Paired) Simultaneous BHS Tasks (Prenatal, EPI, Consult/OPT+ & Major Project).';
+            duty = 'BHS: Castilla & San Agustin';
+            summary = 'Wednesday Paired BHS Duty at Barangays Castilla & San Agustin: Simultaneous Prenatal (ANC), EPI, OPT+ child nutrition & Major Project interventions.';
           } else if (dow === 4) {
-            duty = 'BHS: Cabarasan Daku & Cangumbang';
-            summary = 'Barangays Cabarasan Daku & Cangumbang (Paired) Simultaneous BHS Tasks (Prenatal, EPI, Consult/OPT+ & Major Project).';
+            duty = 'BHS AM: San Jose & Arado';
+            summary = 'Thursday Split AM: 8:00–10:00 AM Barangay San Jose BHS & 10:00 AM–12:00 PM Barangay Arado BHS (ANC, EPI, OPT+, TCLs & Major Project) | PM: Secondary Data Consolidation & Home Follow-Ups.';
           } else if (dow === 5) {
             duty = 'Fri: Advocacy & Outreach';
-            summary = 'Public Health Advocacies (TB & Social Hygiene), Barangay Outreach (EPI, Deworming, Vit A, Mother\'s Classes) & Weekly Preceptor Meet.';
+            summary = 'Friday Whole-Day: Public Health Advocacies (TB & Social Hygiene) across 4 barangays, Community Outreach (EPI, Deworming, Vit A, Mother\'s Classes) & Weekly Preceptor Meet.';
           }
           data[key] = { date: key, dayOfWeek: dow, phase, duty, clerks: 'Jazzy, Leila & Aubrey', summary, completed: false };
         }
@@ -538,7 +670,7 @@
     }
 
     // =========================================================================
-    // 2. GENERATE DEFAULT 5-BARANGAY CHDP STRUCTURE
+    // 2. GENERATE DEFAULT 4-BARANGAY CHDP STRUCTURE
     // =========================================================================
     function generateDefaultCHDP() {
       const barangays = {};
@@ -569,7 +701,39 @@
     }
 
     // =========================================================================
-    // 3. CLOUD SYNC & SESSION PERSISTENCE
+    // 3. GENERATE DEFAULT RHU & BARANGAY DELIVERABLES CHECKLIST
+    // =========================================================================
+    function generateDefaultDeliverables() {
+      return {
+        patientEncounters: 0,
+        items: [
+          { id: 'rhu_1', section: 'rhu', title: 'Patient Log: Initial Consultation & History Taking', desc: 'Elicit a comprehensive medical history for each patient across the 40-patient continuum-of-care log.', done: false, notes: '' },
+          { id: 'rhu_2', section: 'rhu', title: 'Patient Log: Physical Examination', desc: 'Perform a thorough, system-appropriate physical examination and record objective findings.', done: false, notes: '' },
+          { id: 'rhu_3', section: 'rhu', title: 'Patient Log: Diagnostics & Clinical Assessment', desc: 'Select appropriate diagnostic examinations, correctly interpret results, and formulate differential diagnoses.', done: false, notes: '' },
+          { id: 'rhu_4', section: 'rhu', title: 'Patient Log: Risk & Holistic Family Assessment', desc: 'Assess comorbidities and health risks, and conduct a comprehensive family health assessment in holistic family care.', done: false, notes: '' },
+          { id: 'rhu_5', section: 'rhu', title: 'Patient Log: Treatment & Management Planning', desc: 'Set treatment goals and therapeutic management, plus a family treatment plan tailored to social background and resources.', done: false, notes: '' },
+          { id: 'rhu_6', section: 'rhu', title: 'Patient Log: Informed Consent & Ethics', desc: 'Obtain informed consent and observe ethical standards in executing all clinical procedures and treatments.', done: false, notes: '' },
+          { id: 'rhu_7', section: 'rhu', title: 'Patient Log: Patient Education & Health Promotion', desc: 'Educate and counsel patients on disease prevention, healthy lifestyles, and individualized health promotion plans.', done: false, notes: '' },
+          { id: 'rhu_8', section: 'rhu', title: 'Patient Log: Interprofessional Coordination & Referrals', desc: 'Collaborate with healthcare providers and properly assess and refer medico-legal cases to appropriate government authorities.', done: false, notes: '' },
+          { id: 'rhu_9', section: 'rhu', title: 'Patient Log: Continuum-of-Care Follow-Up', desc: 'Monitor and follow up on logged patients through subsequent RHU clinic consultations and barangay home visits.', done: false, notes: '' },
+          { id: 'rhu_10', section: 'rhu', title: 'Social Preparation & Planning', desc: 'Conduct a Health District visit, hold weekly planning meetings, and submit a Community Health Development Plan and Advocacy Plan.', done: false, notes: '' },
+          { id: 'rhu_11', section: 'rhu', title: 'Public Health Advocacy & Workshops', desc: 'Conduct Tuberculosis (TB) advocacy as well as social hygiene consultations, advocacy, and workshops.', done: false, notes: '' },
+          { id: 'rhu_12', section: 'rhu', title: 'Health Systems & Catchment Analysis', desc: 'Perform problem-oriented catchment diagnosis (surveys & secondary data), stakeholder analysis, GO/NGO linkages, and WHO building blocks assessment.', done: false, notes: '' },
+          { id: 'rhu_13', section: 'rhu', title: 'Clinical & Medico-Legal Management', desc: 'Execute comprehensive clinical histories, physical exams, diagnostics, therapeutic plans, and medico-legal assessments/referrals under MHO supervision.', done: false, notes: '' },
+          { id: 'rhu_14', section: 'rhu', title: 'Research & Evidence-Based Practice', desc: 'Conduct literature searches, critically appraise medical journals for clinical decision-making, and conduct relevant community research.', done: false, notes: '' },
+          { id: 'brgy_1', section: 'barangay', title: 'Site Preparation (San Jose, Arado, Castilla & San Agustin)', desc: 'Pay courtesy calls to barangay officials and conduct ocular surveys of all 4 Barangay Health Stations (BHS).', done: false, notes: '' },
+          { id: 'brgy_2', section: 'barangay', title: 'Barangay Health Station (BHS) Rotations', desc: 'Conduct routine prenatal checkups, pediatric checkups/OPT+ weighing, EPI vaccinations, deworming, and Vitamin A supplementation.', done: false, notes: '' },
+          { id: 'brgy_3', section: 'barangay', title: 'Holistic Family Care & Home Visits', desc: 'Conduct comprehensive family health assessments, tailored family treatment plans, and continuum-of-care home visits.', done: false, notes: '' },
+          { id: 'brgy_4', section: 'barangay', title: 'Grassroots Health Education & Mobilization', desc: 'Organize Mothers\' Classes, advocate healthy lifestyles, environmental protection & DRRM, and assist local leaders in community mobilization.', done: false, notes: '' },
+          { id: 'brgy_5', section: 'barangay', title: 'Community Programs (PPAs)', desc: 'Plan health Programs, Projects, and Activities (PPAs) utilizing indigenous materials and local resources, and train community leaders.', done: false, notes: '' },
+          { id: 'doc_1', section: 'docs', title: 'Weekly Reflection Papers (Journal Format)', desc: 'Submit weekly paper analyzing an interesting community medicine clinical encounter (pros, cons, EBM references, justified conclusion) — due 5:00 PM last day of clerkship.', done: false, notes: '' },
+          { id: 'doc_2', section: 'docs', title: 'Accomplishment Reports', desc: 'Submit regular monthly/endline accomplishment reports alongside the Community Health Development Plan (CHDP) and Advocacy Plans.', done: false, notes: '' }
+        ]
+      };
+    }
+
+    // =========================================================================
+    // 4. CLOUD SYNC & SESSION PERSISTENCE
     // =========================================================================
     function setUnsavedState(dirty, label = null) {
       const badge = document.getElementById('save-status-badge');
@@ -590,6 +754,7 @@
     async function initCloudSync() {
       scheduleData = generateDefaultSchedule();
       chdpData = generateDefaultCHDP();
+      deliverablesData = generateDefaultDeliverables();
       refreshAllViews();
 
       const rawConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : (window.VERCEL_FIREBASE_CONFIG || null);
@@ -610,23 +775,31 @@
           currentUser = (await signInAnonymously(auth)).user;
         }
         isCloudReady = true;
-        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'portal_state', 'master_v4');
-        const snap = await getDoc(ref);
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'portal_state', 'master_v5');
+        const snap = await getDoc(docRef);
         if (!snap.exists()) {
-          await setDoc(ref, { scheduleJson: JSON.stringify(scheduleData), chdpJson: JSON.stringify(chdpData), updatedAt: new Date().toISOString() });
+          await setDoc(docRef, {
+            scheduleJson: JSON.stringify(scheduleData),
+            chdpJson: JSON.stringify(chdpData),
+            deliverablesJson: JSON.stringify(deliverablesData),
+            updatedAt: new Date().toISOString()
+          });
         }
-        onSnapshot(ref, (s) => {
-          if (!s.exists()) return;
+        onSnapshot(docRef, (snapshot) => {
+          if (!snapshot.exists()) return;
           isApplyingRemote = true;
           try {
-            const d = s.data();
-            if (d.scheduleJson) scheduleData = JSON.parse(d.scheduleJson);
-            if (d.chdpJson) chdpData = JSON.parse(d.chdpJson);
+            const payload = snapshot.data();
+            if (payload.scheduleJson) scheduleData = JSON.parse(payload.scheduleJson);
+            if (payload.chdpJson) chdpData = JSON.parse(payload.chdpJson);
+            if (payload.deliverablesJson) deliverablesData = JSON.parse(payload.deliverablesJson);
             refreshAllViews();
             setUnsavedState(false, 'Cloud Synced');
-          } finally { isApplyingRemote = false; }
+          } finally {
+            isApplyingRemote = false;
+          }
         });
-      } catch (e) {
+      } catch (err) {
         isCloudReady = false;
         setUnsavedState(false, 'Session Ready');
       }
@@ -641,16 +814,23 @@
       }
       try {
         setUnsavedState(true, 'Syncing...');
-        const ref = doc(db, 'artifacts', appId, 'public', 'data', 'portal_state', 'master_v4');
-        await setDoc(ref, { scheduleJson: JSON.stringify(scheduleData), chdpJson: JSON.stringify(chdpData), updatedAt: new Date().toISOString() });
+        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'portal_state', 'master_v5');
+        await setDoc(docRef, {
+          scheduleJson: JSON.stringify(scheduleData),
+          chdpJson: JSON.stringify(chdpData),
+          deliverablesJson: JSON.stringify(deliverablesData),
+          updatedAt: new Date().toISOString()
+        });
         setUnsavedState(false, 'Cloud Synced');
         if (notify) showToast(customToast);
-      } catch (e) {
+      } catch (err) {
         showToast('Cloud save failed.', 'error');
       }
     }
 
-    function manualSaveAll() { persistAll(true, 'All changes saved!'); }
+    function manualSaveAll() {
+      persistAll(true, 'All changes saved!');
+    }
 
     function showToast(msg, type = 'success') {
       const container = document.getElementById('toast-container');
@@ -662,7 +842,7 @@
     }
 
     // =========================================================================
-    // 4. DUTY BADGE STYLING (CLEAN DUTIES + CLERK NAMES ONLY)
+    // 5. DUTY BADGE STYLING
     // =========================================================================
     function getDutyBadgeStyle(duty) {
       if (!duty) return 'bg-slate-100 text-slate-600 border-slate-200';
@@ -676,7 +856,7 @@
     }
 
     // =========================================================================
-    // 5. RENDER CLEAN DUTY CALENDAR WITH JAZZY, LEILA & AUBREY NAMES
+    // 6. RENDER CLEAN DUTY CALENDAR
     // =========================================================================
     function renderMonthPills() {
       const container = document.getElementById('month-quick-pills');
@@ -778,10 +958,10 @@
     function renderSideSummaryPanel() {
       const mInfo = MONTHS_LIST[currentMonthIndex];
       const monthEntries = Object.values(scheduleData)
-        .filter(e => e.date.startsWith(mInfo.key) && !e.duty.includes('HOLIDAY') && !e.duty.includes('Pre-Deployment'))
+        .filter(item => item.date.startsWith(mInfo.key) && !item.duty.includes('HOLIDAY') && !item.duty.includes('Pre-Deployment'))
         .sort((a, b) => a.date.localeCompare(b.date));
 
-      const doneCount = monthEntries.filter(e => e.completed).length;
+      const doneCount = monthEntries.filter(item => item.completed).length;
       const totalCount = monthEntries.length;
       const pct = totalCount === 0 ? 0 : Math.round((doneCount / totalCount) * 100);
 
@@ -813,31 +993,31 @@
 
       document.getElementById('side-month-list-label').textContent = `${mInfo.label} — Daily Activity Summaries`;
       const allMonthRows = Object.values(scheduleData)
-        .filter(e => e.date.startsWith(mInfo.key))
+        .filter(item => item.date.startsWith(mInfo.key))
         .sort((a, b) => a.date.localeCompare(b.date));
 
       const listEl = document.getElementById('side-month-activity-list');
-      listEl.innerHTML = allMonthRows.map(e => {
-        const dObj = parseDateLocal(e.date);
+      listEl.innerHTML = allMonthRows.map(item => {
+        const dObj = parseDateLocal(item.date);
         const shortD = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', weekday: 'short' });
-        const isSel = e.date === selectedDateKey;
-        const isHol = e.duty.includes('HOLIDAY');
+        const isSel = item.date === selectedDateKey;
+        const isHol = item.duty.includes('HOLIDAY');
 
         return `
-          <div onclick="selectDate('${e.date}')"
-            class="p-2.5 rounded-xl border transition cursor-pointer ${isSel ? 'border-teal-500 bg-teal-50/60' : (e.completed ? 'border-slate-200 bg-slate-50 opacity-80' : 'border-slate-200 bg-white hover:border-teal-300')}">
+          <div onclick="selectDate('${item.date}')"
+            class="p-2.5 rounded-xl border transition cursor-pointer ${isSel ? 'border-teal-500 bg-teal-50/60' : (item.completed ? 'border-slate-200 bg-slate-50 opacity-80' : 'border-slate-200 bg-white hover:border-teal-300')}">
             <div class="flex items-start gap-2.5">
               ${!isHol ? `
-                <input type="checkbox" ${e.completed ? 'checked' : ''} onclick="event.stopPropagation(); toggleDateDone('${e.date}')"
+                <input type="checkbox" ${item.completed ? 'checked' : ''} onclick="event.stopPropagation(); toggleDateDone('${item.date}')"
                   class="mt-0.5 w-4 h-4 rounded border-slate-300 text-emerald-600 focus:ring-emerald-500 cursor-pointer shrink-0" title="Mark day done" />
               ` : `<span class="mt-0.5 w-4 h-4 text-center text-xs text-rose-500 font-bold shrink-0">•</span>`}
               <div class="flex-1 min-w-0">
                 <div class="flex items-center justify-between gap-1">
                   <span class="text-xs font-extrabold text-slate-900">${shortD}</span>
-                  <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${getDutyBadgeStyle(e.duty)}">${e.duty}</span>
+                  <span class="px-1.5 py-0.5 rounded text-[10px] font-bold border ${getDutyBadgeStyle(item.duty)}">${item.duty}</span>
                 </div>
-                <p class="text-[11.5px] mt-1 leading-snug ${e.completed ? 'line-through text-slate-400' : 'text-slate-600'}">
-                  ${e.summary}
+                <p class="text-[11.5px] mt-1 leading-snug ${item.completed ? 'line-through text-slate-400' : 'text-slate-600'}">
+                  ${item.summary}
                 </p>
               </div>
             </div>
@@ -868,7 +1048,7 @@
     }
 
     // =========================================================================
-    // 6. FULL ROSTER TABLE VIEW
+    // 7. FULL ROSTER TABLE VIEW
     // =========================================================================
     function renderScheduleTable() {
       const mFilter = document.getElementById('table-month-filter').value;
@@ -876,24 +1056,24 @@
       const keys = Object.keys(scheduleData).sort().filter(k => mFilter === 'ALL' || k.startsWith(mFilter));
 
       tbody.innerHTML = keys.map(k => {
-        const e = scheduleData[k];
+        const item = scheduleData[k];
         const dObj = parseDateLocal(k);
         const dateStr = dObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', weekday: 'short' });
-        const isHol = e.duty.includes('HOLIDAY');
+        const isHol = item.duty.includes('HOLIDAY');
         return `
           <tr class="${isHol ? 'bg-rose-50/40' : 'hover:bg-slate-50'}">
             <td class="py-2.5 px-4 font-bold text-slate-900 whitespace-nowrap">${dateStr}</td>
             <td class="py-2.5 px-3 whitespace-nowrap">
               <div class="inline-flex flex-col gap-0.5">
-                <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${getDutyBadgeStyle(e.duty)}">${e.duty}</span>
-                ${!isHol ? `<span class="text-[11px] font-semibold text-slate-500 pl-1">${e.clerks || 'Jazzy, Leila & Aubrey'}</span>` : ''}
+                <span class="px-2.5 py-1 rounded-lg border text-xs font-extrabold ${getDutyBadgeStyle(item.duty)}">${item.duty}</span>
+                ${!isHol ? `<span class="text-[11px] font-semibold text-slate-500 pl-1">${item.clerks || 'Jazzy, Leila & Aubrey'}</span>` : ''}
               </div>
             </td>
-            <td class="py-2.5 px-4 text-xs text-slate-600">${e.summary}</td>
+            <td class="py-2.5 px-4 text-xs text-slate-600">${item.summary}</td>
             <td class="py-2.5 px-3 text-center whitespace-nowrap">
               ${!isHol ? `
-                <button onclick="toggleDateDone('${k}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border cursor-pointer ${e.completed ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-emerald-50'}">
-                  ${e.completed ? '✓ Done' : 'Mark Done'}
+                <button onclick="toggleDateDone('${k}')" class="px-2.5 py-1 rounded-lg text-xs font-bold border cursor-pointer ${item.completed ? 'bg-emerald-600 text-white border-emerald-700' : 'bg-white text-slate-600 border-slate-300 hover:bg-emerald-50'}">
+                  ${item.completed ? '✓ Done' : 'Mark Done'}
                 </button>
               ` : '<span class="text-xs text-slate-400">—</span>'}
             </td>
@@ -903,18 +1083,18 @@
     }
 
     // =========================================================================
-    // 7. EDIT DAY MODAL
+    // 8. EDIT DAY MODAL
     // =========================================================================
     function openEditDayModal(dateKey) {
-      const e = scheduleData[dateKey];
-      if (!e) return;
+      const item = scheduleData[dateKey];
+      if (!item) return;
       document.getElementById('edit-date-key').value = dateKey;
-      document.getElementById('modal-phase-tag').textContent = e.phase;
+      document.getElementById('modal-phase-tag').textContent = item.phase;
       document.getElementById('modal-date-title').textContent = parseDateLocal(dateKey).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-      document.getElementById('edit-duty-select').value = e.duty;
-      document.getElementById('edit-clerks-input').value = e.clerks || 'Jazzy, Leila & Aubrey';
-      document.getElementById('edit-day-note').value = e.summary || '';
-      document.getElementById('edit-day-done').checked = !!e.completed;
+      document.getElementById('edit-duty-select').value = item.duty;
+      document.getElementById('edit-clerks-input').value = item.clerks || 'Jazzy, Leila & Aubrey';
+      document.getElementById('edit-day-note').value = item.summary || '';
+      document.getElementById('edit-day-done').checked = !!item.completed;
       const modal = document.getElementById('edit-day-modal');
       modal.classList.remove('hidden');
       modal.classList.add('flex');
@@ -940,7 +1120,7 @@
     }
 
     // =========================================================================
-    // 8. 5-BARANGAY CHDP TAB WITH PER-ENTRY EDIT, SAVE & DELETE + AUTO-COMPUTE
+    // 9. 4-BARANGAY CHDP TAB WITH PER-ENTRY EDIT, SAVE & DELETE + AUTO-COMPUTE
     // =========================================================================
     function renderCHDPWorkspace() {
       const tabsEl = document.getElementById('brgy-selector-tabs');
@@ -1218,7 +1398,7 @@
       if (results.length === 0) {
         tbody.innerHTML = `
           <tr>
-            <td colspan="9" class="py-6 text-center text-xs text-slate-400">
+            <td colspan="8" class="py-6 text-center text-xs text-slate-400">
               Enter and save health conditions in each barangay tab above (or click <strong>Load Sample Data</strong>) to auto-compute Major Projects.
             </td>
           </tr>
@@ -1231,11 +1411,11 @@
               const rk = r.ranks[b];
               return `<td class="py-2.5 px-2 text-center text-xs font-semibold">${rk ? `#${rk.rank} (${rk.pts} pts)` : '—'}</td>`;
             }).join('')}
-            <td class="py-2.5 px-3 text-center font-extrabold text-indigo-900 bg-indigo-50/40">${r.freq} / 5</td>
+            <td class="py-2.5 px-3 text-center font-extrabold text-indigo-900 bg-indigo-50/40">${r.freq} / 4</td>
             <td class="py-2.5 px-3 text-center font-extrabold text-indigo-900 bg-indigo-50/40">${r.totalPts} pts</td>
             <td class="py-2.5 px-3 text-center">
               ${r.isMajor
-                ? `<span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-600 text-white shadow-2xs">★ MAJOR PROJECT (5 Brgys)</span>`
+                ? `<span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold bg-emerald-600 text-white shadow-2xs">★ MAJOR PROJECT (4 Brgys)</span>`
                 : `<span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-600">Barangay-Specific</span>`
               }
             </td>
@@ -1255,11 +1435,11 @@
             id: 'mp_' + Math.random().toString(36).slice(2, 8),
             isAutoMajor: true,
             projectTitle: m.label,
-            objective: `Reduce morbidity & complication risk of ${m.label} across Castilla, San Agustin, San Jose, Cabarasan Daku & Cangumbang by April 2027.`,
-            activities: 'Simultaneous BHS risk screening, CPG-aligned clinical management & RHU referrals, Waray IEC household counseling, and monthly BHW tracking.',
+            objective: `Reduce morbidity & complication risk of ${m.label} across Barangay San Jose, Barangay Arado, Barangay Castilla & Barangay San Agustin by April 2027.`,
+            activities: 'Simultaneous BHS risk screening (Wed Castilla & San Agustin; Thu AM San Jose & Arado), CPG-aligned clinical management & Palo RHU referrals, Waray IEC household counseling, and monthly BHW tracking.',
             targetIndicator: '>= 80% of flagged/eligible residents screened, counselled, and linked to Palo RHU care.',
             focalPersons: 'Jazzy, Leila, Aubrey, RHU Staff & Barangay BHWs',
-            timeline: 'Jan 18 – Apr 30, 2027'
+            timeline: 'Jan 13 – Apr 30, 2027'
           });
         }
       });
@@ -1292,7 +1472,7 @@
                   <textarea id="ap-obj-${idx}" rows="2" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white">${plan.objective}</textarea>
                 </div>
                 <div>
-                  <label class="block font-bold text-slate-600 mb-1">CPG-Aligned Strategies &amp; Activities (5 Barangays)</label>
+                  <label class="block font-bold text-slate-600 mb-1">CPG-Aligned Strategies &amp; Activities (4 Barangays)</label>
                   <textarea id="ap-act-${idx}" rows="2" class="w-full px-2.5 py-1.5 rounded-lg border border-indigo-300 bg-white">${plan.activities}</textarea>
                 </div>
                 <div>
@@ -1382,6 +1562,26 @@
 
     function loadSampleCHDPData() {
       const samples = {
+        'San Jose': {
+          population: '3,120', households: '670', midwife: 'RHM Velasco / BHW Morales', ficRate: '85% (6 defaulters)', ancRate: '79% (6 high-risk)', htnCount: '89 HTN / 29 DM', tbCount: '6 active, 11 presumptive', malnutritionRate: '6.2% UW, 9.8% Stunted', washCoverage: '86% sanitary toilet; 65 flood-prone HHs',
+          conditions: [
+            { id: 'sj1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '89 registered HTN; high PhilPEN risk flags', magnitude: 5, severity: 5, modifiability: 5 },
+            { id: 'sj2', condition: 'Dengue / Vector-Borne Illness & Flood Vulnerability', indicator: '65 low-lying flood-prone HHs; seasonal dengue', magnitude: 4, severity: 4, modifiability: 4 },
+            { id: 'sj3', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Top #1 RHU/BHS outpatient consultation cause', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'sj4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '6 incomplete children in San Jose EPI TCL', magnitude: 3, severity: 4, modifiability: 5 },
+            { id: 'sj5', condition: 'High-Risk Pregnancy / Incomplete Antenatal Care (ANC)', indicator: '21% with <4 ANC visits; 6 high-risk gravidas', magnitude: 3, severity: 5, modifiability: 5 }
+          ]
+        },
+        'Arado': {
+          population: '1,940', households: '420', midwife: 'RHM Bautista / BHW Lim', ficRate: '81% (7 defaulters)', ancRate: '76% (5 high-risk)', htnCount: '54 HTN / 15 DM', tbCount: '4 active, 7 presumptive', malnutritionRate: '8.7% UW, 12.9% Stunted', washCoverage: '84% safe water; 26 wood-fuel HHs',
+          conditions: [
+            { id: 'ar1', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '12.9% stunted & 8.7% underweight in OPT+', magnitude: 4, severity: 4, modifiability: 4 },
+            { id: 'ar2', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '54 registered HTN; irregular RHU follow-up', magnitude: 4, severity: 5, modifiability: 5 },
+            { id: 'ar3', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: '26 wood-fuel HHs; high pediatric URTI', magnitude: 5, severity: 3, modifiability: 4 },
+            { id: 'ar4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '7 EPI defaulters needing catch-up doses', magnitude: 3, severity: 4, modifiability: 5 },
+            { id: 'ar5', condition: 'Acute Gastroenteritis / Unsafe Water & Sanitation (WASH)', indicator: '16% HHs using unimproved water sources', magnitude: 3, severity: 4, modifiability: 4 }
+          ]
+        },
         'Castilla': {
           population: '2,180', households: '465', midwife: 'RHM Santos / BHW Cruz', ficRate: '84% (5 defaulters)', ancRate: '80% (3 high-risk)', htnCount: '62 HTN / 18 DM', tbCount: '4 active, 7 presumptive', malnutritionRate: '6.8% UW, 10.2% Stunted', washCoverage: '90% sanitary toilet; 18 flood-prone HHs',
           conditions: [
@@ -1401,36 +1601,6 @@
             { id: 'sa4', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '11.5% stunted; 7.4% underweight', magnitude: 3, severity: 4, modifiability: 4 },
             { id: 'sa5', condition: 'Type 2 Diabetes Mellitus / Poor Glycemic Control', indicator: '22 registered DM; limited FBS monitoring', magnitude: 3, severity: 4, modifiability: 4 }
           ]
-        },
-        'San Jose': {
-          population: '3,120', households: '670', midwife: 'RHM Velasco / BHW Morales', ficRate: '85% (6 defaulters)', ancRate: '79% (6 high-risk)', htnCount: '89 HTN / 29 DM', tbCount: '6 active, 11 presumptive', malnutritionRate: '6.2% UW, 9.8% Stunted', washCoverage: '86% sanitary toilet; 65 flood-prone HHs',
-          conditions: [
-            { id: 'sj1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '89 registered HTN; high PhilPEN risk flags', magnitude: 5, severity: 5, modifiability: 5 },
-            { id: 'sj2', condition: 'Dengue / Vector-Borne Illness & Flood Vulnerability', indicator: '65 low-lying flood-prone HHs; seasonal dengue', magnitude: 4, severity: 4, modifiability: 4 },
-            { id: 'sj3', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Top #1 RHU/BHS outpatient consultation cause', magnitude: 5, severity: 3, modifiability: 4 },
-            { id: 'sj4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '6 incomplete children in BHS 3 EPI TCL', magnitude: 3, severity: 4, modifiability: 5 },
-            { id: 'sj5', condition: 'High-Risk Pregnancy / Incomplete Antenatal Care (ANC)', indicator: '21% with <4 ANC visits; 6 high-risk gravidas', magnitude: 3, severity: 5, modifiability: 5 }
-          ]
-        },
-        'Cabarasan Daku': {
-          population: '1,890', households: '410', midwife: 'RHM Bautista / BHW Lim', ficRate: '81% (7 defaulters)', ancRate: '76% (5 high-risk)', htnCount: '51 HTN / 14 DM', tbCount: '3 active, 6 presumptive', malnutritionRate: '8.9% UW, 13.1% Stunted', washCoverage: '84% safe water; 28 wood-fuel HHs',
-          conditions: [
-            { id: 'cd1', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '13.1% stunted & 8.9% underweight in OPT+', magnitude: 4, severity: 4, modifiability: 4 },
-            { id: 'cd2', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '51 registered HTN; distance barrier to RHU', magnitude: 4, severity: 5, modifiability: 5 },
-            { id: 'cd3', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: '28 wood-fuel HHs; high pediatric URTI', magnitude: 5, severity: 3, modifiability: 4 },
-            { id: 'cd4', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '7 EPI defaulters needing catch-up doses', magnitude: 3, severity: 4, modifiability: 5 },
-            { id: 'cd5', condition: 'Acute Gastroenteritis / Unsafe Water & Sanitation (WASH)', indicator: '16% HHs using unimproved water sources', magnitude: 3, severity: 4, modifiability: 4 }
-          ]
-        },
-        'Cangumbang': {
-          population: '1,740', households: '380', midwife: 'RHM Ocampo / BHW Perez', ficRate: '83% (5 defaulters)', ancRate: '77% (4 high-risk)', htnCount: '48 HTN / 12 DM', tbCount: '4 active, 8 presumptive', malnutritionRate: '8.1% UW, 12.4% Stunted', washCoverage: '85% safe water; 24 wood-fuel HHs',
-          conditions: [
-            { id: 'cg1', condition: 'Uncontrolled Hypertension / Cardiovascular Risk', indicator: '48 registered HTN; low follow-up adherence', magnitude: 4, severity: 5, modifiability: 5 },
-            { id: 'cg2', condition: 'Childhood Underweight / Stunting (Malnutrition)', indicator: '12.4% stunted in OPT Plus registry', magnitude: 4, severity: 4, modifiability: 4 },
-            { id: 'cg3', condition: 'Presumptive / Active Tuberculosis (TB)', indicator: '4 active TB-DOTS; 8 presumptive symptomatic', magnitude: 3, severity: 5, modifiability: 4 },
-            { id: 'cg4', condition: 'Acute Respiratory Tract Infections (ARI / URTI)', indicator: 'Leading morbidity in BHS 5 consult log', magnitude: 5, severity: 3, modifiability: 4 },
-            { id: 'cg5', condition: 'Incomplete Child Immunization (EPI Defaulters)', indicator: '5 children due for catch-up measles/OPV', magnitude: 3, severity: 4, modifiability: 5 }
-          ]
         }
       };
 
@@ -1439,12 +1609,231 @@
       isEditingBrgyProfile = false;
       editingConditionIndex = null;
       editingActionPlanIndex = null;
-      persistAll(true, 'Sample 5-Barangay data loaded & Major Projects computed!');
+      persistAll(true, 'Sample 4-Barangay data loaded & Major Projects computed!');
       renderCHDPWorkspace();
     }
 
     // =========================================================================
-    // 9. PERFECT-FORMAT PDF GENERATORS (SCHEDULE WITH CLERK NAMES + CHDP)
+    // 10. RHU & BARANGAY DELIVERABLES WORKSPACE & PDF GENERATOR
+    // =========================================================================
+    function renderDeliverablesWorkspace() {
+      if (!deliverablesData || !deliverablesData.items) deliverablesData = generateDefaultDeliverables();
+
+      const count = Number(deliverablesData.patientEncounters || 0);
+      const countEl = document.getElementById('patient-encounter-count');
+      const inputEl = document.getElementById('patient-encounter-input');
+      const pillEl = document.getElementById('patient-log-status-pill');
+      if (countEl) countEl.textContent = count;
+      if (inputEl) inputEl.value = count;
+      if (pillEl) {
+        if (count >= 40) {
+          pillEl.textContent = '✓ Target Met (40+ Encounters)';
+          pillEl.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-400 text-slate-900';
+        } else {
+          pillEl.textContent = `${40 - count} Remaining to Target`;
+          pillEl.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-400 text-slate-900';
+        }
+      }
+
+      const items = deliverablesData.items;
+      const calcStats = (sec) => {
+        const subset = sec === 'all' ? items : items.filter(i => i.section === sec);
+        const done = subset.filter(i => i.done).length;
+        const total = subset.length;
+        const pct = total === 0 ? 0 : Math.round((done / total) * 100);
+        return { done, total, pct };
+      };
+
+      const stAll = calcStats('all');
+      const stRhu = calcStats('rhu');
+      const stBrgy = calcStats('barangay');
+      const stDoc = calcStats('docs');
+
+      document.getElementById('deliv-overall-badge').textContent = `${stAll.done} / ${stAll.total} (${stAll.pct}%)`;
+      document.getElementById('deliv-overall-bar').style.width = `${stAll.pct}%`;
+      document.getElementById('deliv-rhu-badge').textContent = `${stRhu.done} / ${stRhu.total}`;
+      document.getElementById('deliv-rhu-bar').style.width = `${stRhu.pct}%`;
+      document.getElementById('deliv-brgy-badge').textContent = `${stBrgy.done} / ${stBrgy.total}`;
+      document.getElementById('deliv-brgy-bar').style.width = `${stBrgy.pct}%`;
+      document.getElementById('deliv-doc-badge').textContent = `${stDoc.done} / ${stDoc.total}`;
+      document.getElementById('deliv-doc-bar').style.width = `${stDoc.pct}%`;
+
+      const sections = [
+        {
+          key: 'rhu',
+          title: '1. RHU-Level Activities & Deliverables',
+          subtitle: 'Apply medical concepts to create, implement, evaluate, and improve health programs under the supervision of the Municipal Health Officer (MHO).'
+        },
+        {
+          key: 'barangay',
+          title: '2. Barangay-Level Activities & Deliverables (San Jose, Arado, Castilla & San Agustin)',
+          subtitle: 'Direct primary care, family assessments, BHS rotations, and grassroots health education across the 4 sentinel barangays.'
+        },
+        {
+          key: 'docs',
+          title: '3. Additional Documentation Deliverables',
+          subtitle: 'Journal-format weekly reflection papers and accomplishment reports due at the culmination of the clerkship.'
+        }
+      ];
+
+      const container = document.getElementById('deliverables-sections-container');
+      container.innerHTML = sections.map(sec => {
+        const secItems = items.filter(i => i.section === sec.key);
+        return `
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="p-4 bg-slate-50 border-b border-slate-200">
+              <h3 class="text-base font-extrabold text-slate-900">${sec.title}</h3>
+              <p class="text-xs text-slate-500 mt-0.5">${sec.subtitle}</p>
+            </div>
+            <div class="divide-y divide-slate-200">
+              ${secItems.map(item => `
+                <div class="p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 ${item.done ? 'bg-emerald-50/30' : 'hover:bg-slate-50/70'} transition">
+                  <label class="flex items-start gap-3 cursor-pointer flex-1">
+                    <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleDeliverableItem('${item.id}')"
+                      class="mt-1 w-4 h-4 rounded border-slate-300 text-teal-600 focus:ring-teal-500 cursor-pointer shrink-0" />
+                    <div class="space-y-0.5">
+                      <div class="flex flex-wrap items-center gap-2">
+                        <span class="text-xs sm:text-sm font-extrabold ${item.done ? 'line-through text-slate-400' : 'text-slate-900'}">${item.title}</span>
+                        ${item.done ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-emerald-600 text-white">✓ Completed</span>` : ''}
+                      </div>
+                      <p class="text-xs text-slate-600 leading-relaxed">${item.desc}</p>
+                    </div>
+                  </label>
+                  <div class="flex items-center gap-2 lg:w-80 shrink-0">
+                    <input type="text" value="${(item.notes || '').replace(/"/g, '&quot;')}" onchange="updateDeliverableNote('${item.id}', this.value)"
+                      placeholder="Add log/date/remarks..."
+                      class="w-full px-3 py-1.5 rounded-xl border border-slate-300 bg-white text-xs text-slate-800 focus:ring-2 focus:ring-teal-500 focus:outline-none" />
+                    ${item.isCustom ? `
+                      <button onclick="deleteDeliverableItem('${item.id}')" class="px-2.5 py-1.5 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 cursor-pointer shrink-0">
+                        Delete
+                      </button>
+                    ` : ''}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function toggleDeliverableItem(id) {
+      const target = deliverablesData.items.find(i => i.id === id);
+      if (!target) return;
+      target.done = !target.done;
+      persistAll(false);
+      renderDeliverablesWorkspace();
+      showToast(target.done ? 'Deliverable marked completed!' : 'Deliverable marked pending');
+    }
+
+    function updateDeliverableNote(id, val) {
+      const target = deliverablesData.items.find(i => i.id === id);
+      if (!target) return;
+      target.notes = val.trim();
+      persistAll(true, 'Deliverable note saved!');
+    }
+
+    function adjustPatientEncounters(delta) {
+      const next = Math.max(0, Number(deliverablesData.patientEncounters || 0) + delta);
+      deliverablesData.patientEncounters = next;
+      persistAll(false);
+      renderDeliverablesWorkspace();
+      showToast(`Patient log encounters: ${next} / 40`);
+    }
+
+    function setPatientEncounters(val) {
+      const next = Math.max(0, parseInt(val, 10) || 0);
+      deliverablesData.patientEncounters = next;
+      persistAll(true, `Patient log updated (${next} / 40)!`);
+      renderDeliverablesWorkspace();
+    }
+
+    function addCustomDeliverableItem(ev) {
+      ev.preventDefault();
+      const section = document.getElementById('new-deliv-section').value;
+      const title = document.getElementById('new-deliv-title').value.trim();
+      const desc = document.getElementById('new-deliv-desc').value.trim();
+      if (!title) return;
+      deliverablesData.items.push({
+        id: 'custom_' + Date.now(),
+        section,
+        title,
+        desc,
+        done: false,
+        notes: '',
+        isCustom: true
+      });
+      document.getElementById('new-deliv-title').value = '';
+      document.getElementById('new-deliv-desc').value = '';
+      persistAll(true, 'Custom deliverable added!');
+      renderDeliverablesWorkspace();
+    }
+
+    function deleteDeliverableItem(id) {
+      deliverablesData.items = deliverablesData.items.filter(i => i.id !== id);
+      persistAll(true, 'Custom deliverable removed!');
+      renderDeliverablesWorkspace();
+    }
+
+    function downloadDeliverablesPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'letter' });
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const margin = 32;
+
+      doc.setFillColor(15, 118, 110);
+      doc.roundedRect(margin, margin, pageWidth - margin * 2, 52, 6, 6, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.text('UPM-SHS COMMUNITY CLERKSHIP DELIVERABLES CHECKLIST', margin + 14, margin + 21);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8.8);
+      doc.text(`Palo, Leyte (4 Barangays)  |  Clerks: Jazzy, Leila & Aubrey  |  Patient Log: ${deliverablesData.patientEncounters || 0} / 40 Encounters`, margin + 14, margin + 38);
+
+      const sectionLabels = {
+        rhu: '1. RHU-Level Activities & Deliverables',
+        barangay: '2. Barangay-Level Activities & Deliverables',
+        docs: '3. Additional Documentation Deliverables'
+      };
+
+      const rows = (deliverablesData.items || []).map(item => [
+        sectionLabels[item.section] || item.section,
+        item.title,
+        item.desc,
+        item.done ? 'COMPLETED' : 'Pending',
+        item.notes || '—'
+      ]);
+
+      doc.autoTable({
+        startY: margin + 64,
+        margin: { left: margin, right: margin },
+        head: [['Level / Section', 'Deliverable', 'Requirement / Scope', 'Status', 'Remarks / Log']],
+        body: rows,
+        theme: 'grid',
+        styles: { font: 'helvetica', fontSize: 7.5, cellPadding: 4, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
+        headStyles: { fillColor: [241, 245, 249], textColor: [15, 118, 110], fontStyle: 'bold' },
+        columnStyles: {
+          0: { cellWidth: 95 },
+          1: { cellWidth: 120, fontStyle: 'bold' },
+          3: { cellWidth: 62, halign: 'center' },
+          4: { cellWidth: 85 }
+        },
+        didParseCell: function (data) {
+          if (data.section === 'body' && data.column.index === 3 && data.cell.raw === 'COMPLETED') {
+            data.cell.styles.fillColor = [209, 250, 229];
+            data.cell.styles.textColor = [6, 95, 70];
+            data.cell.styles.fontStyle = 'bold';
+          }
+        }
+      });
+
+      doc.save('Palo_Community_Clerkship_Deliverables_Checklist.pdf');
+      showToast('Downloaded Deliverables Checklist PDF!');
+    }
+
+    // =========================================================================
+    // 11. PDF GENERATORS (SCHEDULE + 4-BARANGAY CHDP)
     // =========================================================================
     function renderSingleMonthPDFPage(doc, mInfo, isFirst) {
       if (!isFirst) doc.addPage('letter', 'landscape');
@@ -1462,7 +1851,6 @@
       doc.setFontSize(9);
       doc.text(`${mInfo.label.toUpperCase()}   |   Jazzy, Leila & Aubrey`, margin + 14, margin + 34);
 
-      const firstDay = new Date(mInfo.year, mInfo.month, 1);
       const lastDay = new Date(mInfo.year, mInfo.month + 1, 0);
       const totalDays = lastDay.getDate();
 
@@ -1475,11 +1863,11 @@
         if (dow === 0 || dow === 6) {
           row[dow] = `${day}\nWeekend`;
         } else if (scheduleData[key]) {
-          const e = scheduleData[key];
-          const isHol = e.duty.includes('HOLIDAY');
-          const statusTag = e.completed ? ' [DONE]' : '';
-          const clerksLine = !isHol ? `\n(${e.clerks || 'Jazzy, Leila & Aubrey'})` : '';
-          row[dow] = `${day}${statusTag}\n${e.duty}${clerksLine}`;
+          const item = scheduleData[key];
+          const isHol = item.duty.includes('HOLIDAY');
+          const statusTag = item.completed ? ' [DONE]' : '';
+          const clerksLine = !isHol ? `\n(${item.clerks || 'Jazzy, Leila & Aubrey'})` : '';
+          row[dow] = `${day}${statusTag}\n${item.duty}${clerksLine}`;
         } else {
           row[dow] = `${day}`;
         }
@@ -1559,15 +1947,15 @@
       doc.setTextColor(255, 255, 255);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(13.5);
-      doc.text('MUNICIPALITY OF PALO, LEYTE — 5-BARANGAY COMMUNITY HEALTH DEVELOPMENT PLAN (CHDP)', margin + 14, margin + 20);
+      doc.text('MUNICIPALITY OF PALO, LEYTE — 4-BARANGAY COMMUNITY HEALTH DEVELOPMENT PLAN (CHDP)', margin + 14, margin + 20);
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.8);
-      doc.text('Sentinel Barangays: Castilla, San Agustin, San Jose, Cabarasan Daku & Cangumbang', margin + 14, margin + 36);
+      doc.text('Sentinel Barangays: Barangay San Jose, Barangay Arado, Barangay Castilla & Barangay San Agustin', margin + 14, margin + 36);
 
       doc.setTextColor(30, 41, 59);
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10.5);
-      doc.text('I. 5-Barangay Secondary Health Indicator Profile Summary', margin, margin + 66);
+      doc.text('I. 4-Barangay Secondary Health Indicator Profile Summary', margin, margin + 66);
 
       const profileRows = BARANGAYS.map(b => {
         const d = chdpData.barangays[b];
@@ -1594,32 +1982,32 @@
         headStyles: { fillColor: [241, 245, 249], textColor: [30, 58, 138], fontStyle: 'bold' }
       });
 
-      let nextY = doc.lastAutoTable.finalY + 18;
+      const nextY = doc.lastAutoTable.finalY + 18;
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10.5);
-      doc.text('II. Cross-Barangay Community Diagnosis & Common Denominator Synthesis', margin, nextY);
+      doc.text('II. Cross-Barangay Community Diagnosis & Common Denominator Synthesis (4 Barangays)', margin, nextY);
 
       const computed = computeCommonDenominators();
       const synRows = computed.length > 0
         ? computed.map(r => [
             r.label,
             ...BARANGAYS.map(b => r.ranks[b] ? `#${r.ranks[b].rank} (${r.ranks[b].pts} pts)` : '—'),
-            `${r.freq} / 5`,
+            `${r.freq} / 4`,
             `${r.totalPts} pts`,
-            r.isMajor ? 'MAJOR PROJECT (5 Barangays)' : 'Barangay-Specific'
+            r.isMajor ? 'MAJOR PROJECT (4 Barangays)' : 'Barangay-Specific'
           ])
-        : [['No conditions entered yet', '—', '—', '—', '—', '—', '0/5', '0', '—']];
+        : [['No conditions entered yet', '—', '—', '—', '—', '0/4', '0', '—']];
 
       doc.autoTable({
         startY: nextY + 6,
         margin: { left: margin, right: margin },
-        head: [['Health Condition / Problem', 'Castilla', 'San Agustin', 'San Jose', 'Cabarasan Daku', 'Cangumbang', 'Freq.', 'Points', 'Designation']],
+        head: [['Health Condition / Problem', 'San Jose', 'Arado', 'Castilla', 'San Agustin', 'Freq.', 'Points', 'Designation']],
         body: synRows,
         theme: 'grid',
         styles: { font: 'helvetica', fontSize: 7.8, cellPadding: 4, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
         headStyles: { fillColor: [241, 245, 249], textColor: [15, 118, 110], fontStyle: 'bold' },
         didParseCell: function (data) {
-          if (data.section === 'body' && data.column.index === 8 && String(data.cell.raw).includes('MAJOR')) {
+          if (data.section === 'body' && data.column.index === 7 && String(data.cell.raw).includes('MAJOR')) {
             data.cell.styles.fillColor = [209, 250, 229];
             data.cell.styles.textColor = [6, 95, 70];
             data.cell.styles.fontStyle = 'bold';
@@ -1661,7 +2049,7 @@
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(10.5);
       doc.setTextColor(15, 118, 110);
-      doc.text('IV. Community Health Development Action Plan (Major Projects Implementation across 5 Barangays)', margin, actY);
+      doc.text('IV. Community Health Development Action Plan (Major Projects Implementation across 4 Barangays)', margin, actY);
 
       const actionRows = chdpData.customActionPlans.map((p, i) => [
         `${i + 1}. ${p.projectTitle}`,
@@ -1675,19 +2063,19 @@
       doc.autoTable({
         startY: actY + 6,
         margin: { left: margin, right: margin },
-        head: [['Major Project / Intervention', 'Specific Objective', 'CPG-Aligned Activities (5 Barangays)', 'Target Indicator', 'Focal Persons', 'Timeline']],
+        head: [['Major Project / Intervention', 'Specific Objective', 'CPG-Aligned Activities (4 Barangays)', 'Target Indicator', 'Focal Persons', 'Timeline']],
         body: actionRows.length ? actionRows : [['—', '—', '—', '—', '—', '—']],
         theme: 'grid',
         styles: { font: 'helvetica', fontSize: 7.6, cellPadding: 4, textColor: [30, 41, 59], lineColor: [203, 213, 225] },
         headStyles: { fillColor: [15, 118, 110], textColor: [255, 255, 255], fontStyle: 'bold' }
       });
 
-      doc.save('Palo_Leyte_5_Barangay_Community_Health_Development_Plan.pdf');
-      showToast('Downloaded Entire 5-Barangay CHDP PDF!');
+      doc.save('Palo_Leyte_4_Barangay_Community_Health_Development_Plan.pdf');
+      showToast('Downloaded Entire 4-Barangay CHDP PDF!');
     }
 
     // =========================================================================
-    // 10. VIEW SWITCHING & RESET
+    // 12. VIEW SWITCHING & RESET
     // =========================================================================
     function switchView(v) {
       activeView = v;
@@ -1703,13 +2091,19 @@
 
       const schedWrapper = document.getElementById('schedule-and-side-wrapper');
       const chdpView = document.getElementById('view-chdp');
+      const delivView = document.getElementById('view-deliverables');
+
+      schedWrapper.classList.add('hidden');
+      chdpView.classList.add('hidden');
+      delivView.classList.add('hidden');
 
       if (v === 'chdp') {
-        schedWrapper.classList.add('hidden');
         chdpView.classList.remove('hidden');
         renderCHDPWorkspace();
+      } else if (v === 'deliverables') {
+        delivView.classList.remove('hidden');
+        renderDeliverablesWorkspace();
       } else {
-        chdpView.classList.add('hidden');
         schedWrapper.classList.remove('hidden');
         document.getElementById('view-calendar').classList.toggle('hidden', v !== 'calendar');
         document.getElementById('view-table').classList.toggle('hidden', v !== 'table');
@@ -1742,6 +2136,7 @@
     function confirmResetDefault() {
       scheduleData = generateDefaultSchedule();
       chdpData = generateDefaultCHDP();
+      deliverablesData = generateDefaultDeliverables();
       isEditingBrgyProfile = false;
       editingConditionIndex = null;
       editingActionPlanIndex = null;
@@ -1755,15 +2150,18 @@
       renderCalendar();
       renderScheduleTable();
       renderCHDPWorkspace();
+      renderDeliverablesWorkspace();
     }
 
     Object.assign(window, {
-      manualSaveAll, downloadCalendarPDF, downloadAllMonthsCalendarPDF, downloadCHDPPDF,
+      manualSaveAll, downloadCalendarPDF, downloadAllMonthsCalendarPDF, downloadCHDPPDF, downloadDeliverablesPDF,
       switchView, changeMonth, selectMonth, selectDate, toggleDateDone, toggleSelectedDayDone,
       updateSelectedDaySummary, renderScheduleTable, openEditDayModal, closeEditDayModal, saveDayEdit,
       selectBrgyTab, toggleEditBrgyProfile, saveBrgyProfile, clearBrgyProfile,
       editConditionRow, saveConditionRow, deleteConditionRow, addConditionRow,
       editActionPlanRow, saveActionPlanRow, addCHDPActionRow, removeActionPlan,
+      toggleDeliverableItem, updateDeliverableNote, adjustPatientEncounters, setPatientEncounters,
+      addCustomDeliverableItem, deleteDeliverableItem,
       loadSampleCHDPData, openResetModal, closeResetModal, confirmResetDefault
     });
 
